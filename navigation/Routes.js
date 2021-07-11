@@ -19,6 +19,12 @@ import SettingsPublic from '../screens/settingsPublic';
 import OngoingDonation from '../screens/ongoingDonation';
 import OngoingRequest from '../screens/ongoingRequest';
 import RegisterDriver from '../screens/registerDriver';
+import EditProfile from '../screens/editProfile';
+import ChangePassword from '../screens/changePassword';
+import DriverSettings from '../screens/driverSettings';
+import AboutUs from '../screens/aboutUs';
+import PrivacyPolicy from '../screens/privacyPolicy';
+import TermsCondition from '../screens/termsCondition';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -68,6 +74,25 @@ const DashboardPublicStack = () => {
       <Stack.Screen name="OngoingDonation" component={OngoingDonation} />
       <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
       <Stack.Screen name="RegisterDriver" component={RegisterDriver} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Edit Profile',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="DriverSettings" component={DriverSettings} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="TermsCondition" component={TermsCondition} />
     </Stack.Navigator>
   );
 };
