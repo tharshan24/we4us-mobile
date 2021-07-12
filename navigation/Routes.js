@@ -39,7 +39,10 @@ const AuthStack = () => {
       <Stack.Screen
        options={{
           title: false,
-        }}
+        headerStyle: {
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+        },}}
        name="Welcome_page" 
        component={Welcome_Page} />
       <Stack.Screen
