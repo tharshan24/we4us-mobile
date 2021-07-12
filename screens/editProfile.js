@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import colorConstant from '../constants/colorConstant';
 import DocumentPicker from 'react-native-document-picker';
-import {TextInput} from 'react-native-paper';
+import {TextInput, Modal, Portal, Provider} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const EditProfile = (props) => {
-  const [text, setText] = React.useState('');
+  // functions
   const FilePic = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -36,167 +36,212 @@ const EditProfile = (props) => {
     }
     return <Text>Success</Text>;
   };
-  const [edit, setEdit] = React.useState(true);
-  const [val, setVal] = React.useState(true);
-  const EnableEdit = () => {
-    setEdit(false);
-    setVal(false);
-  };
-  const DisableEdit = () => {
-    setEdit(true);
-    setVal(true);
-  };
 
-  const [hideTxt, setHideTxt] = React.useState(false);
+  // const initialValue [{label:"username", edit:false, currentValue:""}]
+
+  const [actionVal, setActionVal] = React.useState(true);
 
   return (
-    <ScrollView style={styles.MainContainer}>
-      <View style={styles.ProfilePicCon}>
-        <Image
-          style={styles.ProfilePic}
-          source={require('../assets/Images/profilePic.jpg')}
-        />
-        <TouchableOpacity onPress={() => FilePic()}>
-          <Text style={styles.ChangeTxt}>Change</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.Content}>
-        <Text style={styles.ContentTxt}>Username</Text>
-        <View style={styles.EditContent}>
-          <TextInput
-            placeholder="Aaketk21"
-            disabled={edit}
-            autoFocus={val}
-            value={text}
-            onChangeText={(text) => setText(text)}
-            selectionColor={colorConstant.primaryColor}
-            underlineColor={colorConstant.proGreyLight}
-            style={{
-              height: 40,
-              width: Dimensions.get('window').width / 1.7,
-              backgroundColor: '#ffffff',
-              borderColor: 'red',
-            }}
-            onBlur={() => {
-              DisableEdit(edit, val);
-              setHideTxt(!hideTxt);
-            }}
+    <Provider>
+      <ScrollView style={styles.MainContainer}>
+        <View style={styles.ProfilePicCon}>
+          {/* <ImageBackground source={require('../assets/Images/profilePic.jpg')} /> */}
+          <Image
+            style={styles.ProfilePic}
+            source={require('../assets/Images/profilePic.jpg')}
           />
-
-          {hideTxt ? (
-            <View style={styles.IconContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  setHideTxt(!hideTxt);
-                  DisableEdit(edit, val);
-                }}>
-                <MaterialCommunityIcons
-                  name="check-bold"
-                  style={{marginLeft: 5}}
-                  color={colorConstant.proGreen}
-                  size={30}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setHideTxt(!hideTxt);
-                  DisableEdit(edit, val);
-                }}>
-                <MaterialCommunityIcons
-                  name="close-thick"
-                  style={{marginLeft: 30}}
-                  color={colorConstant.proRed}
-                  size={30}
-                />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.EditBtn}
-              onPress={() => {
-                EnableEdit(edit, val);
-                setHideTxt(!hideTxt);
-              }}>
-              <Text style={styles.EditTxt}>Edit</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity onPress={() => FilePic()}>
+            <Text style={styles.ChangeTxt}>Change</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setActionVal(false)}>
+            <Text style={styles.ChangeTxt}>Edit</Text>
+          </TouchableOpacity>
         </View>
-        
-      </View>
-      <View style={styles.Content}>
-        <Text style={styles.ContentTxt}>Username</Text>
-        <View style={styles.EditContent}>
-          <TextInput
-            placeholder="Aaketk21"
-            disabled={edit}
-            autoFocus={val}
-            value={text}
-            onChangeText={(text) => setText(text)}
-            selectionColor={colorConstant.primaryColor}
-            underlineColor={colorConstant.proGreyLight}
-            style={{
-              height: 40,
-              width: Dimensions.get('window').width / 1.7,
-              backgroundColor: '#ffffff',
-              borderColor: 'red',
-            }}
-            onBlur={() => {
-              DisableEdit(edit, val);
-              setHideTxt(!hideTxt);
-            }}
-          />
-
-          {hideTxt ? (
-            <View style={styles.IconContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  setHideTxt(!hideTxt);
-                  DisableEdit(edit, val);
-                }}>
-                <MaterialCommunityIcons
-                  name="check-bold"
-                  style={{marginLeft: 5}}
-                  color={colorConstant.proGreen}
-                  size={30}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setHideTxt(!hideTxt);
-                  DisableEdit(edit, val);
-                }}>
-                <MaterialCommunityIcons
-                  name="close-thick"
-                  style={{marginLeft: 30}}
-                  color={colorConstant.proRed}
-                  size={30}
-                />
-              </TouchableOpacity>
+        <View style={styles.BottomContainer}>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>First Name</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="Athavan"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: '90%',
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
             </View>
-          ) : (
+          </View>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>Last Name</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="Theivendram"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: '90%',
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
+            </View>
+          </View>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>Address</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="Jaffna, SriLanka"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: '90%',
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
+            </View>
+          </View>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>District</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="Jaffna"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: Dimensions.get('window').width / 1.7,
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
+            </View>
+          </View>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>City</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="Jaffna"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: Dimensions.get('window').width / 1.7,
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
+            </View>
+          </View>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>ZipCode</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="40000"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: Dimensions.get('window').width / 1.7,
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
+            </View>
+          </View>
+          <View style={styles.Content}>
+            <Text style={styles.ContentTxt}>Landline Number</Text>
+            <View style={styles.EditContent}>
+              <TextInput
+                placeholder="021 224 1234"
+                disabled={actionVal}
+                // value={textUsername}
+                // onChangeText={(Username) => setTextUsername(Username)}
+                selectionColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.proGreyLight}
+                style={{
+                  height: 40,
+                  width: Dimensions.get('window').width / 1.7,
+                  backgroundColor: '#ffffff',
+                  borderColor: 'red',
+                }}
+                pressRetentionOffset={console.log('rj;;;g ')}
+              />
+            </View>
+          </View>
+          {/* <View style={styles.Content}>
             <TouchableOpacity
-              style={styles.EditBtn}
-              onPress={() => {
-                EnableEdit(edit, val);
-                setHideTxt(!hideTxt);
-              }}>
-              <Text style={styles.EditTxt}>Edit</Text>
+              activeOpacity={0.7}
+              onPress={showModal}
+              disabled={disValue}>
+              <Text style={styles.ContentTxt}>Email</Text>
+              <View style={styles.EditContent}>
+                <TextInput
+                  placeholder="Aaketk21"
+                  disabled={true}
+                  selectionColor={colorConstant.primaryColor}
+                  underlineColor={colorConstant.proGreyLight}
+                  style={{
+                    height: 40,
+                    width: Dimensions.get('window').width / 1.7,
+                    backgroundColor: '#ffffff',
+                    borderColor: 'red',
+                  }}
+                />
+              </View>
             </TouchableOpacity>
-          )}
+            <Portal style={styles.PortalContainer}>
+              <Modal
+                visible={visible}
+                onDismiss={hideModal}
+                style={styles.containerStyle}>
+                <View style={styles.ModalContentCon}>
+                  <Text style={styles.ModalContentTxt}>
+                    You cant change the verified fields. Contact administrators
+                    for further information
+                  </Text>
+                </View>
+              </Modal>
+            </Portal>
+          </View> */}
         </View>
-        
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </Provider>
   );
 };
 
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    // backgroundColor: 'red',
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 25,
     backgroundColor: '#f8f8f8',
   },
   Content: {
@@ -204,8 +249,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     flexDirection: 'column',
-    // borderColor: 'green',
-    // borderWidth: 10,
     flex: 2,
   },
   ContentTxt: {
@@ -216,17 +259,29 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 2,
+    backgroundColor: colorConstant.primaryColor,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    marginBottom: 15,
+  },
+  BottomContainer: {
+    flex: 3,
+    paddingLeft: 13,
+    paddingRight: 13,
   },
   ProfilePic: {
-    height: 100,
-    width: 100,
+    height: 130,
+    width: 130,
     borderRadius: 100,
     marginBottom: 10,
+    marginTop: 10,
   },
   ChangeTxt: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 17,
-    color: colorConstant.primaryColor,
+    color: '#ffffff',
+    marginBottom: 15,
   },
   EditContent: {
     flexDirection: 'row',
@@ -242,6 +297,32 @@ const styles = StyleSheet.create({
   IconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+  },
+  containerStyle: {
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    padding: 20,
+    height: Dimensions.get('window').height / 5,
+    width: Dimensions.get('window').width / 1.2,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    borderRadius: 5,
+    // flex: 1,
+    marginTop: Dimensions.get('window').width / 2,
+    marginLeft: Dimensions.get('window').width / 15,
+  },
+  ModalContentCon: {
+    //  marginLeft: 10,
+    justifyContent: 'center',
+  },
+  ModalContentTxt: {
+    fontSize: 18,
+    fontFamily: 'Barlow-Regular',
+    color: colorConstant.primaryColor,
+    flexDirection: 'column',
+    // alignItems: 'stretch',
+    justifyContent: 'flex-start',
   },
 });
 

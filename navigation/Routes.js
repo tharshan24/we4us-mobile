@@ -82,6 +82,8 @@ const DashboardPublicStack = () => {
           title: 'Edit Profile',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
           },
           headerTitleStyle: {
             fontFamily: 'Barlow-SemiBold',
