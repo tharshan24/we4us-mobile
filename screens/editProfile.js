@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Text,
   View,
@@ -13,6 +13,15 @@ import colorConstant from '../constants/colorConstant';
 import DocumentPicker from 'react-native-document-picker';
 import {TextInput, Modal, Portal, Provider} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {
+  Select,
+  VStack,
+  CheckIcon,
+  Center,
+  NativeBaseProvider,
+} from 'native-base';
 
 const EditProfile = (props) => {
   // functions
@@ -40,6 +49,41 @@ const EditProfile = (props) => {
   // const initialValue [{label:"username", edit:false, currentValue:""}]
 
   const [actionVal, setActionVal] = React.useState(true);
+  const [token, setToken] = React.useState();
+  const [cities, setCities] = React.useState([]);
+
+  const loadCities = () => {
+    console.log(`Bearer ${token}`, 'dddd');
+    axios
+      .get('http://10.0.2.2:8000/system/districts', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setCities(response.data.result.rows);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        setToken(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    loadCities();
+  });
 
   return (
     <Provider>
@@ -74,7 +118,7 @@ const EditProfile = (props) => {
                   backgroundColor: '#ffffff',
                   borderColor: 'red',
                 }}
-                pressRetentionOffset={console.log('rj;;;g ')}
+                // pressRetentionOffset={console.log('rj;;;g ')}
               />
             </View>
           </View>
@@ -94,7 +138,7 @@ const EditProfile = (props) => {
                   backgroundColor: '#ffffff',
                   borderColor: 'red',
                 }}
-                pressRetentionOffset={console.log('rj;;;g ')}
+                // pressRetentionOffset={console.log('rj;;;g ')}
               />
             </View>
           </View>
@@ -120,7 +164,7 @@ const EditProfile = (props) => {
           </View>
           <View style={styles.Content}>
             <Text style={styles.ContentTxt}>District</Text>
-            <View style={styles.EditContent}>
+            {/* <View style={styles.EditContent}>
               <TextInput
                 placeholder="Jaffna"
                 disabled={actionVal}
@@ -134,9 +178,31 @@ const EditProfile = (props) => {
                   backgroundColor: '#ffffff',
                   borderColor: 'red',
                 }}
-                pressRetentionOffset={console.log('rj;;;g ')}
+                // pressRetentionOffset={console.log('rj;;;g ')}
               />
-            </View>
+            </View> */}
+            {/* <NativeBaseProvider>
+              <VStack alignItems="center" space={4}>
+                <Select
+                  // selectedValue={language}
+                  minWidth={200}
+                  accessibilityLabel="Select your favorite programming language"
+                  placeholder="Select your favorite programming language"
+                  // onValueChange={(itemValue) => setLanguage(itemValue)}
+                  _selectedItem={{
+                    bg: 'cyan.600',
+                    endIcon: <CheckIcon size={4} />,
+                  }}>
+                  {cities.map((city) => {
+                    <Select.Item label={city.name_en} value="js" />;
+                  })}
+                  <Select.Item label="JavaScript" value="js" />
+                </Select>
+              </VStack>
+            </NativeBaseProvider> */}
+            {cities.map((city) => {
+                    <Text>{city.name_en}</Text>
+                  })}
           </View>
           <View style={styles.Content}>
             <Text style={styles.ContentTxt}>City</Text>
@@ -154,7 +220,7 @@ const EditProfile = (props) => {
                   backgroundColor: '#ffffff',
                   borderColor: 'red',
                 }}
-                pressRetentionOffset={console.log('rj;;;g ')}
+                // pressRetentionOffset={console.log('rj;;;g ')}
               />
             </View>
           </View>
@@ -194,7 +260,7 @@ const EditProfile = (props) => {
                   backgroundColor: '#ffffff',
                   borderColor: 'red',
                 }}
-                pressRetentionOffset={console.log('rj;;;g ')}
+                // pressRetentionOffset={console.log('rj;;;g ')}
               />
             </View>
           </View>

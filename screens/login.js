@@ -7,11 +7,14 @@ import {
   StyleSheet,
   StatusBar,
   TextInput,
+  Alert,
 } from 'react-native';
 import {Input, NativeBaseProvider} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import colorConstant from '../constants/colorConstant';
 import {Button} from 'react-native-paper';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 // import ThreeDRotationIcon from '@material-ui/icons/ThreeDRotation';
@@ -19,21 +22,49 @@ import {Button} from 'react-native-paper';
 const Login = (props) => {
   const navigation = useNavigation();
   const [show, setShow] = React.useState(false);
-  const [showEmailError, setShowEmailError] = React.useState(false);
+  // const [showEmailError, setShowEmailError] = React.useState(false);
+  const [pwd, setPwd] = React.useState();
   const [email, setEmail] = React.useState();
   const handleClick = () => setShow(!show);
 
-  // const Validate = () => {
-
-  // };
-  const validateEmail = () => {
-    console.log('blur');
-    var re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log(email, re.test(email));
-    setShowEmailError(!re.test(email));
-    return re.test(email);
+  const login = () => {
+    axios
+      .post('http://10.0.2.2:8000/user/login', {
+        user_name: email,
+        password: pwd,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data.status_code === 0) {
+          storeData(response.data.token);
+          navigation.navigate('Dashboard');
+        } else {
+          Alert.alert("Enter valid username");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('token', value)
+    } catch (e) {
+      // saving error
+    }
+  };
+
+
+  // const validateEmail = () => {
+  //   console.log('blur');
+  //   var re =
+  //     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   console.log(email, re.test(email));
+  //   setShowEmailError(!re.test(email));
+  //   return re.test(email);
+  // };
+
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.Container}>
@@ -50,10 +81,10 @@ const Login = (props) => {
                 style={styles.UsernameInput}
                 placeholder="Username"
                 onChangeText={(val) => setEmail(val)}
-                onBlur={() => validateEmail()}
+                // onBlur={() => validateEmail()}
                 value={email}
               />
-              {showEmailError ? <Text>Enter valid Email</Text> : null}
+              {/* {showEmailError ? <Text>Enter valid Email</Text> : null} */}
             </View>
             <View>
               <Input
@@ -80,6 +111,7 @@ const Login = (props) => {
                 }
                 style={styles.PasswordInput}
                 placeholder="Password"
+                onChangeText={(val) => setPwd(val)}
               />
             </View>
           </View>
@@ -104,7 +136,7 @@ const Login = (props) => {
                   borderColor: colorConstant.primaryColor,
                 }}
                 mode="contained"
-                onPress={() => navigation.replace('Dashboard')}>
+                onPress={() => login()}>
                 <Text style={styles.SigninBtn}> Sign in </Text>
               </Button>
             </View>
