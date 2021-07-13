@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 
-
 function ExploreAvailability(props) {
   return (
     <View>
@@ -24,13 +23,21 @@ function ExploreAvailability(props) {
             style={styles.ProfilePic}
             source={require('../assets/Images/profilePic.jpg')}
           />
-         <View>
-           <Text style={styles.headingtext}>Wedding Lunch</Text>
-           <Text style={styles.bodytext}>From:Theivendram Athavan</Text>
-           <Text style={styles.bodytext}>Quantity: 20</Text>
-           <Text style={styles.bodytext}>Best Before: 30/05/2021</Text>
-           </View> 
-         
+          <View style={styles.TextCon}>
+            <View style={styles.bodytext}>
+              <Text>Wedding lunch</Text>
+            </View>
+
+            <View style={styles.bodytext}>
+              <Text >From:Theivendram Athavan</Text>
+            </View>
+            <View style={styles.bodytext}>
+              <Text>Quantity: 20</Text>
+            </View>
+            <View style={styles.bodytext}>
+              <Text>Best Before: 30/05/2021</Text>
+            </View>
+          </View>
         </View>
       </View>
       <View style={styles.AvailabilityCon2}>
@@ -40,12 +47,21 @@ function ExploreAvailability(props) {
             style={styles.ProfilePic}
             source={require('../assets/Images/profilePic.jpg')}
           />
-         <View>
-           <Text style={styles.headingtext}>Wedding Lunch</Text>
-           <Text style={styles.bodytext}>From:Theivendram Athavan</Text>
-           <Text style={styles.bodytext}>Quantity: 20</Text>
-           <Text style={styles.bodytext}>Best Before: 30/05/2021</Text>
-           </View> 
+          <View style={styles.TextCon}>
+            <View style={styles.bodytext}>
+              <Text>Wedding lunch</Text>
+            </View>
+
+            <View style={styles.bodytext}>
+              <Text >From:Theivendram Athavan</Text>
+            </View>
+            <View style={styles.bodytext}>
+              <Text>Quantity: 20</Text>
+            </View>
+            <View style={styles.bodytext}>
+              <Text>Best Before: 30/05/2021</Text>
+            </View>
+          </View>
         </View>
       </View>
     </View>
@@ -58,9 +74,9 @@ const styles = StyleSheet.create({
   AvailabilityCon1: {
     backgroundColor: '#ffffff',
     elevation: 0.5,
-    marginTop: 12,
+    marginTop: 6,
     width: 381,
-    height: 99,
+    height: 135,
     borderRadius: 16,
     left: 14,
     top: 16,
@@ -72,10 +88,10 @@ const styles = StyleSheet.create({
     elevation: 0.5,
     marginTop: 6,
     width: 381,
-    height: 99,
+    height: 135,
     borderRadius: 16,
     left: 14,
-    top: 35,
+    top: 16,
     borderLeftColor: 'red',
     borderLeftWidth:5
   },
@@ -87,14 +103,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   AvailabilityHeaderTxt: {
-    fontFamily: 'Barlow',
+    fontFamily: 'Barlow-Bold',
     fontSize: 18,
     color: colorConstant.proCharcoal,
   },
   ProfilePicCon: {
     flexDirection: 'row',
     left: 30,
-    top: 13
+    top: 25
   },
   ProfilePic: {
     height: 80,
@@ -106,18 +122,12 @@ const styles = StyleSheet.create({
   borderRadius: 16,
   left: 20,
 
-  },
-headingtext: {
-    fontFamily: 'Barlow-SemiBold',
-    fontSize: 16,
-    color: 'black',
-    left:23
+
   },
   bodytext: {
     fontFamily: 'Barlow-SemiBold',
-    fontSize: 14,
-    color: colorConstant.proGreyLight,
-    left:23
+    fontSize: 20,
+    color: '#ffffff',
   }
 
 });
