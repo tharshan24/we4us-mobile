@@ -164,7 +164,7 @@ const OrganizationRegister = (props) => {
             left: 130
           }}
           mode="outlined"
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => navigation.navigate()}>
           <Text style={styles.Btn}> Submit </Text>
         </Button>
         <View>

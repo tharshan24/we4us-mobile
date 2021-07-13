@@ -155,7 +155,7 @@ const PersonRegister = (props) => {
             left: 130
           }}
           mode="outlined"
-          onPress={() => navigation.navigate('Registration')}>
+          onPress={() => navigation.navigate()}>
           <Text style={styles.Btn}> Submit </Text>
         </Button>
         <View>
