@@ -30,6 +30,7 @@ import OrganizationRegister from '../screens/organizationRegister';
 import PersonRegister from '../screens/personRegister';
 // import DashboardNgo from '../screens/dashboardNgo';
 // import DashboardShops from '../screens/dashboardShops';
+import SplashScreen from '../screens/splashScreen';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -40,6 +41,7 @@ const AuthStack = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {/* <Stack.Screen name="DashboardNGO" component={DashboardNgo} /> */}
       {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="Welcome_page" component={Welcome_Page} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Registration" component={Registration} />

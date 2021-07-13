@@ -7,12 +7,11 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
   StatusBar,
   Image,
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 const DashboardPublic = (props) => {
   const navigation = useNavigation();
@@ -31,19 +30,19 @@ const DashboardPublic = (props) => {
         </View>
         <View style={styles.UserDetails}>
           <Text style={styles.UserName}> Theivendram Athavan </Text>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={({ marginRight: 15 }, { marginTop: 3 })}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
-            <View style={{ marginLeft: 8 }}>
+            <View style={{marginLeft: 8}}>
               <Text style={styles.Email}>thavanthya@gmail.com </Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={({ marginRight: 15 }, { marginTop: 3 })}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="phone" color="#ffffff" size={13} />
             </View>
-            <View style={{ marginLeft: 3 }}>
+            <View style={{marginLeft: 3}}>
               <Text style={styles.Mobile}> +94 77 946 2554 </Text>
             </View>
           </View>
