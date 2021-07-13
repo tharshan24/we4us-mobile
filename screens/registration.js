@@ -8,9 +8,9 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { RadioButton, Button } from 'react-native-paper';
+import {RadioButton, Button} from 'react-native-paper';
 
-const Registration = ({ navigation }) => {
+const Registration = ({navigation}) => {
   const [value, setValue] = React.useState('person');
   return (
     <View style={styles.container}>
@@ -35,7 +35,8 @@ const Registration = ({ navigation }) => {
             style={styles.radioButton}>
             <View style={styles.radioButtonIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PersonRegister')}>
             <Text style={styles.radioButtonText}>A Person</Text>
           </TouchableOpacity>
         </View>
@@ -50,7 +51,8 @@ const Registration = ({ navigation }) => {
             style={styles.radioButton}>
             <View style={styles.radioButtonIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('OrganizationRegister')}>
             <Text style={styles.radioButtonText}>Organization</Text>
           </TouchableOpacity>
         </View>
@@ -58,7 +60,6 @@ const Registration = ({ navigation }) => {
           <Text style={styles.radioButtonText1}>
             NGO / Charity Org/ Restaurant / Shop
           </Text>
-
           <View>
             <Text style={styles.bodytext}>Already have an account? </Text>
 
@@ -66,16 +67,15 @@ const Registration = ({ navigation }) => {
               color="#3F5185"
               style={{
                 flexDirection: 'column',
-                height: 60,
+                height: 35,
                 width: 100,
-                
+                marginTop: 5,
                 left: 232,
                 alignContent: 'flex-end',
                 borderRadius: 5,
                 borderWidth: 1,
                 borderColor: '#3F5185',
                 backgroundColor: 'white',
-
               }}
               mode="outlined"
               onPress={() => navigation.navigate('Login')}>
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#3F51B5',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingVertical: 10,
-    paddingTop: 20,
+    // paddingVertical: 40,
+    paddingTop: 10,
     paddingHorizontal: 30,
   },
   footer_title: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     color: '#F5A623',
   },
   bodytext: {
-    top: 25,
+    top: 31,
     fontSize: 18,
     marginLeft: 16,
     color: '#fff',

@@ -38,9 +38,9 @@ const Welcome_page = ({navigation}) => (
           <Image
             source={require('../assets/Images/Welcome_page_image2.png')}
             style={{
-              width: 339,
-              height: 309,
-              top: 16,
+              width: 389,
+              height: 339,
+              top: 14,
               left: 12,
               alignItems: 'center',
             }}
@@ -59,8 +59,8 @@ const Welcome_page = ({navigation}) => (
           <Image
             source={require('../assets/Images/Welcome_page_image3.png')}
             style={{
-              width: 359,
-              height: 309,
+              width: 389,
+              height: 339,
               top: 14,
               left: 12,
               alignItems: 'center',
@@ -103,10 +103,10 @@ const Welcome_page = ({navigation}) => (
           <Image
             source={require('../assets/Images/Welcome_page_image5.png')}
             style={{
-              width: 329,
-              height: 269,
+              width: 389,
+              height: 339,
               top: 14,
-              left: 20,
+              left: 12,
               alignItems: 'center',
             }}
           />
