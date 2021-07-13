@@ -35,7 +35,8 @@ const Registration = ({navigation}) => {
             style={styles.radioButton}>
             <View style={styles.radioButtonIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PersonRegister')}>
             <Text style={styles.radioButtonText}>A Person</Text>
           </TouchableOpacity>
         </View>
@@ -50,7 +51,8 @@ const Registration = ({navigation}) => {
             style={styles.radioButton}>
             <View style={styles.radioButtonIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('OrganizationRegister')}>
             <Text style={styles.radioButtonText}>Organization</Text>
           </TouchableOpacity>
         </View>
@@ -58,7 +60,6 @@ const Registration = ({navigation}) => {
           <Text style={styles.radioButtonText1}>
             NGO / Charity Org/ Restaurant / Shop
           </Text>
-
           <View>
             <Text style={styles.bodytext}>Already have an account? </Text>
 

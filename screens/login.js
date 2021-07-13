@@ -39,7 +39,7 @@ const Login = (props) => {
           storeData(response.data.token);
           navigation.replace('Dashboard');
         } else {
-          Alert.alert("Enter valid username");
+          Alert.alert('Enter valid Credentials');
         }
       })
       .catch(function (error) {
@@ -49,12 +49,11 @@ const Login = (props) => {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('token', value)
+      await AsyncStorage.setItem('token', value);
     } catch (e) {
       // saving error
     }
   };
-
 
   // const validateEmail = () => {
   //   console.log('blur');
