@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   Text,
@@ -10,9 +9,10 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import {Input, NativeBaseProvider} from 'native-base';
-import {useNavigation} from '@react-navigation/native';
-import {Button} from 'react-native-paper';
+import { Input, NativeBaseProvider } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { Button } from 'react-native-paper';
+
 
 const OrganizationRegister = (props) => {
   const navigation = useNavigation();
@@ -22,7 +22,7 @@ const OrganizationRegister = (props) => {
   const [city, setCity] = React.useState();
   const [email, setEmail] = React.useState();
   const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
+  const handleClick = () => setShow(!show); 
   const [showEmailError, setShowEmailError] = React.useState(false);
 
   const validateEmail = () => {
@@ -37,26 +37,24 @@ const OrganizationRegister = (props) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>We4Us</Text>
-        <Image
-          source={require('../assets/Images/Organization_image.png')}
+        <Image source={require('../assets/Images/Organization_image.png')}
           style={{
             width: 200,
             height: 200,
             left: 100,
-            alignItems: 'center',
-          }}
-        />
-
-        <ScrollView>
+            alignItems: "center"
+          }} />
+     
+        <ScrollView >
           <NativeBaseProvider>
-            <View style={styles.Inputtext}>
+          <View style={styles.Inputtext}>
               <Input
                 style={styles.textInput}
                 placeholder="Type"
                 onChangeText={(val) => setType(val)}
                 value={type}
               />
-            </View>
+</View>
 
             <View style={styles.Inputtext}>
               <Input
@@ -65,6 +63,7 @@ const OrganizationRegister = (props) => {
                 onChangeText={(val) => setUsername(val)}
                 value={name}
               />
+
             </View>
             <View style={styles.Inputtext}>
               <Input
@@ -93,14 +92,14 @@ const OrganizationRegister = (props) => {
               {showEmailError ? <Text>Enter valid Email</Text> : null}
             </View>
             <View style={styles.Inputtext}>
-              <Input
+            <Input
                 type={show ? 'text' : 'password'}
                 InputRightElement={
                   <Button
                     style={{
                       backgroundColor: '#3F5185',
                       justifyContent: 'center',
-                      borderColor: '#3F5185',
+                      borderColor:'#3F5185',
                       alignItems: 'center',
                       height: 59,
                     }}
@@ -121,14 +120,14 @@ const OrganizationRegister = (props) => {
               />
             </View>
             <View style={styles.Inputtext}>
-              <Input
+            <Input
                 type={show ? 'text' : 'password'}
                 InputRightElement={
                   <Button
                     style={{
                       backgroundColor: '#3F5185',
                       justifyContent: 'center',
-                      borderColor: '#3F5185',
+                      borderColor:'#3F5185',
                       alignItems: 'center',
                       height: 59,
                     }}
@@ -149,61 +148,66 @@ const OrganizationRegister = (props) => {
               />
             </View>
           </NativeBaseProvider>
+        
+        <Button
+          color="white"
+          style={{
+            flexDirection: 'column',
+            height: 60,
+            width: 150,
+            marginTop: 5,
+            justifyContent: 'center',
+            borderRadius: 5,
+            borderWidth: 1,
+            backgroundColor: '#3F5185',
+            top: 1,
+            left: 130
+          }}
+          mode="outlined"
+          onPress={() => navigation.navigate()}>
+          <Text style={styles.Btn}> Submit </Text>
+        </Button>
+        <View>
+          <Text style={styles.bodytext} >Already have an account? </Text>
 
           <Button
-            color="white"
+            color="#3F5185"
             style={{
               flexDirection: 'column',
-              height: 60,
-              width: 150,
+              height: 35,
+              width: 100,
               marginTop: 5,
-              justifyContent: 'center',
+              left: 232,
+              alignContent: 'flex-end',
               borderRadius: 5,
               borderWidth: 1,
-              backgroundColor: '#3F5185',
-              top: 1,
-              left: 130,
+              borderColor: '#3F5185',
+              backgroundColor: 'white'
             }}
             mode="outlined"
             onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.Btn}> Submit </Text>
+            <Text style={styles.Btn}> Sign In </Text>
           </Button>
-          <View>
-            <Text style={styles.bodytext}>Already have an account? </Text>
 
-            <Button
-              color="#3F5185"
-              style={{
-                flexDirection: 'column',
-                height: 35,
-                width: 100,
-                marginTop: 5,
-                left: 232,
-                alignContent: 'flex-end',
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: '#3F5185',
-                backgroundColor: 'white',
-              }}
-              mode="outlined"
-              onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.Btn}> Sign In </Text>
-            </Button>
-          </View>
+
+        </View>
         </ScrollView>
       </View>
+      
     </SafeAreaView>
   );
-};
+}
 
 export default OrganizationRegister;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
   },
   header: {
     flex: 2,
+
   },
   footer: {
     flex: 2,
@@ -211,23 +215,23 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     paddingVertical: 110,
-    paddingHorizontal: 30,
+    paddingHorizontal: 30
   },
   footer_title: {
     fontSize: 25,
-    fontStyle: 'normal',
-    fontFamily: 'Barlow',
-    color: '#000',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontStyle: "normal",
+    fontFamily: "Barlow",
+    color: "#000",
+    fontWeight: "bold",
+    textAlign: 'center'
   },
   title: {
     fontSize: 45,
-    fontStyle: 'normal',
-    fontFamily: 'Barlow',
-    color: '#3F51B5',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontStyle: "normal",
+    fontFamily: "Barlow",
+    color: "#3F51B5",
+    fontWeight: "bold",
+    textAlign: 'center'
   },
   textInput: {
     height: 59,
@@ -255,6 +259,6 @@ const styles = StyleSheet.create({
     top: 31,
     fontSize: 18,
     marginLeft: 16,
-    color: '#000',
+    color: '#000'
   },
 });
