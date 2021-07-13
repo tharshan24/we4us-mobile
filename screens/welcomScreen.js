@@ -14,6 +14,31 @@ const Welcome_page = ({navigation}) => (
       <View style={styles.child}>
         <View style={styles.slide}>
           <Text style={styles.title}>Welcome</Text>
+          <View
+            style={{
+              left: 280,
+              width: 150,
+              height: 50,
+              borderRadius: 20,
+             bottom:94
+            }}>
+            <Button
+              color="#3F5185"
+              style={{
+                flexDirection: 'column',
+                height: 60,
+                width: 150,
+                marginTop: 5,
+                justifyContent: 'center',
+                borderRadius: 5,
+                borderColor:'white',
+                backgroundColor: 'white',
+              }}
+              mode="outlined"
+              onPress={() => navigation.navigate('Registration')}>
+              <Text style={styles.Btn}> Skip </Text>
+            </Button>
+          </View>
           <Image
             source={require('../assets/Images/Welcome_page_image1.png')}
             style={{
@@ -35,6 +60,31 @@ const Welcome_page = ({navigation}) => (
       <View style={styles.child}>
         <View style={styles.slide}>
           <Text style={styles.title}>Welcome</Text>
+          <View
+            style={{
+              left: 280,
+              width: 150,
+              height: 50,
+              borderRadius: 20,
+             bottom:94
+            }}>
+            <Button
+              color="#3F5185"
+              style={{
+                flexDirection: 'column',
+                height: 60,
+                width: 150,
+                marginTop: 5,
+                justifyContent: 'center',
+                borderRadius: 5,
+                borderColor:'white',
+                backgroundColor: 'white',
+              }}
+              mode="outlined"
+              onPress={() => navigation.navigate('Registration')}>
+              <Text style={styles.Btn}> Skip </Text>
+            </Button>
+          </View>
           <Image
             source={require('../assets/Images/Welcome_page_image2.png')}
             style={{
@@ -56,6 +106,31 @@ const Welcome_page = ({navigation}) => (
       <View style={styles.child}>
         <View style={styles.slide}>
           <Text style={styles.title}>Welcome</Text>
+          <View
+            style={{
+              left: 280,
+              width: 150,
+              height: 50,
+              borderRadius: 20,
+             bottom:94
+            }}>
+            <Button
+              color="#3F5185"
+              style={{
+                flexDirection: 'column',
+                height: 60,
+                width: 150,
+                marginTop: 5,
+                justifyContent: 'center',
+                borderRadius: 5,
+                borderColor:'white',
+                backgroundColor: 'white',
+              }}
+              mode="outlined"
+              onPress={() => navigation.navigate('Registration')}>
+              <Text style={styles.Btn}> Skip </Text>
+            </Button>
+          </View>
           <Image
             source={require('../assets/Images/Welcome_page_image3.png')}
             style={{
@@ -79,6 +154,31 @@ const Welcome_page = ({navigation}) => (
       <View style={styles.child}>
         <View style={styles.slide}>
           <Text style={styles.title}>Welcome</Text>
+          <View
+            style={{
+              left: 280,
+              width: 150,
+              height: 50,
+              borderRadius: 20,
+             bottom:94
+            }}>
+            <Button
+              color="#3F5185"
+              style={{
+                flexDirection: 'column',
+                height: 60,
+                width: 150,
+                marginTop: 5,
+                justifyContent: 'center',
+                borderRadius: 5,
+                borderColor:'white',
+                backgroundColor: 'white',
+              }}
+              mode="outlined"
+              onPress={() => navigation.navigate('Registration')}>
+              <Text style={styles.Btn}> Skip </Text>
+            </Button>
+          </View>
           <Image
             source={require('../assets/Images/Welcome_page_image4.png')}
             style={{
@@ -100,6 +200,31 @@ const Welcome_page = ({navigation}) => (
       <View style={styles.child}>
         <View style={styles.slide}>
           <Text style={styles.title}>Welcome</Text>
+          <View
+            style={{
+              left: 280,
+              width: 150,
+              height: 50,
+              borderRadius: 20,
+             bottom:94
+            }}>
+            <Button
+              color="#3F5185"
+              style={{
+                flexDirection: 'column',
+                height: 60,
+                width: 150,
+                marginTop: 5,
+                justifyContent: 'center',
+                borderRadius: 5,
+                borderColor:'white',
+                backgroundColor: 'white',
+              }}
+              mode="outlined"
+              onPress={() => navigation.navigate('Registration')}>
+              <Text style={styles.Btn}> Skip </Text>
+            </Button>
+          </View>
           <Image
             source={require('../assets/Images/Welcome_page_image5.png')}
             style={{

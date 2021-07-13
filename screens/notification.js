@@ -19,7 +19,8 @@ function ExploreAvailability(props) {
     <>
       <View style={styles.header}>
         <Text style={styles.heading}>Notification</Text>
-      </View><View style={styles.bodyCon}>
+      </View>
+      <View style={styles.bodyCon}>
         <View style={styles.AvailabilityCon}>
           <View style={styles.ProfilePicCon}>
             <Image
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Barlow-SemiBold',
     fontSize: 25,
     color: 'white',
-    left: 138,
+    textAlign: 'center',
     justifyContent: 'center',
     top: 15
   },
