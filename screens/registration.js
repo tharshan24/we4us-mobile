@@ -67,7 +67,7 @@ const Registration = ({navigation}) => {
               color="#3F5185"
               style={{
                 flexDirection: 'column',
-                height: 60,
+                height: 35,
                 width: 100,
                 marginTop: 5,
                 left: 232,
@@ -76,7 +76,7 @@ const Registration = ({navigation}) => {
                 borderWidth: 1,
                 borderColor: '#3F5185',
                 backgroundColor: 'white',
-                bottom: 15, 
+                bottom: 15,
               }}
               mode="outlined"
               onPress={() => navigation.navigate('Login')}>
@@ -162,8 +162,9 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   Btn: {
-    fontSize: 11,
+    fontSize: 13,
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'Barlow-Bold',
   },
 });
