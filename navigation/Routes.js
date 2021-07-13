@@ -51,7 +51,16 @@ const AuthStack = () => {
 
 const ExploreStack = () => {
   return (
-    <Top.Navigator>
+    <Top.Navigator
+      tabBarOptions={{
+        indicatorStyle: {
+          backgroundColor: '#ffffff',
+          paddingTop: 5,
+          borderRadius: 10,
+        },
+        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
+        style: {backgroundColor: colorConstant.primaryColor},
+      }}>
       <Top.Screen name="Availability" component={ExploreAvailability} />
       <Top.Screen name="Request" component={ExploreRequest} />
     </Top.Navigator>

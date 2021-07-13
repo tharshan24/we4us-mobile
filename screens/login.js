@@ -37,7 +37,7 @@ const Login = (props) => {
         console.log(response.data);
         if (response.data.status_code === 0) {
           storeData(response.data.token);
-          navigation.navigate('Dashboard');
+          navigation.replace('Dashboard');
         } else {
           Alert.alert("Enter valid username");
         }
