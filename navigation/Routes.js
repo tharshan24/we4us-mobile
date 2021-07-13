@@ -35,31 +35,15 @@ const Top = createMaterialTopTabNavigator();
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-       options={{
-          title: false,
-        headerStyle: {
-          elevation: 0, // remove shadow on Android
-          shadowOpacity: 0, // remove shadow on iOS
-        },}}
-       name="Welcome_page" 
-       component={Welcome_Page} />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          title: false,
-          headerStyle: {
-            backgroundColor: colorConstant.primaryColor,
-            elevation: 0, // remove shadow on Android
-            shadowOpacity: 0, // remove shadow on iOS
-          },
-        }}
-      />
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Welcome_page" component={Welcome_Page} />
+      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="PersonRegister" component={PersonRegister} />
-      <Stack.Screen name="OrganizationRegister" component={OrganizationRegister} />
+      <Stack.Screen
+        name="OrganizationRegister"
+        component={OrganizationRegister}
+      />
       <Stack.Screen name="forgotPassword" component={forgotPassword} />
     </Stack.Navigator>
   );
