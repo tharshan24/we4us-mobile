@@ -16,43 +16,38 @@ import { Button } from 'react-native-paper';
 
 function ExploreAvailability(props) {
   return (
-    <View>
-      <View >
-      <Text style={styles.heading}>Notification</Text>
-      </View>
-      <View style={styles.AvailabilityCon}>
-
-        <View style={styles.ProfilePicCon}>
-          <Image
-            style={styles.ProfilePic}
-            source={require('../assets/Images/notification.jpg')}
-          />
-         <View>
-           <Text style={styles.headingtext}>Aceept Availabiity</Text>
-           <Text style={styles.bodytext}>From:Theivendram Athavan</Text>
-           <Text style={styles.bodytext}>Quantity: 20</Text>
-           <Text style={styles.bodytext}>Best Before: 30/05/2021</Text>
-           </View> 
-         
+    <>
+      <View style={styles.header}>
+        <Text style={styles.heading}>Notification</Text>
+      </View><View style={styles.bodyCon}>
+        <View style={styles.AvailabilityCon}>
+          <View style={styles.ProfilePicCon}>
+            <Image
+              style={styles.ProfilePic}
+              source={require('../assets/Images/notification.jpg')} />
+            <View>
+              <Text style={styles.headingtext}>Aceept Availabiity</Text>
+              <Text style={styles.bodytext}>From:Theivendram Athavan</Text>
+              <Text style={styles.bodytext}>Quantity: 20</Text>
+              <Text style={styles.bodytext}>Best Before: 30/05/2021</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.AvailabilityCon}>
+          <View style={styles.ProfilePicCon}>
+            <Image
+              style={styles.ProfilePic}
+              source={require('../assets/Images/notification.jpg')} />
+            <View>
+              <Text style={styles.headingtext}>Accept Request</Text>
+              <Text style={styles.bodytext}>From:Theivendram Athavan</Text>
+              <Text style={styles.bodytext}>Quantity: 20</Text>
+              <Text style={styles.bodytext}>Best Before: 23/05/2021</Text>
+            </View>
+          </View>
         </View>
       </View>
-      <View style={styles.AvailabilityCon}>
-
-        <View style={styles.ProfilePicCon}>
-          <Image
-            style={styles.ProfilePic}
-            source={require('../assets/Images/notification.jpg')}
-          />
-         <View>
-           <Text style={styles.headingtext}>Accept Request</Text>
-           <Text style={styles.bodytext}>From:Theivendram Athavan</Text>
-           <Text style={styles.bodytext}>Quantity: 20</Text>
-           <Text style={styles.bodytext}>Best Before: 23/05/2021</Text>
-           </View> 
-        </View>
-      </View>
-    </View>
-
+    </>
   );
 }
 
@@ -92,28 +87,36 @@ const styles = StyleSheet.create({
   },
   TextCon: {
     height: 105,
-  borderRadius: 16,
-  left: 20,
+    borderRadius: 16,
+    left: 20,
 
   },
   heading: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 25,
-    color: 'black',
-    left:138,
-    justifyContent:'center'
+    color: 'white',
+    left: 138,
+    justifyContent: 'center',
+    top: 15
   },
-headingtext: {
+  headingtext: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 16,
     color: 'black',
-    left:23
+    left: 23
   },
   bodytext: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 14,
     color: colorConstant.proGreyLight,
-    left:23
+    left: 23
+  },
+  header: {
+    flex: 1,
+    backgroundColor: colorConstant.primaryColor,
+  },
+  bodyCon: {
+    flex: 8
   }
 
 });
