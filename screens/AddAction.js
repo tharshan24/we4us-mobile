@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import colorConstant from '../constants/colorConstant';
 import { Button } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function AddAction(props) {
   return (
@@ -21,23 +22,28 @@ function AddAction(props) {
         <View style={styles.AvailabilityCon}>
 
           <View>
-            <Text style={styles.headingtext}>Create Availabiity</Text>
+            <View style={styles.headingCon}>
+            <Text style={styles.headingtext}>Availabiity</Text>
+            <MaterialCommunityIcons
+                    name="food"
+                    color={colorConstant.primaryColor}
+                    size={30}
+                  />
+                  </View>
             <Text style={styles.bodytext}>Nowadays worldwide a lot of people are starving without adequate food.
               At the same time, many people are wasting the extra food in their functions, events, and restaurants.
               So can you create and help others.
             </Text>
             <View style={styles.BtnContainer}>
               <Button
-                color='green'
+                color={colorConstant.primaryColor}
                 style={{
                   flexDirection: 'column',
                   height: 50,
                   width: 180,
                   marginTop: 6,
                   justifyContent: 'center',
-                  borderRadius: 10,
-                  borderWidth: 1,
-                  borderColor: colorConstant.proGreen,
+                  borderRadius: 5,
                 }}
                 mode="contained"
                 onPress={() => create()}>
@@ -50,23 +56,27 @@ function AddAction(props) {
         <View style={styles.AvailabilityCon2}>
 
           <View>
-            <Text style={styles.headingtext}>Create Request</Text>
+          <View style={styles.headingCon}>
+            <Text style={styles.headingtext}>Request</Text>
+            <MaterialCommunityIcons
+                    name="card-account-details-outline"
+                    color={colorConstant.primaryColor}
+                    size={30}
+                  />
+            </View>
             <Text style={styles.bodytext}>During pandemic/disasters not everyone affected gets the support they need since they get unnoticed or unreachable. So can you create request and get a help. 
-
 
             </Text>
             <View style={styles.BtnContainer2}>
               <Button
-                color='red'
+                color={colorConstant.primaryColor}
                 style={{
                   flexDirection: 'column',
                   height: 50,
                   width: 180,
                   marginTop: 6,
                   justifyContent: 'center',
-                  borderRadius: 10,
-                  borderWidth: 1,
-                  borderColor: 'red',
+                  borderRadius: 5,
                 }}
                 mode="contained"
                 onPress={() => create()}>
@@ -102,8 +112,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     left: 14,
     top: 6,
-    borderLeftColor: 'green',
-    borderLeftWidth:5
   },
   AvailabilityCon2: {
     backgroundColor: '#ffffff',
@@ -114,8 +122,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     left: 14,
     top: 6,
-    borderLeftColor: 'red',
-    borderLeftWidth:5
   },
   heading: {
     fontFamily: 'Barlow-SemiBold',
@@ -128,9 +134,14 @@ const styles = StyleSheet.create({
   headingtext: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 24,
-    color: 'black',
+    color: colorConstant.primaryColor,
     justifyContent: 'center',
     textAlign: 'center'
+  },
+  headingCon:{
+    flexDirection: 'row',
+    justifyContent:'center',
+    textAlign:'center'
   },
   bodytext: {
     fontFamily: 'Barlow-SemiBold',
