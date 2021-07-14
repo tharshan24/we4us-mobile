@@ -28,9 +28,10 @@ import TermsCondition from '../screens/termsCondition';
 import Welcome_Page from '../screens/welcomScreen';
 import OrganizationRegister from '../screens/organizationRegister';
 import PersonRegister from '../screens/personRegister';
-// import DashboardNgo from '../screens/dashboardNgo';
+import DashboardNgo from '../screens/dashboardNgo';
 // import DashboardShops from '../screens/dashboardShops';
 import SplashScreen from '../screens/splashScreen';
+import SettingsOrganization from '../screens/settingsOrganization';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -43,6 +44,26 @@ const AuthStack = () => {
       {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="Welcome_page" component={Welcome_Page} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Registration" component={Registration} />
+      <Stack.Screen name="PersonRegister" component={PersonRegister} />
+      <Stack.Screen
+        name="OrganizationRegister"
+        component={OrganizationRegister}
+      />
+      <Stack.Screen name="forgotPassword" component={forgotPassword} />
+    </Stack.Navigator>
+  );
+};
+
+//Ngo
+const AuthStackNgo = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {/* <Stack.Screen name="DashboardNGO" component={DashboardNgo} /> */}
+      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
+      {/* <Stack.Screen name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen name="Welcome_page" component={Welcome_Page} /> */}
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="PersonRegister" component={PersonRegister} />
@@ -112,6 +133,150 @@ const DashboardPublicStack = () => {
   );
 };
 
+// Ngo
+const DashboardNgoStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Home"
+        component={DashboardNgoTap}
+      />
+      <Stack.Screen name="History-Donation" component={HistoryDonation} />
+      <Stack.Screen name="History-Request" component={HistoryRequest} />
+      <Stack.Screen name="PublicSetting" component={SettingsPublic} />
+      <Stack.Screen name="OngoingDonation" component={OngoingDonation} />
+      <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
+      <Stack.Screen name="RegisterDriver" component={RegisterDriver} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Edit Profile',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="DriverSettings" component={DriverSettings} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="TermsCondition" component={TermsCondition} />
+    </Stack.Navigator>
+  );
+};
+
+const DashboardNgoTap = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      activeColor={colorConstant.proRed}
+      inactiveColor="#727E8E"
+      barStyle={{backgroundColor: '#ffffff'}}>
+      <Tab.Screen
+        name="Home"
+        component={DashboardNgo}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="home-outline"
+              color={color}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Explore"
+        component={ExploreNgoStack}
+        options={{
+          tabBarLabel: 'Explore',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="layers-search-outline"
+              color={color}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="AddAction"
+        component={AddAction}
+        options={{
+          tabBarLabel: 'Add',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="plus-box"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          tabBarLabel: 'Notification',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="bell-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsOrganization}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="cog-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const ExploreNgoStack = () => {
+  return (
+    <Top.Navigator
+      tabBarOptions={{
+        indicatorStyle: {
+          backgroundColor: '#ffffff',
+          paddingTop: 5,
+          borderRadius: 10,
+        },
+        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
+        style: {backgroundColor: colorConstant.primaryColor},
+      }}>
+      <Top.Screen name="Availability" component={ExploreAvailability} />
+      <Top.Screen name="Request" component={ExploreRequest} />
+    </Top.Navigator>
+  );
+};
+
+
+//Public Dashboard
 const DashboardTap = () => {
   return (
     <Tab.Navigator
@@ -200,7 +365,10 @@ function InitialStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Auth" component={AuthStack} />
+      <Stack.Screen name="AuthNgo" component={AuthStackNgo} />
       <Stack.Screen name="Dashboard" component={DashboardPublicStack} />
+      <Stack.Screen name="DashboardNgo" component={DashboardNgoStack} />
+      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
       {/* <Stack.Screen name="Password" component={changePwd} /> */}
     </Stack.Navigator>
   );

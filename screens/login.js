@@ -33,10 +33,20 @@ const Login = (props) => {
         password: pwd,
       })
       .then(function (response) {
-        console.log(response.data);
+        console.log(response.data.result.userType);
         if (response.data.status_code === 0) {
-          storeData(response.data.token);
-          navigation.replace('Dashboard');
+          const user = {
+            result: response.data.result,
+            token: response.data.token,
+          };
+          storeData(user);
+          // storeData(response.data.user);
+          // storeData(response.data.result.userType);
+          if (response.data.result.userType === 1) {
+            navigation.replace('Dashboard');
+          } else if (response.data.result.userType === 2) {
+            navigation.replace('DashboardNgo');
+          }
         } else {
           Alert.alert('Enter valid Credentials');
         }
@@ -48,9 +58,10 @@ const Login = (props) => {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('token', value);
+      console.log(value,"--------------------------------")
+      await AsyncStorage.setItem('user', JSON.stringify(value));
     } catch (e) {
-      // saving error
+      console.log(e,"llllllllllllllllllllllllllllllllllllll");
     }
   };
 
