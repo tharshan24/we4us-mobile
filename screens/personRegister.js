@@ -73,7 +73,7 @@ const PersonRegister = (props) => {
     return reg.test(mobile);
   };
   const validatePassword = () => {
-    const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8}$/;
     setShowPasswordError(!reg.test(password));
     if (reg.test(password)) {
       flag = 1;
@@ -146,7 +146,7 @@ const PersonRegister = (props) => {
     //   }
     // }
     if (flag === 1) {
-      console.log('nfbjnfjlllllllllllllllllllllllllllllll');
+      // console.log('nfbjnfjlllllllllllllllllllllllllllllll');
       RegisterUser();
     } else {
       Alert.alert('Enter valid Credentials');

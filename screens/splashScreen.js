@@ -18,7 +18,7 @@ function SplashScreen(props) {
       // const type = await AsyncStorage.getItem('userType');
       const user = await AsyncStorage.getItem('user');
       // console.log(JSON.parse(user).result.userType,"ooooooooooooooooooooooo");
-      if (user !== null) {
+      if (JSON.parse(user) !== null) {
         if (JSON.parse(user).result.userType === 1) {
           navigation.navigate('Dashboard');
         } else if (JSON.parse(user).result.userType === 2) {

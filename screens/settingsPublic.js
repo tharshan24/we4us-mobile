@@ -23,7 +23,7 @@ const SettingsPublic = (props) => {
     // let c = Alert.Alert('Are you sure ?');
     // if (c) {
     try {
-      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('user');
       navigation.replace('Auth', {
         screen: 'Login',
       });
