@@ -7,14 +7,45 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from 'react-native';
 import colorConstant from '../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from 'react-native-paper';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const SettingsPublic = (props) => {
   const navigation = useNavigation();
+
+  const logout = async () => {
+    // let c = Alert.Alert('Are you sure ?');
+    // if (c) {
+    try {
+      await AsyncStorage.removeItem('token');
+      navigation.replace('Auth', {
+        screen: 'Login',
+      });
+    } catch (e) {
+      // remove error
+    }
+    // }
+    console.log('Done.');
+  };
+
+  
+    const con = () => {
+      Alert.alert('Logout', 'Are you sure to Logout ?', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Yes', onPress: () => logout()},
+      ]);
+    };
+
   return (
     <SafeAreaView style={styles.Container}>
       <View style={styles.TopContainer}>
@@ -135,7 +166,7 @@ const SettingsPublic = (props) => {
               width: Dimensions.get('window').width / 1.2,
               justifyContent: 'center',
             }}
-            onPress={() => navigation.replace('Auth')}>
+            onPress={() => con()}>
             <Text style={styles.BtnTxtLogout}>LogOut</Text>
           </Button>
         </View>

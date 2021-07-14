@@ -12,14 +12,19 @@ import {
 import colorConstant from '../constants/colorConstant';
 import DocumentPicker from 'react-native-document-picker';
 import {TextInput, Modal, Portal, Provider} from 'react-native-paper';
+// import { Container, Header, Content, Picker, Form } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {
   Select,
+  Container,
+  Picker,
   VStack,
+  Header,
   CheckIcon,
   Center,
+  Spinner,
   NativeBaseProvider,
 } from 'native-base';
 
@@ -51,6 +56,8 @@ const EditProfile = (props) => {
   const [actionVal, setActionVal] = React.useState(true);
   const [token, setToken] = React.useState();
   const [cities, setCities] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [selectedCity, setSelectedCity] = React.useState(true);
 
   const loadCities = () => {
     console.log(`Bearer ${token}`, 'dddd');
@@ -63,6 +70,7 @@ const EditProfile = (props) => {
       .then(function (response) {
         console.log(response.data);
         setCities(response.data.result.rows);
+        setLoading(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -83,88 +91,93 @@ const EditProfile = (props) => {
   useEffect(() => {
     getData();
     loadCities();
-  });
+  }, []);
 
   return (
-    <Provider>
-      <ScrollView style={styles.MainContainer}>
-        <View style={styles.ProfilePicCon}>
-          {/* <ImageBackground source={require('../assets/Images/profilePic.jpg')} /> */}
-          <Image
-            style={styles.ProfilePic}
-            source={require('../assets/Images/profilePic.jpg')}
-          />
-          <TouchableOpacity onPress={() => FilePic()}>
-            <Text style={styles.ChangeTxt}>Change</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActionVal(false)}>
-            <Text style={styles.ChangeTxt}>Edit</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.BottomContainer}>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>First Name</Text>
-            <View style={styles.EditContent}>
-              <TextInput
-                placeholder="Athavan"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: '90%',
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                // pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View>
-          </View>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>Last Name</Text>
-            <View style={styles.EditContent}>
-              <TextInput
-                placeholder="Theivendram"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: '90%',
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                // pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View>
-          </View>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>Address</Text>
-            <View style={styles.EditContent}>
-              <TextInput
-                placeholder="Jaffna, SriLanka"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: '90%',
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View>
-          </View>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>District</Text>
-            {/* <View style={styles.EditContent}>
+    <NativeBaseProvider>
+      <Provider>
+        <ScrollView style={styles.MainContainer}>
+          {loading ? (
+            <Spinner color="blue.500" />
+          ) : (
+            <>
+              <View style={styles.ProfilePicCon}>
+                {/* <ImageBackground source={require('../assets/Images/profilePic.jpg')} /> */}
+                <Image
+                  style={styles.ProfilePic}
+                  source={require('../assets/Images/profilePic.jpg')}
+                />
+                <TouchableOpacity onPress={() => FilePic()}>
+                  <Text style={styles.ChangeTxt}>Change</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setActionVal(false)}>
+                  <Text style={styles.ChangeTxt}>Edit</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.BottomContainer}>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>First Name</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder="Athavan"
+                      disabled={actionVal}
+                      // value={textUsername}
+                      // onChangeText={(Username) => setTextUsername(Username)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: '90%',
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                      // pressRetentionOffset={console.log('rj;;;g ')}
+                    />
+                  </View>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>Last Name</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder="Theivendram"
+                      disabled={actionVal}
+                      // value={textUsername}
+                      // onChangeText={(Username) => setTextUsername(Username)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: '90%',
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                      // pressRetentionOffset={console.log('rj;;;g ')}
+                    />
+                  </View>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>Address</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder="Jaffna, SriLanka"
+                      disabled={actionVal}
+                      // value={textUsername}
+                      // onChangeText={(Username) => setTextUsername(Username)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: '90%',
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                      pressRetentionOffset={console.log('rj;;;g ')}
+                    />
+                  </View>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>District</Text>
+                  {/* <View style={styles.EditContent}>
               <TextInput
                 placeholder="Jaffna"
                 disabled={actionVal}
@@ -181,7 +194,7 @@ const EditProfile = (props) => {
                 // pressRetentionOffset={console.log('rj;;;g ')}
               />
             </View> */}
-            {/* <NativeBaseProvider>
+                  {/* <NativeBaseProvider>
               <VStack alignItems="center" space={4}>
                 <Select
                   // selectedValue={language}
@@ -200,71 +213,86 @@ const EditProfile = (props) => {
                 </Select>
               </VStack>
             </NativeBaseProvider> */}
-            {cities.map((city) => {
-                    <Text>{city.name_en}</Text>
-                  })}
-          </View>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>City</Text>
-            <View style={styles.EditContent}>
-              <TextInput
-                placeholder="Jaffna"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: Dimensions.get('window').width / 1.7,
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                // pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View>
-          </View>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>ZipCode</Text>
-            <View style={styles.EditContent}>
-              <TextInput
-                placeholder="40000"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: Dimensions.get('window').width / 1.7,
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View>
-          </View>
-          <View style={styles.Content}>
-            <Text style={styles.ContentTxt}>Landline Number</Text>
-            <View style={styles.EditContent}>
-              <TextInput
-                placeholder="021 224 1234"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: Dimensions.get('window').width / 1.7,
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                // pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View>
-          </View>
-          {/* <View style={styles.Content}>
+
+                  <VStack alignItems="center" space={4}>
+                    <Select
+                      minWidth={330}
+                      selectedValue={selectedCity}
+                      style={styles.textInput}
+                      placeholder="District"
+                      onValueChange={(val) => setSelectedCity(val)}
+                      // _selectedItem={{
+                      //   bg: 'cyan.600',
+                      //   endIcon: <CheckIcon size={15} />,
+                      // }}
+                    >
+                      {cities.map((city) => (
+                        <Select.Item label={city.name_en} value={city.id} />
+                      ))}
+                    </Select>
+                  </VStack>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>City</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder="Jaffna"
+                      disabled={actionVal}
+                      // value={textUsername}
+                      // onChangeText={(Username) => setTextUsername(Username)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: Dimensions.get('window').width / 1.7,
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                      // pressRetentionOffset={console.log('rj;;;g ')}
+                    />
+                  </View>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>ZipCode</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder="40000"
+                      disabled={actionVal}
+                      // value={textUsername}
+                      // onChangeText={(Username) => setTextUsername(Username)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: Dimensions.get('window').width / 1.7,
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                      pressRetentionOffset={console.log('rj;;;g ')}
+                    />
+                  </View>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>Landline Number</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder="021 224 1234"
+                      disabled={actionVal}
+                      // value={textUsername}
+                      // onChangeText={(Username) => setTextUsername(Username)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: Dimensions.get('window').width / 1.7,
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                      // pressRetentionOffset={console.log('rj;;;g ')}
+                    />
+                  </View>
+                </View>
+                {/* <View style={styles.Content}>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={showModal}
@@ -299,9 +327,12 @@ const EditProfile = (props) => {
               </Modal>
             </Portal>
           </View> */}
-        </View>
-      </ScrollView>
-    </Provider>
+              </View>
+            </>
+          )}
+        </ScrollView>
+      </Provider>
+    </NativeBaseProvider>
   );
 };
 

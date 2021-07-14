@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
-  TextInput,
   Alert,
 } from 'react-native';
 import {Input, NativeBaseProvider} from 'native-base';
@@ -54,15 +53,6 @@ const Login = (props) => {
       // saving error
     }
   };
-
-  // const validateEmail = () => {
-  //   console.log('blur');
-  //   var re =
-  //     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   console.log(email, re.test(email));
-  //   setShowEmailError(!re.test(email));
-  //   return re.test(email);
-  // };
 
   return (
     <NativeBaseProvider>

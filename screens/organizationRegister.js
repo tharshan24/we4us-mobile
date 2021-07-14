@@ -2,17 +2,22 @@
 import React from 'react';
 import {
   Text,
-  Dimensions,
   StyleSheet,
   Image,
   View,
   SafeAreaView,
-  TextInput,
   ScrollView,
 } from 'react-native';
-import {Input, NativeBaseProvider} from 'native-base';
+// import {Input, NativeBaseProvider} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
+import {
+  Select,
+  VStack,
+  CheckIcon,
+  NativeBaseProvider,
+  Input,
+} from 'native-base';
 
 const OrganizationRegister = (props) => {
   const navigation = useNavigation();
@@ -21,6 +26,7 @@ const OrganizationRegister = (props) => {
   const [district, setDistrict] = React.useState();
   const [city, setCity] = React.useState();
   const [email, setEmail] = React.useState();
+  const [orgName, setOrgName] = React.useState();
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   const [showEmailError, setShowEmailError] = React.useState(false);
@@ -50,12 +56,28 @@ const OrganizationRegister = (props) => {
         <ScrollView>
           <NativeBaseProvider>
             <View style={styles.Inputtext}>
-              <Input
+              {/* <Input
                 style={styles.textInput}
                 placeholder="Type"
                 onChangeText={(val) => setType(val)}
                 value={type}
-              />
+              /> */}
+              <VStack alignItems="center" space={4}>
+                <Select
+                  selectedValue={type}
+                  minWidth={330}
+                  style={styles.textInput}
+                  placeholder="Type"
+                  onValueChange={(itemValue) => setType(itemValue)}
+                  _selectedItem={{
+                    bg: 'cyan.600',
+                    endIcon: <CheckIcon size={15} />,
+                  }}>
+                  <Select.Item label="Male" value="js" />
+                  <Select.Item label="Female" value="ts" />
+                  <Select.Item label="Other" value="c" />
+                </Select>
+              </VStack>
             </View>
 
             <View style={styles.Inputtext}>
@@ -66,21 +88,50 @@ const OrganizationRegister = (props) => {
                 value={name}
               />
             </View>
+
             <View style={styles.Inputtext}>
               <Input
                 style={styles.textInput}
-                placeholder="District"
-                onChangeText={(val) => setDistrict(val)}
-                value={district}
+                placeholder="Name"
+                onChangeText={(val) => setOrgName(val)}
+                value={orgName}
               />
             </View>
             <View style={styles.Inputtext}>
-              <Input
-                style={styles.textInput}
-                placeholder="City"
-                onChangeText={(val) => setCity(val)}
-                value={city}
-              />
+              <VStack alignItems="center" space={4}>
+                <Select
+                  selectedValue={district}
+                  minWidth={330}
+                  style={styles.textInput}
+                  placeholder="District"
+                  onValueChange={(itemValue) => setDistrict(itemValue)}
+                  _selectedItem={{
+                    bg: 'cyan.600',
+                    endIcon: <CheckIcon size={15} />,
+                  }}>
+                  <Select.Item label="Male" value="js" />
+                  <Select.Item label="Female" value="ts" />
+                  <Select.Item label="Other" value="c" />
+                </Select>
+              </VStack>
+            </View>
+            <View style={styles.Inputtext}>
+              <VStack alignItems="center" space={4}>
+                <Select
+                  selectedValue={city}
+                  minWidth={330}
+                  style={styles.textInput}
+                  placeholder="City"
+                  onValueChange={(itemValue) => setCity(itemValue)}
+                  _selectedItem={{
+                    bg: 'cyan.600',
+                    endIcon: <CheckIcon size={15} />,
+                  }}>
+                  <Select.Item label="Male" value="js" />
+                  <Select.Item label="Female" value="ts" />
+                  <Select.Item label="Other" value="c" />
+                </Select>
+              </VStack>
             </View>
             <View style={styles.Inputtext}>
               <Input
