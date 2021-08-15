@@ -1,19 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import colorConstant from '../constants/colorConstant';
+import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   Text,
   StyleSheet,
+  TouchableOpacity,
   SafeAreaView,
   StatusBar,
   Image,
 } from 'react-native';
 import {Button} from 'react-native-paper';
+import {flexDirection} from 'styled-system';
 
-const DashboardPublic = (props) => {
+const DashboardNgo = (props) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.Container}>
@@ -25,17 +27,17 @@ const DashboardPublic = (props) => {
         <View style={styles.ProfilePicCon}>
           <Image
             style={styles.ProfilePic}
-            source={require('../assets/Images/profilePic.jpg')}
+            source={require('../../assets/Images/logo.png')}
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> Theivendram Athavan </Text>
+          <Text style={styles.UserName}> Rotaract Club </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 8}}>
-              <Text style={styles.Email}>thavanthya@gmail.com </Text>
+              <Text style={styles.Email}>rotaract@gmail.com </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -43,7 +45,7 @@ const DashboardPublic = (props) => {
               <MaterialCommunityIcons name="phone" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 3}}>
-              <Text style={styles.Mobile}> +94 77 946 2554 </Text>
+              <Text style={styles.Mobile}> +94 77 123 4567 </Text>
             </View>
           </View>
         </View>
@@ -77,7 +79,7 @@ const DashboardPublic = (props) => {
                 </View>
               </View>
               <View style={styles.DonationCount}>
-                <Text style={styles.DonationCountTxt}>17</Text>
+                <Text style={styles.DonationCountTxt}>7</Text>
                 <Text style={styles.DonationSuccess}>SUCCESSFUL DONATIONS</Text>
               </View>
               <View style={styles.ButtonsCon}>
@@ -103,7 +105,7 @@ const DashboardPublic = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingDonation')}>
-                  <Text style={styles.BtnTxt2}>2 in Progress</Text>
+                  <Text style={styles.BtnTxt2}>3 in Progress</Text>
                 </Button>
               </View>
             </View>
@@ -121,7 +123,7 @@ const DashboardPublic = (props) => {
                 </View>
               </View>
               <View style={styles.RequestCount}>
-                <Text style={styles.RequestCountTxt}>5</Text>
+                <Text style={styles.RequestCountTxt}>7</Text>
                 <Text style={styles.RequestSuccess}>REQUESTS CREATED</Text>
               </View>
               <View style={styles.ButtonsConRequest}>
@@ -147,7 +149,7 @@ const DashboardPublic = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingRequest')}>
-                  <Text style={styles.BtnTxt2Request}>3 on request</Text>
+                  <Text style={styles.BtnTxt2Request}>5 on request</Text>
                 </Button>
               </View>
             </View>
@@ -155,35 +157,50 @@ const DashboardPublic = (props) => {
           <View style={styles.RegisterDriverCon}>
             <View style={styles.Heading}>
               <View style={styles.DriverHeaderCon}>
-                <Text style={styles.DriverHeaderTxt}>DELIVERIES</Text>
+                <Text style={styles.DriverHeaderTxt}>COLLECTION POINTS</Text>
               </View>
               <View style={styles.DriverHeaderIcon}>
                 <MaterialCommunityIcons
-                  name="truck-fast-outline"
+                  name="garage-open-variant"
                   color={colorConstant.proCharcoal}
                   size={25}
                 />
               </View>
             </View>
-            <View style={styles.ImageCon}>
-              <Image
-                style={styles.DeliveryImage}
-                source={require('../assets/Images/registerDriver.png')}
-              />
-              <Button
-                color={colorConstant.primaryColor}
-                mode="contained"
-                style={{
-                  marginTop: 5,
-                  width: 205,
-                  height: 30,
-                  justifyContent: 'center',
-                }}
-                onPress={() => navigation.navigate('RegisterDriver')}>
-                <Text style={styles.DeliveryConBtnTxt}>
-                  REGISTER AS A DRIVER
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <View style={styles.DonationCampCount}>
+                <Text style={styles.DonationCampCountTxt}>4</Text>
+                <Text style={styles.DonationCampSuccess}>
+                  SUCCESSFUL DONATIONS
                 </Text>
-              </Button>
+              </View>
+              <View style={styles.ButtonsConDonationCamp}>
+                <Button
+                  color={colorConstant.primaryColor}
+                  mode="contained"
+                  style={{
+                    marginTop: 10,
+                    height: 30,
+                    width: 150,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => navigation.navigate('History-Request')}>
+                  <Text style={styles.BtnTxtDonationCamp}>History</Text>
+                </Button>
+                <Button
+                  color={colorConstant.proRed}
+                  mode="contained"
+                  style={{
+                    marginTop: 10,
+                    height: 30,
+                    width: 150,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => navigation.navigate('OngoingRequest')}>
+                  <Text style={styles.BtnTxt2DonationCamp}>5 on request</Text>
+                </Button>
+              </View>
             </View>
           </View>
         </View>
@@ -347,6 +364,19 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: colorConstant.primaryColor,
   },
+  DonationCampCount: {
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  DonationCampCountTxt: {
+    fontFamily: 'Barlow-Bold',
+    fontSize: 50,
+  },
+  DonationCampSuccess: {
+    fontFamily: 'Barlow-Bold',
+    fontSize: 10,
+    color: colorConstant.primaryColor,
+  },
   ButtonsCon: {
     alignItems: 'center',
     marginTop: 5,
@@ -362,12 +392,18 @@ const styles = StyleSheet.create({
   ButtonsConRequest: {
     alignItems: 'center',
     marginTop: 5,
+    // flexDirection: 'row',
   },
-  BtnTxtRequest: {
+  ButtonsConDonationCamp: {
+    alignItems: 'center',
+    marginTop: 5,
+    // flexDirection: 'row',
+  },
+  BtnTxtDonationCamp: {
     alignItems: 'center',
     fontSize: 12,
   },
-  BtnTxt2Request: {
+  BtnTxt2DonationCamp: {
     alignItems: 'center',
     fontSize: 14,
   },
@@ -393,4 +429,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardPublic;
+export default DashboardNgo;

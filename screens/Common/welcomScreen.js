@@ -20,7 +20,7 @@ const Welcome_page = ({navigation}) => (
               width: 150,
               height: 50,
               borderRadius: 20,
-             bottom:94
+              bottom: 94,
             }}>
             <Button
               color="#3F5185"
@@ -31,7 +31,7 @@ const Welcome_page = ({navigation}) => (
                 marginTop: 5,
                 justifyContent: 'center',
                 borderRadius: 5,
-                borderColor:'white',
+                borderColor: 'white',
                 backgroundColor: 'white',
               }}
               mode="outlined"
@@ -40,10 +40,10 @@ const Welcome_page = ({navigation}) => (
             </Button>
           </View>
           <Image
-            source={require('../assets/Images/Welcome_page_image1.png')}
+            source={require('../../assets/Images/Welcome_page_image1.png')}
             style={{
               width: Dimensions.get('window').width,
-              height: Dimensions.get('window').height/2,
+              height: Dimensions.get('window').height / 2,
               top: 14,
               left: 12,
               alignItems: 'center',
@@ -66,7 +66,7 @@ const Welcome_page = ({navigation}) => (
               width: 150,
               height: 50,
               borderRadius: 20,
-             bottom:94
+              bottom: 94,
             }}>
             <Button
               color="#3F5185"
@@ -77,7 +77,7 @@ const Welcome_page = ({navigation}) => (
                 marginTop: 5,
                 justifyContent: 'center',
                 borderRadius: 5,
-                borderColor:'white',
+                borderColor: 'white',
                 backgroundColor: 'white',
               }}
               mode="outlined"
@@ -86,7 +86,7 @@ const Welcome_page = ({navigation}) => (
             </Button>
           </View>
           <Image
-            source={require('../assets/Images/Welcome_page_image2.png')}
+            source={require('../../assets/Images/Welcome_page_image2.png')}
             style={{
               width: 339,
               height: 309,
@@ -112,7 +112,7 @@ const Welcome_page = ({navigation}) => (
               width: 150,
               height: 50,
               borderRadius: 20,
-             bottom:94
+              bottom: 94,
             }}>
             <Button
               color="#3F5185"
@@ -123,7 +123,7 @@ const Welcome_page = ({navigation}) => (
                 marginTop: 5,
                 justifyContent: 'center',
                 borderRadius: 5,
-                borderColor:'white',
+                borderColor: 'white',
                 backgroundColor: 'white',
               }}
               mode="outlined"
@@ -132,7 +132,7 @@ const Welcome_page = ({navigation}) => (
             </Button>
           </View>
           <Image
-            source={require('../assets/Images/Welcome_page_image3.png')}
+            source={require('../../assets/Images/Welcome_page_image3.png')}
             style={{
               width: 359,
               height: 309,
@@ -160,7 +160,7 @@ const Welcome_page = ({navigation}) => (
               width: 150,
               height: 50,
               borderRadius: 20,
-             bottom:94
+              bottom: 94,
             }}>
             <Button
               color="#3F5185"
@@ -171,7 +171,7 @@ const Welcome_page = ({navigation}) => (
                 marginTop: 5,
                 justifyContent: 'center',
                 borderRadius: 5,
-                borderColor:'white',
+                borderColor: 'white',
                 backgroundColor: 'white',
               }}
               mode="outlined"
@@ -180,7 +180,7 @@ const Welcome_page = ({navigation}) => (
             </Button>
           </View>
           <Image
-            source={require('../assets/Images/Welcome_page_image4.png')}
+            source={require('../../assets/Images/Welcome_page_image4.png')}
             style={{
               width: 389,
               height: 339,
@@ -206,7 +206,7 @@ const Welcome_page = ({navigation}) => (
               width: 150,
               height: 50,
               borderRadius: 20,
-             bottom:94
+              bottom: 94,
             }}>
             <Button
               color="#3F5185"
@@ -217,7 +217,7 @@ const Welcome_page = ({navigation}) => (
                 marginTop: 5,
                 justifyContent: 'center',
                 borderRadius: 5,
-                borderColor:'white',
+                borderColor: 'white',
                 backgroundColor: 'white',
               }}
               mode="outlined"
@@ -226,7 +226,7 @@ const Welcome_page = ({navigation}) => (
             </Button>
           </View>
           <Image
-            source={require('../assets/Images/Welcome_page_image5.png')}
+            source={require('../../assets/Images/Welcome_page_image5.png')}
             style={{
               width: 329,
               height: 269,
@@ -317,7 +317,6 @@ const styles = StyleSheet.create({
   },
   Btn: {
     fontSize: 12,
-    fontSize: 14,
   },
 });
 

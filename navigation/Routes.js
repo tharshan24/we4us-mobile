@@ -1,137 +1,44 @@
 /* eslint-disable react-native/no-inline-styles */
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
-import Registration from '../screens/registration';
-import Login from '../screens/login';
+import PublicRegistration from '../screens/Common/publicRegistration';
+import Login from '../screens/Common/login';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import Notification from '../screens/notification';
-import forgotPassword from '../screens/forgotPassword';
+import Notifications from '../screens/Public/notifications';
+import forgotPassword from '../screens/Common/forgotPassword';
 import colorConstant from '../constants/colorConstant';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import ExploreAvailability from '../screens/exploreAvailability';
-import ExploreRequest from '../screens/exploreRequest';
-import AddAction from '../screens/AddAction';
-import DashboardPublic from '../screens/dashboardPublic';
+import ExploreAvailability from '../screens/Public/exploreAvailability';
+import ExploreRequest from '../screens/Public/exploreRequest';
+import CreateAction from '../screens/Public/createAction';
+import DashboardPublic from '../screens/Public/dashboardPublic';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HistoryDonation from '../screens/historyDonation';
-import HistoryRequest from '../screens/historyRequest';
-import SettingsPublic from '../screens/settingsPublic';
-import OngoingDonation from '../screens/ongoingDonation';
-import OngoingRequest from '../screens/ongoingRequest';
-import RegisterDriver from '../screens/registerDriver';
-import EditProfile from '../screens/editProfile';
-import ChangePassword from '../screens/changePassword';
-import DriverSettings from '../screens/driverSettings';
-import AboutUs from '../screens/aboutUs';
-import PrivacyPolicy from '../screens/privacyPolicy';
-import TermsCondition from '../screens/termsCondition';
-import Welcome_Page from '../screens/welcomScreen';
-import OrganizationRegister from '../screens/organizationRegister';
-import PersonRegister from '../screens/personRegister';
-import DashboardNgo from '../screens/dashboardNgo';
-// import DashboardShops from '../screens/dashboardShops';
-import SplashScreen from '../screens/splashScreen';
-import SettingsOrganization from '../screens/settingsOrganization';
+import HistoryDonation from '../screens/Public/historyDonation';
+import HistoryRequest from '../screens/Public/historyRequest';
+import SettingsPublic from '../screens/Public/settingsPublic';
+import OngoingDonation from '../screens/Public/ongoingDonation';
+import OngoingRequest from '../screens/Public/ongoingRequest';
+import RegisterDriver from '../screens/Public/registerDriver';
+import EditProfile from '../screens/Public/editProfile';
+import ChangePassword from '../screens/Common/changePassword';
+import DriverSettings from '../screens/Public/driverSettings';
+import AboutUs from '../screens/Public/aboutUs';
+import PrivacyPolicy from '../screens/Public/privacyPolicy';
+import TermsCondition from '../screens/Public/termsCondition';
+import Welcome_Page from '../screens/Common/welcomScreen';
+import OrganizationRegister from '../screens/Common/organizationRegister';
+import PersonRegister from '../screens/Public/personRegister';
+import DashboardNgo from '../screens/NGO/dashboardNgo';
+import SplashScreen from '../screens/Common/splashScreen';
+import SettingsOrganization from '../screens/NGO/settingsOrganization';
+import BrowseAvailability from '../screens/Public/browseAvailability';
+import FilterResults from '../screens/Public/filterResults';
+import {useNavigation} from '@react-navigation/native';
+import DonationTrackingMap from '../screens/Public/donationTrackingMap';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 const Top = createMaterialTopTabNavigator();
-
-const AuthStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      {/* <Stack.Screen name="DashboardNGO" component={DashboardNgo} /> */}
-      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
-      <Stack.Screen name="SplashScreen" component={SplashScreen} />
-      <Stack.Screen name="Welcome_page" component={Welcome_Page} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Registration" component={Registration} />
-      <Stack.Screen name="PersonRegister" component={PersonRegister} />
-      <Stack.Screen
-        name="OrganizationRegister"
-        component={OrganizationRegister}
-      />
-      <Stack.Screen name="forgotPassword" component={forgotPassword} />
-    </Stack.Navigator>
-  );
-};
-
-//Ngo
-const AuthStackNgo = () => {
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      {/* <Stack.Screen name="DashboardNGO" component={DashboardNgo} /> */}
-      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
-      {/* <Stack.Screen name="SplashScreen" component={SplashScreen} />
-      <Stack.Screen name="Welcome_page" component={Welcome_Page} /> */}
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Registration" component={Registration} />
-      <Stack.Screen name="PersonRegister" component={PersonRegister} />
-      <Stack.Screen
-        name="OrganizationRegister"
-        component={OrganizationRegister}
-      />
-      <Stack.Screen name="forgotPassword" component={forgotPassword} />
-    </Stack.Navigator>
-  );
-};
-
-const ExploreStack = () => {
-  return (
-    <Top.Navigator
-      tabBarOptions={{
-        indicatorStyle: {
-          backgroundColor: '#ffffff',
-          paddingTop: 5,
-          borderRadius: 10,
-        },
-        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
-        style: {backgroundColor: colorConstant.primaryColor},
-      }}>
-      <Top.Screen name="Availability" component={ExploreAvailability} />
-      <Top.Screen name="Request" component={ExploreRequest} />
-    </Top.Navigator>
-  );
-};
-
-const DashboardPublicStack = () => {
-  return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="Home"
-        component={DashboardTap}
-      />
-      <Stack.Screen name="History-Donation" component={HistoryDonation} />
-      <Stack.Screen name="History-Request" component={HistoryRequest} />
-      <Stack.Screen name="PublicSetting" component={SettingsPublic} />
-      <Stack.Screen name="OngoingDonation" component={OngoingDonation} />
-      <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
-      <Stack.Screen name="RegisterDriver" component={RegisterDriver} />
-      <Stack.Screen
-        name="EditProfile"
-        component={EditProfile}
-        options={{
-          headerTintColor: '#ffffff',
-          title: 'Edit Profile',
-          headerStyle: {
-            backgroundColor: colorConstant.primaryColor,
-            elevation: 0, // remove shadow on Android
-            shadowOpacity: 0, // remove shadow on iOS
-          },
-          headerTitleStyle: {
-            fontFamily: 'Barlow-SemiBold',
-          },
-        }}
-      />
-      <Stack.Screen name="ChangePassword" component={ChangePassword} />
-      <Stack.Screen name="DriverSettings" component={DriverSettings} />
-      <Stack.Screen name="AboutUs" component={AboutUs} />
-      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-      <Stack.Screen name="TermsCondition" component={TermsCondition} />
-    </Stack.Navigator>
-  );
-};
 
 // Ngo
 const DashboardNgoStack = () => {
@@ -173,6 +80,25 @@ const DashboardNgoStack = () => {
   );
 };
 
+const AuthStackNgo = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {/* <Stack.Screen name="DashboardNGO" component={DashboardNgo} /> */}
+      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
+      {/* <Stack.Screen name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen name="Welcome_page" component={Welcome_Page} /> */}
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Registration" component={PublicRegistration} />
+      <Stack.Screen name="PersonRegister" component={PersonRegister} />
+      <Stack.Screen
+        name="OrganizationRegister"
+        component={OrganizationRegister}
+      />
+      <Stack.Screen name="forgotPassword" component={forgotPassword} />
+    </Stack.Navigator>
+  );
+};
+
 const DashboardNgoTap = () => {
   return (
     <Tab.Navigator
@@ -210,7 +136,7 @@ const DashboardNgoTap = () => {
       />
       <Tab.Screen
         name="AddAction"
-        component={AddAction}
+        component={CreateAction}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
@@ -275,7 +201,6 @@ const ExploreNgoStack = () => {
   );
 };
 
-
 //Public Dashboard
 const DashboardTap = () => {
   return (
@@ -302,7 +227,6 @@ const DashboardTap = () => {
         name="Explore"
         component={ExploreStack}
         options={{
-          tabBarLabel: 'Explore',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               name="layers-search-outline"
@@ -314,7 +238,7 @@ const DashboardTap = () => {
       />
       <Tab.Screen
         name="AddAction"
-        component={AddAction}
+        component={CreateAction}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
@@ -329,7 +253,7 @@ const DashboardTap = () => {
       />
       <Tab.Screen
         name="Notification"
-        component={Notification}
+        component={Notifications}
         options={{
           tabBarLabel: 'Notification',
           tabBarIcon: ({color}) => (
@@ -358,6 +282,151 @@ const DashboardTap = () => {
         }}
       />
     </Tab.Navigator>
+  );
+};
+
+const AuthStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {/* <Stack.Screen name="DashboardNGO" component={DashboardNgo} /> */}
+      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen name="Welcome_page" component={Welcome_Page} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Registration" component={PublicRegistration} />
+      <Stack.Screen name="PersonRegister" component={PersonRegister} />
+      <Stack.Screen
+        name="OrganizationRegister"
+        component={OrganizationRegister}
+      />
+      <Stack.Screen name="forgotPassword" component={forgotPassword} />
+    </Stack.Navigator>
+  );
+};
+
+const ExploreStack = () => {
+  return (
+    <Top.Navigator
+      screenOptions={{}}
+      tabBarOptions={{
+        indicatorStyle: {
+          backgroundColor: '#ffffff',
+          paddingTop: 5,
+          borderRadius: 10,
+        },
+        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
+        style: {backgroundColor: colorConstant.primaryColor},
+      }}>
+      <Top.Screen name="Availability" component={ExploreAvailability} />
+      <Top.Screen name="Request" component={ExploreRequest} />
+    </Top.Navigator>
+  );
+};
+
+const DashboardPublicStack = () => {
+  const navigation = useNavigation();
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={DashboardTap}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="History-Donation" component={HistoryDonation} />
+      <Stack.Screen name="History-Request" component={HistoryRequest} />
+      <Stack.Screen
+        name="OngoingDonation"
+        component={OngoingDonation}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Donations',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
+      <Stack.Screen name="RegisterDriver" component={RegisterDriver} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Edit Profile',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="DriverSettings" component={DriverSettings} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="TermsCondition" component={TermsCondition} />
+      <Stack.Screen
+        name="BrowseAvailability"
+        component={BrowseAvailability}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="FilterResults"
+        component={FilterResults}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Filter',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DonationTrackingMap"
+        component={DonationTrackingMap}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Track Donation',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+    </Stack.Navigator>
   );
 };
 

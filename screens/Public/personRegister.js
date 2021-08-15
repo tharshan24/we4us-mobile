@@ -44,15 +44,12 @@ const PersonRegister = (props) => {
   const [selectedCity, setSelectedCity] = React.useState(true);
   const [selectedDistrict, setSelectedDistrict] = React.useState(true);
 
-  // const [gender, setGender] = React.useState('');
-
   let flag = 0;
 
   const validateEmail = () => {
     console.log('blur');
     var re =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log(email, re.test(email));
     setShowEmailError(!re.test(email));
     if (re.test(email)) {
       flag = 1;
@@ -72,6 +69,7 @@ const PersonRegister = (props) => {
     }
     return reg.test(mobile);
   };
+
   const validatePassword = () => {
     const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8}$/;
     setShowPasswordError(!reg.test(password));
@@ -99,7 +97,6 @@ const PersonRegister = (props) => {
     axios
       .get('http://10.0.2.2:8000/system/districts')
       .then(function (response) {
-        console.log(response.data);
         setDistrict(response.data.result.rows);
         setLoading(false);
       })
@@ -107,11 +104,11 @@ const PersonRegister = (props) => {
         console.log(error);
       });
   };
+
   const loadCities = (districtId) => {
     axios
       .get(`http://10.0.2.2:8000/system/citiesByDistrict/${districtId}`)
       .then(function (response) {
-        console.log(response.data);
         setCity(response.data.result.rows);
       })
       .catch(function (error) {
@@ -128,25 +125,8 @@ const PersonRegister = (props) => {
     loadCities(districtId);
   };
 
-  // let validation = [
-  //   validateEmail,
-  //   validateMobile,
-  //   validatePassword,
-  //   confirmPassword,
-  // ];
-  // let validation = [true, true, true, true];
-
   const validateOnSubmit = () => {
-    // console.log(validateEmail());
-    // flag = 0;
-    // console.log(gender);
-    // for (i = 0; i < 4; i++) {
-    //   if (validation[i] === true) {
-    //     flag = 1;
-    //   }
-    // }
     if (flag === 1) {
-      // console.log('nfbjnfjlllllllllllllllllllllllllllllll');
       RegisterUser();
     } else {
       Alert.alert('Enter valid Credentials');
@@ -157,7 +137,6 @@ const PersonRegister = (props) => {
   };
 
   const RegisterUser = () => {
-    // console.log(name, email, mobile, city, gender, checkPassword);
     axios
       .post('http://10.0.2.2:8000/user/publicRegister', {
         user_name: name,
@@ -174,7 +153,7 @@ const PersonRegister = (props) => {
             screen: 'Login',
           });
         } else {
-          Alert.alert('Registration Failed');
+          Alert.alert('PublicRegistration Failed');
           console.log(response.data);
         }
       })
@@ -184,24 +163,23 @@ const PersonRegister = (props) => {
   };
 
   return (
-    <NativeBaseProvider>
-      <SafeAreaView style={styles.container}>
-        {loading ? (
-          <Spinner color="blue.500" />
-        ) : (
-          <View style={styles.header}>
-            <Text style={styles.title}>We4Us</Text>
-            <Image
-              source={require('../assets/Images/Person_image.png')}
-              style={{
-                width: 200,
-                height: 200,
-                left: 100,
-                alignItems: 'center',
-              }}
-            />
-
-            <ScrollView>
+    <ScrollView>
+      <NativeBaseProvider>
+        <SafeAreaView style={styles.container}>
+          {loading ? (
+            <Spinner color="blue.500" />
+          ) : (
+            <View style={styles.header}>
+              <Text style={styles.title}>We4Us</Text>
+              <Image
+                source={require('../../assets/Images/Person_image.png')}
+                style={{
+                  width: 200,
+                  height: 200,
+                  left: 100,
+                  alignItems: 'center',
+                }}
+              />
               <View style={styles.Inputtext}>
                 <Input
                   style={styles.textInput}
@@ -416,11 +394,11 @@ const PersonRegister = (props) => {
                   <Text style={styles.Btn}> Sign In </Text>
                 </Button>
               </View>
-            </ScrollView>
-          </View>
-        )}
-      </SafeAreaView>
-    </NativeBaseProvider>
+            </View>
+          )}
+        </SafeAreaView>
+      </NativeBaseProvider>
+    </ScrollView>
   );
 };
 

@@ -9,6 +9,8 @@ target 'we4us' do
   use_react_native!(:path => config["reactNativePath"])
 
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   target 'we4usTests' do
     inherit! :complete
     # Pods for testing

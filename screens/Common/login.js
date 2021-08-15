@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {Input, NativeBaseProvider} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
-import colorConstant from '../constants/colorConstant';
+import colorConstant from '../../constants/colorConstant';
 import {Button} from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -58,10 +58,9 @@ const Login = (props) => {
 
   const storeData = async (value) => {
     try {
-      console.log(value,"--------------------------------")
       await AsyncStorage.setItem('user', JSON.stringify(value));
     } catch (e) {
-      console.log(e,"llllllllllllllllllllllllllllllllllllll");
+      console.log(e);
     }
   };
 
