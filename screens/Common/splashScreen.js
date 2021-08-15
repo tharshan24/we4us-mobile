@@ -2,9 +2,8 @@
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-import colorConstant from '../constants/colorConstant';
+import colorConstant from '../../constants/colorConstant';
 
 function SplashScreen(props) {
   const navigation = useNavigation();
@@ -14,10 +13,7 @@ function SplashScreen(props) {
 
   const checkLogin = async () => {
     try {
-      // const value = await AsyncStorage.getItem('token');
-      // const type = await AsyncStorage.getItem('userType');
       const user = await AsyncStorage.getItem('user');
-      // console.log(JSON.parse(user).result.userType,"ooooooooooooooooooooooo");
       if (JSON.parse(user) !== null) {
         if (JSON.parse(user).result.userType === 1) {
           navigation.navigate('Dashboard');
@@ -43,7 +39,6 @@ function SplashScreen(props) {
       }}>
       <Text
         style={{fontFamily: 'Poppins-Bold', fontSize: 60, color: '#ffffff'}}>
-        {' '}
         We4Us
       </Text>
     </View>

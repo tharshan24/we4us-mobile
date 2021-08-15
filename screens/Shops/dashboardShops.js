@@ -1,21 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import colorConstant from '../constants/colorConstant';
+import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
   StatusBar,
   Image,
+  Dimensions,
 } from 'react-native';
 import {Button} from 'react-native-paper';
-import {flexDirection} from 'styled-system';
 
-const DashboardNgo = (props) => {
+const DashboardShops = (props) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.Container}>
@@ -27,17 +26,17 @@ const DashboardNgo = (props) => {
         <View style={styles.ProfilePicCon}>
           <Image
             style={styles.ProfilePic}
-            source={require('../assets/Images/logo.png')}
+            source={require('../../assets/Images/keels.jpg')}
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> Rotaract Club </Text>
+          <Text style={styles.UserName}> Keells </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 8}}>
-              <Text style={styles.Email}>rotaract@gmail.com </Text>
+              <Text style={styles.Email}>Keells@gmail.com </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -68,13 +67,13 @@ const DashboardNgo = (props) => {
             <View style={styles.Donations}>
               <View style={styles.DonationHeader}>
                 <View style={styles.DonationHeaderTxtCon}>
-                  <Text style={styles.DonationHeaderTxt}>DONATIONS</Text>
+                  <Text style={styles.DonationHeaderTxt}>SELLING POINTS</Text>
                 </View>
                 <View style={styles.DonationHeaderIcon}>
                   <MaterialCommunityIcons
-                    name="handshake"
+                    name="shopping-outline"
                     color={colorConstant.proGreen}
-                    size={25}
+                    size={27}
                   />
                 </View>
               </View>
@@ -88,8 +87,8 @@ const DashboardNgo = (props) => {
                   mode="contained"
                   style={{
                     marginTop: 9,
-                    height: 25,
-                    width: 100,
+                    height: 35,
+                    width: 120,
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('History-Donation')}>
@@ -100,105 +99,12 @@ const DashboardNgo = (props) => {
                   mode="contained"
                   style={{
                     marginTop: 10,
-                    height: 30,
-                    width: 150,
+                    height: 40,
+                    width: 170,
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingDonation')}>
                   <Text style={styles.BtnTxt2}>3 in Progress</Text>
-                </Button>
-              </View>
-            </View>
-            <View style={styles.Requests}>
-              <View style={styles.RequestHeader}>
-                <View style={styles.RequestHeaderTxtCon}>
-                  <Text style={styles.RequestHeaderTxt}>REQUESTS</Text>
-                </View>
-                <View style={styles.RequestHeaderIcon}>
-                  <MaterialCommunityIcons
-                    name="bullhorn-outline"
-                    color={colorConstant.proRed}
-                    size={25}
-                  />
-                </View>
-              </View>
-              <View style={styles.RequestCount}>
-                <Text style={styles.RequestCountTxt}>7</Text>
-                <Text style={styles.RequestSuccess}>REQUESTS CREATED</Text>
-              </View>
-              <View style={styles.ButtonsConRequest}>
-                <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 9,
-                    height: 25,
-                    width: 100,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Request')}>
-                  <Text style={styles.BtnTxtRequest}>History</Text>
-                </Button>
-                <Button
-                  color={colorConstant.proRed}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('OngoingRequest')}>
-                  <Text style={styles.BtnTxt2Request}>5 on request</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View style={styles.RegisterDriverCon}>
-            <View style={styles.Heading}>
-              <View style={styles.DriverHeaderCon}>
-                <Text style={styles.DriverHeaderTxt}>COLLECTION POINTS</Text>
-              </View>
-              <View style={styles.DriverHeaderIcon}>
-                <MaterialCommunityIcons
-                  name="garage-open-variant"
-                  color={colorConstant.proCharcoal}
-                  size={25}
-                />
-              </View>
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View style={styles.DonationCampCount}>
-                <Text style={styles.DonationCampCountTxt}>4</Text>
-                <Text style={styles.DonationCampSuccess}>
-                  SUCCESSFUL DONATIONS
-                </Text>
-              </View>
-              <View style={styles.ButtonsConDonationCamp}>
-                <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Request')}>
-                  <Text style={styles.BtnTxtDonationCamp}>History</Text>
-                </Button>
-                <Button
-                  color={colorConstant.proRed}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('OngoingRequest')}>
-                  <Text style={styles.BtnTxt2DonationCamp}>5 on request</Text>
                 </Button>
               </View>
             </View>
@@ -263,8 +169,9 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   OverviewCon: {
-    // marginTop: 4,
+    marginTop: 15,
     flexDirection: 'row',
+    marginBottom: 18,
   },
   OverviewTxtCon: {
     marginLeft: 25,
@@ -281,37 +188,26 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  MainActions: {
-    marginLeft: 5,
-    flexDirection: 'row',
-    width: 411,
-    justifyContent: 'space-around',
-    marginTop: 5,
-  },
+  //   MainActions: {
+  //     // marginLeft: 5,
+  //     flexDirection: 'column',
+  //     // width: 411,
+  //     justifyContent: 'space-around',
+  //     // marginTop: 5,
+  //   },
   Donations: {
     backgroundColor: '#ffffff',
-    elevation: 1,
-    height: 210,
+    elevation: 0.7,
+    // height: 210,
     marginLeft: 10,
-    width: 185,
+    width: Dimensions.get('screen').width / 1.1,
+    height: Dimensions.get('screen').height / 2.4,
     borderRadius: 16,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    paddingBottom: 15,
   },
-  Requests: {
-    backgroundColor: '#ffffff',
-    elevation: 1,
-    marginRight: 10,
-    height: 210,
-    width: 185,
-    borderRadius: 16,
-  },
-  RegisterDriverCon: {
-    backgroundColor: '#ffffff',
-    elevation: 0.5,
-    marginTop: 6,
-    width: 381,
-    height: 135,
-    borderRadius: 16,
-  },
+
   DonationHeader: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -322,7 +218,7 @@ const styles = StyleSheet.create({
   },
   DonationHeaderTxt: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 18,
+    fontSize: 22,
     color: colorConstant.proGreen,
   },
   RequestHeader: {
@@ -344,50 +240,25 @@ const styles = StyleSheet.create({
   },
   DonationCountTxt: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 50,
+    fontSize: 80,
   },
   DonationSuccess: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 10,
+    fontSize: 17,
     color: colorConstant.primaryColor,
   },
-  RequestCount: {
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  RequestCountTxt: {
-    fontFamily: 'Barlow-Bold',
-    fontSize: 50,
-  },
-  RequestSuccess: {
-    fontFamily: 'Barlow-Bold',
-    fontSize: 10,
-    color: colorConstant.primaryColor,
-  },
-  DonationCampCount: {
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  DonationCampCountTxt: {
-    fontFamily: 'Barlow-Bold',
-    fontSize: 50,
-  },
-  DonationCampSuccess: {
-    fontFamily: 'Barlow-Bold',
-    fontSize: 10,
-    color: colorConstant.primaryColor,
-  },
+
   ButtonsCon: {
     alignItems: 'center',
-    marginTop: 5,
+    // marginTop: 5,
   },
   BtnTxt: {
     alignItems: 'center',
-    fontSize: 12,
+    fontSize: 16,
   },
   BtnTxt2: {
     alignItems: 'center',
-    fontSize: 14,
+    fontSize: 17,
   },
   ButtonsConRequest: {
     alignItems: 'center',
@@ -399,34 +270,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     // flexDirection: 'row',
   },
-  BtnTxtDonationCamp: {
-    alignItems: 'center',
-    fontSize: 12,
-  },
-  BtnTxt2DonationCamp: {
-    alignItems: 'center',
-    fontSize: 14,
-  },
-  Heading: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 5,
-  },
-  DriverHeaderCon: {
-    marginRight: 8,
-  },
-  DriverHeaderTxt: {
-    fontFamily: 'Barlow-Bold',
-    fontSize: 18,
-    color: colorConstant.proCharcoal,
-  },
-  ImageCon: {
-    alignItems: 'center',
-  },
-  DeliveryImage: {
-    height: 60,
-    width: 60,
-  },
 });
 
-export default DashboardNgo;
+export default DashboardShops;

@@ -8,16 +8,16 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import {RadioButton, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
-const Registration = ({navigation}) => {
-  const [value, setValue] = React.useState('person');
+const PublicRegistration = ({navigation}) => {
+  // const [value, setValue] = React.useState('person');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>We4Us</Text>
         <Image
-          source={require('../assets/Images/Registration_image.png')}
+          source={require('../../assets/Images/Registration_image.png')}
           style={{
             width: Dimensions.get('window').width,
             height: Dimensions.get('window').height / 2,
@@ -89,7 +89,7 @@ const Registration = ({navigation}) => {
   );
 };
 
-export default Registration;
+export default PublicRegistration;
 
 const styles = StyleSheet.create({
   container: {

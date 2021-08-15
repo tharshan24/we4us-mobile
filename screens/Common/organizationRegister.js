@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-// import {Input, NativeBaseProvider} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
 import {
@@ -40,28 +39,22 @@ const OrganizationRegister = (props) => {
     return re.test(email);
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>We4Us</Text>
-        <Image
-          source={require('../assets/Images/Organization_image.png')}
-          style={{
-            width: 200,
-            height: 200,
-            left: 100,
-            alignItems: 'center',
-          }}
-        />
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>We4Us</Text>
+          <Image
+            source={require('../../assets/Images/Organization_image.png')}
+            style={{
+              width: 200,
+              height: 200,
+              left: 100,
+              alignItems: 'center',
+            }}
+          />
 
-        <ScrollView>
           <NativeBaseProvider>
             <View style={styles.Inputtext}>
-              {/* <Input
-                style={styles.textInput}
-                placeholder="Type"
-                onChangeText={(val) => setType(val)}
-                value={type}
-              /> */}
               <VStack alignItems="center" space={4}>
                 <Select
                   selectedValue={type}
@@ -73,9 +66,10 @@ const OrganizationRegister = (props) => {
                     bg: 'cyan.600',
                     endIcon: <CheckIcon size={15} />,
                   }}>
-                  <Select.Item label="Male" value="js" />
-                  <Select.Item label="Female" value="ts" />
-                  <Select.Item label="Other" value="c" />
+                  <Select.Item label="NGO" value="js" />
+                  <Select.Item label="Shops" value="ts" />
+                  <Select.Item label="Restaurants" value="c" />
+                  <Select.Item label="Care Homes" value="c" />
                 </Select>
               </VStack>
             </View>
@@ -241,9 +235,9 @@ const OrganizationRegister = (props) => {
               <Text style={styles.Btn}> Sign In </Text>
             </Button>
           </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 

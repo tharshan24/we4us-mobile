@@ -9,7 +9,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import colorConstant from '../constants/colorConstant';
+import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from 'react-native-paper';
@@ -34,17 +34,16 @@ const SettingsPublic = (props) => {
     console.log('Done.');
   };
 
-  
-    const con = () => {
-      Alert.alert('Logout', 'Are you sure to Logout ?', [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'Yes', onPress: () => logout()},
-      ]);
-    };
+  const con = () => {
+    Alert.alert('Logout', 'Are you sure to Logout ?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Yes', onPress: () => logout()},
+    ]);
+  };
 
   return (
     <SafeAreaView style={styles.Container}>

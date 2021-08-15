@@ -9,24 +9,12 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import colorConstant from '../constants/colorConstant';
+import colorConstant from '../../constants/colorConstant';
 import DocumentPicker from 'react-native-document-picker';
-import {TextInput, Modal, Portal, Provider} from 'react-native-paper';
-// import { Container, Header, Content, Picker, Form } from 'native-base';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {TextInput, Provider} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {
-  Select,
-  Container,
-  Picker,
-  VStack,
-  Header,
-  CheckIcon,
-  Center,
-  Spinner,
-  NativeBaseProvider,
-} from 'native-base';
+import {Select, VStack, Spinner, NativeBaseProvider} from 'native-base';
 
 const EditProfile = (props) => {
   // functions
@@ -51,16 +39,15 @@ const EditProfile = (props) => {
     return <Text>Success</Text>;
   };
 
-  // const initialValue [{label:"username", edit:false, currentValue:""}]
-
   const [actionVal, setActionVal] = React.useState(true);
+  const [txtVal, setTxtVal] = React.useState('Edit');
+  const [submitTxt, setSubmitTxt] = React.useState();
   const [token, setToken] = React.useState();
   const [cities, setCities] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedCity, setSelectedCity] = React.useState(true);
 
   const loadCities = () => {
-    console.log(`Bearer ${token}`, 'dddd');
     axios
       .get('http://10.0.2.2:8000/system/districts', {
         headers: {
@@ -75,6 +62,17 @@ const EditProfile = (props) => {
       .catch(function (error) {
         console.log(error);
       });
+  };
+
+  const txtChange = () => {
+    if (txtVal === 'Edit') {
+      setTxtVal('Cancel');
+      setSubmitTxt('Submit');
+    } else {
+      setTxtVal('Edit');
+      setActionVal(true);
+      setSubmitTxt();
+    }
   };
 
   const getData = async () => {
@@ -102,17 +100,25 @@ const EditProfile = (props) => {
           ) : (
             <>
               <View style={styles.ProfilePicCon}>
-                {/* <ImageBackground source={require('../assets/Images/profilePic.jpg')} /> */}
                 <Image
                   style={styles.ProfilePic}
-                  source={require('../assets/Images/profilePic.jpg')}
+                  source={require('../../assets/Images/profilePic.jpg')}
                 />
                 <TouchableOpacity onPress={() => FilePic()}>
                   <Text style={styles.ChangeTxt}>Change</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setActionVal(false)}>
-                  <Text style={styles.ChangeTxt}>Edit</Text>
-                </TouchableOpacity>
+                <View style={styles.submitCon}>
+                  <TouchableOpacity
+                    style={{marginRight: 50}}
+                    onPress={() => {
+                      setActionVal(false), txtChange();
+                    }}>
+                    <Text style={styles.ChangeTxt}>{txtVal}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => submitChanges()}>
+                    <Text style={styles.SubmitTxt}>{submitTxt}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
               <View style={styles.BottomContainer}>
                 <View style={styles.Content}>
@@ -121,8 +127,6 @@ const EditProfile = (props) => {
                     <TextInput
                       placeholder="Athavan"
                       disabled={actionVal}
-                      // value={textUsername}
-                      // onChangeText={(Username) => setTextUsername(Username)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -131,7 +135,6 @@ const EditProfile = (props) => {
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}
-                      // pressRetentionOffset={console.log('rj;;;g ')}
                     />
                   </View>
                 </View>
@@ -141,8 +144,6 @@ const EditProfile = (props) => {
                     <TextInput
                       placeholder="Theivendram"
                       disabled={actionVal}
-                      // value={textUsername}
-                      // onChangeText={(Username) => setTextUsername(Username)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -151,7 +152,6 @@ const EditProfile = (props) => {
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}
-                      // pressRetentionOffset={console.log('rj;;;g ')}
                     />
                   </View>
                 </View>
@@ -161,8 +161,6 @@ const EditProfile = (props) => {
                     <TextInput
                       placeholder="Jaffna, SriLanka"
                       disabled={actionVal}
-                      // value={textUsername}
-                      // onChangeText={(Username) => setTextUsername(Username)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -171,61 +169,18 @@ const EditProfile = (props) => {
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}
-                      pressRetentionOffset={console.log('rj;;;g ')}
                     />
                   </View>
                 </View>
                 <View style={styles.Content}>
                   <Text style={styles.ContentTxt}>District</Text>
-                  {/* <View style={styles.EditContent}>
-              <TextInput
-                placeholder="Jaffna"
-                disabled={actionVal}
-                // value={textUsername}
-                // onChangeText={(Username) => setTextUsername(Username)}
-                selectionColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.proGreyLight}
-                style={{
-                  height: 40,
-                  width: Dimensions.get('window').width / 1.7,
-                  backgroundColor: '#ffffff',
-                  borderColor: 'red',
-                }}
-                // pressRetentionOffset={console.log('rj;;;g ')}
-              />
-            </View> */}
-                  {/* <NativeBaseProvider>
-              <VStack alignItems="center" space={4}>
-                <Select
-                  // selectedValue={language}
-                  minWidth={200}
-                  accessibilityLabel="Select your favorite programming language"
-                  placeholder="Select your favorite programming language"
-                  // onValueChange={(itemValue) => setLanguage(itemValue)}
-                  _selectedItem={{
-                    bg: 'cyan.600',
-                    endIcon: <CheckIcon size={4} />,
-                  }}>
-                  {cities.map((city) => {
-                    <Select.Item label={city.name_en} value="js" />;
-                  })}
-                  <Select.Item label="JavaScript" value="js" />
-                </Select>
-              </VStack>
-            </NativeBaseProvider> */}
-
                   <VStack alignItems="center" space={4}>
                     <Select
                       minWidth={330}
                       selectedValue={selectedCity}
                       style={styles.textInput}
                       placeholder="District"
-                      onValueChange={(val) => setSelectedCity(val)}
-                      // _selectedItem={{
-                      //   bg: 'cyan.600',
-                      //   endIcon: <CheckIcon size={15} />,
-                      // }}
-                    >
+                      onValueChange={(val) => setSelectedCity(val)}>
                       {cities.map((city) => (
                         <Select.Item label={city.name_en} value={city.id} />
                       ))}
@@ -238,8 +193,6 @@ const EditProfile = (props) => {
                     <TextInput
                       placeholder="Jaffna"
                       disabled={actionVal}
-                      // value={textUsername}
-                      // onChangeText={(Username) => setTextUsername(Username)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -248,7 +201,6 @@ const EditProfile = (props) => {
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}
-                      // pressRetentionOffset={console.log('rj;;;g ')}
                     />
                   </View>
                 </View>
@@ -258,8 +210,6 @@ const EditProfile = (props) => {
                     <TextInput
                       placeholder="40000"
                       disabled={actionVal}
-                      // value={textUsername}
-                      // onChangeText={(Username) => setTextUsername(Username)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -268,7 +218,6 @@ const EditProfile = (props) => {
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}
-                      pressRetentionOffset={console.log('rj;;;g ')}
                     />
                   </View>
                 </View>
@@ -278,8 +227,6 @@ const EditProfile = (props) => {
                     <TextInput
                       placeholder="021 224 1234"
                       disabled={actionVal}
-                      // value={textUsername}
-                      // onChangeText={(Username) => setTextUsername(Username)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -288,45 +235,9 @@ const EditProfile = (props) => {
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}
-                      // pressRetentionOffset={console.log('rj;;;g ')}
                     />
                   </View>
                 </View>
-                {/* <View style={styles.Content}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={showModal}
-              disabled={disValue}>
-              <Text style={styles.ContentTxt}>Email</Text>
-              <View style={styles.EditContent}>
-                <TextInput
-                  placeholder="Aaketk21"
-                  disabled={true}
-                  selectionColor={colorConstant.primaryColor}
-                  underlineColor={colorConstant.proGreyLight}
-                  style={{
-                    height: 40,
-                    width: Dimensions.get('window').width / 1.7,
-                    backgroundColor: '#ffffff',
-                    borderColor: 'red',
-                  }}
-                />
-              </View>
-            </TouchableOpacity>
-            <Portal style={styles.PortalContainer}>
-              <Modal
-                visible={visible}
-                onDismiss={hideModal}
-                style={styles.containerStyle}>
-                <View style={styles.ModalContentCon}>
-                  <Text style={styles.ModalContentTxt}>
-                    You cant change the verified fields. Contact administrators
-                    for further information
-                  </Text>
-                </View>
-              </Modal>
-            </Portal>
-          </View> */}
               </View>
             </>
           )}
@@ -380,6 +291,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     marginBottom: 15,
   },
+  SubmitTxt: {
+    fontFamily: 'Barlow-SemiBold',
+    fontSize: 17,
+    color: '#ffffff',
+    marginBottom: 15,
+  },
   EditContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -402,15 +319,11 @@ const styles = StyleSheet.create({
     padding: 20,
     height: Dimensions.get('window').height / 5,
     width: Dimensions.get('window').width / 1.2,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     borderRadius: 5,
-    // flex: 1,
     marginTop: Dimensions.get('window').width / 2,
     marginLeft: Dimensions.get('window').width / 15,
   },
   ModalContentCon: {
-    //  marginLeft: 10,
     justifyContent: 'center',
   },
   ModalContentTxt: {
@@ -418,8 +331,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Barlow-Regular',
     color: colorConstant.primaryColor,
     flexDirection: 'column',
-    // alignItems: 'stretch',
     justifyContent: 'flex-start',
+  },
+  submitCon: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
