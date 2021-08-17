@@ -35,6 +35,8 @@ import BrowseAvailability from '../screens/Public/browseAvailability';
 import FilterResults from '../screens/Public/filterResults';
 import {useNavigation} from '@react-navigation/native';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
+import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
+import RequestForDonation from '../screens/Public/requestsForDonation';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -174,7 +176,7 @@ const DashboardNgoTap = () => {
               name="cog-outline"
               color={color}
               size={26}
-              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+              style={{alignItems: 'center', flexDirection: 'column'}}
             />
           ),
         }}
@@ -409,6 +411,43 @@ const DashboardPublicStack = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="OngoingDeliveryDetails"
+        component={OngoingDeliveryDetails}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RequestForDonation"
+        component={RequestForDonation}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Requests',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+
       <Stack.Screen
         name="DonationTrackingMap"
         component={DonationTrackingMap}

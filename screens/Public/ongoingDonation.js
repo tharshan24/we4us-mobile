@@ -19,7 +19,7 @@ function OngoingDonation(props) {
       <View style={styles.mainContainer}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('DonationTrackingMap');
+            navigation.navigate('OngoingDeliveryDetails');
           }}>
           <View style={styles.AvailabilityCon}>
             <View style={styles.ProfilePicCon}>

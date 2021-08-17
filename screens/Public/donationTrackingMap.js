@@ -13,7 +13,7 @@ import colorConstant from '../../constants/colorConstant';
 import MapViewDirections from 'react-native-maps-directions';
 import GOOGLE_API_KEY from '../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {backgroundColor} from 'styled-system';
+import {Button} from 'react-native-paper';
 
 function DonationTrackingMap(props) {
   const [fromLocation, setFromLocation] = useState();
@@ -102,8 +102,10 @@ function DonationTrackingMap(props) {
   }, []);
 
   const destinationMarker = () => (
-    <MapView.Marker coordinate={toLocation}>
-      {/*onDragEnd={(checkLoc) => console.log(checkLoc.nativeEvent.coordinate)} draggable={true}*/}
+    <MapView.Marker
+      coordinate={toLocation}
+      // onDrag={(checkLoc) => console.log(checkLoc.nativeEvent.coordinate)}
+      draggable={true}>
       <View
         style={{
           // backgroundColor: 'red',
@@ -121,7 +123,7 @@ function DonationTrackingMap(props) {
             alignItems: 'center',
           }}>
           <MaterialCommunityIcons
-            name="map-marker"
+            name="map-marker-radius-outline"
             color={colorConstant.proGreen}
             size={40}
             style={{
@@ -186,17 +188,14 @@ function DonationTrackingMap(props) {
         style={{flex: 1}}
         followsUserLocation={true}
         showsUserLocation={true}
-        showsMyLocationButton={true}
-        showsCompass={true}
-        toolbarEnabled={true}
-        zoomEnabled={true}
-        rotateEnabled={true}>
+        showsMyLocationButton={true}>
         <MapViewDirections
           origin={fromLocation}
           destination={toLocation}
-          strokeColor={colorConstant.primaryColor}
+          strokeColor={colorConstant.proGreyDark}
           strokeWidth={4}
           apikey={GOOGLE_API_KEY}
+          showsUserLocation={true}
           optimizeWaypoints={true}
           onReady={(result) => {
             setDuration(result.duration);
@@ -245,10 +244,58 @@ function DonationTrackingMap(props) {
               <TouchableOpacity activeOpacity={0.7}>
                 <Text style={styles.nameTxt}> Priyatharshan </Text>
                 <Text style={styles.detailsTxt}> Volunteer Driver </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <MaterialCommunityIcons
+                    name="star"
+                    color={colorConstant.proYellow}
+                    size={20}
+                  />
+                  <Text style={styles.ratingTxt}> 4.7 </Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.BtnContainer}></View>
+          <View style={styles.BtnContainer}>
+            <Button
+              mode="contained"
+              icon="phone"
+              labelStyle={{
+                fontSize: 18,
+                fontFamily: 'Barlow-Bold',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              style={{
+                backgroundColor: colorConstant.proGreen,
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 40,
+                width: 150,
+                marginRight: 30,
+              }}>
+              Call
+            </Button>
+            <Button
+              mode="outlined"
+              icon="message"
+              labelStyle={{
+                color: colorConstant.proGreen,
+                fontSize: 18,
+                fontFamily: 'Barlow-Bold',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 2,
+                borderColor: colorConstant.proGreen,
+                height: 40,
+                width: 150,
+              }}>
+              Chat
+            </Button>
+          </View>
         </View>
       </View>
     </View>
@@ -258,7 +305,7 @@ function DonationTrackingMap(props) {
 const styles = StyleSheet.create({
   deliveryDetailsContainer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 0,
     right: 0,
     left: 0,
     padding: 10,
@@ -266,11 +313,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   deliveryDetailsContent: {
+    elevation: 0.5,
     backgroundColor: '#ffffff',
     width: Dimensions.get('window').width * 0.95,
     borderRadius: 10,
     padding: 10,
-    height: Dimensions.get('window').height / 5,
+    height: Dimensions.get('window').height / 4.5,
+    justifyContent: 'center',
   },
   driverDetailContainer: {
     flex: 3,
@@ -280,11 +329,15 @@ const styles = StyleSheet.create({
   BtnContainer: {
     flex: 2,
     flexDirection: 'row',
-    backgroundColor: 'blue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
   imageContainer: {
     height: 70,
     width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   profilePicture: {
     height: 70,
@@ -305,6 +358,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Barlow-SemiBold',
     fontSize: 15,
     color: '#a0a0a0',
+  },
+  ratingTxt: {
+    fontFamily: 'Barlow-Bold',
+    fontSize: 15,
+    color: colorConstant.proYellow,
   },
 });
 export default DonationTrackingMap;
