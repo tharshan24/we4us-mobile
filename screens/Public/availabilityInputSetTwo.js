@@ -10,7 +10,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
-import {Select, VStack, NativeBaseProvider} from 'native-base';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const availabilityInputSetTwo = () => {
@@ -52,6 +51,7 @@ const availabilityInputSetTwo = () => {
   };
 
   const handleConfirmCooked = (date) => {
+    console.log(date);
     let picker = new Date(date);
 
     let dateDate = picker.getDate();

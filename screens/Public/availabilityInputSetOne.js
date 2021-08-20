@@ -11,7 +11,6 @@ import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
-import {height} from 'styled-system';
 
 const availabilityInputSetOne = () => {
   const navigation = useNavigation();

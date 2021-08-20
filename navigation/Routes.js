@@ -41,6 +41,8 @@ import availabilityInputSetOne from '../screens/Public/availabilityInputSetOne';
 import availabilityInputSetTwo from '../screens/Public/availabilityInputSetTwo';
 import availabilityInputSetThree from '../screens/Public/availabilityInputSetThree';
 import CreateRequest from '../screens/Public/CreateRequest';
+import findLocationMap from '../screens/Public/findLocationMap';
+import cameraScreen from '../screens/Common/cameraScreen';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -525,6 +527,40 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Create Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="findLocationMap"
+        component={findLocationMap}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="cameraScreen"
+        component={cameraScreen}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Capture',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

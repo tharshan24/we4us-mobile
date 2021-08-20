@@ -10,15 +10,41 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
+import {Select, VStack, NativeBaseProvider} from 'native-base';
+import DocumentPicker from 'react-native-document-picker';
 
 const availabilityInputSetThree = () => {
   const navigation = useNavigation();
 
-  const [quantity, setQuantity] = React.useState('');
-  const [storageDesc, setStorageDesc] = React.useState('');
+  const [address, setAddress] = React.useState('');
+  const [imageLoc, setImageLoc] = React.useState('');
+  const [deliveryOption, setDeliveryOption] = React.useState('');
+  const [vehicle, setVehicle] = React.useState('');
+
+  const imagePicker = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      console.log(
+        res.uri,
+        res.type, // mime type
+        res.name,
+        res.size,
+      );
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
+    return <Text>Success</Text>;
+  };
 
   const validateFieldsTwo = () => {
-    navigation.navigate('availabilityInputSetThree');
+    console.log('Submitted Successfully');
+    // navigation.navigate('availabilityInputSetThree');
     // if (quantity === '') {
     //   Alert.alert('Enter Amount of your Donation');
     // } else if (hour === 'HH') {
@@ -40,64 +66,135 @@ const availabilityInputSetThree = () => {
             {'Share Surplus food with the \nNeeded persons'}
           </Text>
         </View>
-        <View style={styles.contentContainerQuantity}>
-          <View style={styles.quantityTextCon}>
-            <Text style={styles.quantityText}>Quantity</Text>
+        <View style={styles.contentContainerFrom}>
+          <View style={styles.fromTextCon}>
+            <Text style={styles.fromText}>From Address</Text>
           </View>
-          <View style={styles.textInputQuantity}>
-            <TextInput
-              keyboardType="number-pad"
-              mode="outlined"
-              label="Quantity"
-              selectionColor={colorConstant.primaryColor}
-              outlineColor={colorConstant.primaryColor}
-              underlineColor={colorConstant.primaryColor}
-              value={quantity}
+          <View style={styles.fromAddress}>
+            <View style={{flex: 4}}>
+              <TextInput
+                keyboardType="number-pad"
+                mode="outlined"
+                label="Address"
+                selectionColor={colorConstant.primaryColor}
+                outlineColor={colorConstant.primaryColor}
+                underlineColor={colorConstant.primaryColor}
+                value={address}
+                style={{
+                  fontSize: 20,
+                  backgroundColor: '#ffffff',
+                  marginRight: 10,
+                }}
+                onChangeText={(text) => setAddress(text)}
+              />
+            </View>
+            <View
               style={{
-                fontSize: 20,
-                backgroundColor: '#ffffff',
-              }}
-              onChangeText={(text) => setQuantity(text)}
-            />
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Button
+                mode="contained"
+                onPress={() => navigation.navigate('findLocationMap')}
+                style={{
+                  height: 50,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: colorConstant.proYellow,
+                }}>
+                <Text style={{fontFamily: 'Barlow-SemiBold', fontSize: 17}}>
+                  Map
+                </Text>
+              </Button>
+            </View>
           </View>
         </View>
-        <View style={styles.contentContainerCookedTime}>
-          <View style={styles.cookedTimeTextCon}>
-            <Text style={styles.cookedTimeText}>
-              Cooked / Manufactured Time
-            </Text>
+        <View style={styles.contentContainerDelivery}>
+          <View style={styles.deliveryTextCon}>
+            <Text style={styles.deliveryText}>Delivery</Text>
+          </View>
+          <View style={{flex: 3}}>
+            <NativeBaseProvider>
+              <VStack>
+                <Select
+                  style={{
+                    fontSize: 20,
+                    backgroundColor: '#ffffff',
+                    borderWidth: 1,
+                    borderColor: colorConstant.primaryColor,
+                  }}
+                  width={Dimensions.get('screen').width / 1.1}
+                  selectedValue={deliveryOption}
+                  placeholder="Select Delivery Option"
+                  onValueChange={(itemValue) => setDeliveryOption(itemValue)}>
+                  <Select.Item label="Self Delivery" value="self" />
+                  <Select.Item label="Volunteer Driver" value="volunteer" />
+                  <Select.Item label="Paid Driver" value="paid" />
+                </Select>
+              </VStack>
+            </NativeBaseProvider>
           </View>
         </View>
-        <View style={styles.contentContainerBestBefore}>
-          <View style={styles.bestBeforeTextCon}>
-            <Text style={styles.bestBeforeText}>Best Before / Expiry Date</Text>
+        <View style={styles.contentContainerVehicle}>
+          <View style={styles.vehicleTextCon}>
+            <Text style={styles.vehicleText}>Needed Vehicle</Text>
+          </View>
+          <View style={{flex: 3}}>
+            <NativeBaseProvider>
+              <VStack>
+                <Select
+                  style={{
+                    fontSize: 20,
+                    backgroundColor: '#ffffff',
+                    borderWidth: 1,
+                    borderColor: colorConstant.primaryColor,
+                  }}
+                  width={Dimensions.get('screen').width / 1.1}
+                  selectedValue={vehicle}
+                  placeholder="Select Needed Vehicle"
+                  onValueChange={(itemValue) => setVehicle(itemValue)}>
+                  <Select.Item label="MotorBike" value="mb" />
+                  <Select.Item label="Three Wheeler" value="tw" />
+                  <Select.Item label="Truck" value="tr" />
+                </Select>
+              </VStack>
+            </NativeBaseProvider>
           </View>
         </View>
-        <View style={styles.contentContainerStorage}>
-          <View style={styles.storageDescriptionTextCon}>
-            <Text style={styles.storageDescriptionText}>
-              Storage Description
-            </Text>
+        <View style={styles.contentContainerImage}>
+          <View style={styles.ImageTextCon}>
+            <Text style={styles.ImageText}>Upload Image</Text>
           </View>
-          <View style={styles.textInputStorageDesc}>
-            <TextInput
-              mode="outlined"
-              label="Storage Description"
-              selectionColor={colorConstant.primaryColor}
-              outlineColor={colorConstant.primaryColor}
-              underlineColor={colorConstant.primaryColor}
-              value={storageDesc}
-              multiline={true}
-              numberOfLines={10}
+          <View style={styles.chosenImageContainer}>
+            <View
               style={{
-                fontSize: 20,
-                backgroundColor: '#ffffff',
-              }}
-              onChangeText={(text) => setStorageDesc(text)}
-            />
+                flex: 1,
+                flexDirection: 'row',
+              }}>
+              <View style={{flex: 1, marginRight: 30}}>
+                <Button
+                  mode="contained"
+                  // style={{width: 160}}
+                  onPress={() => navigation.navigate('cameraScreen')}>
+                  Camera
+                </Button>
+              </View>
+              <View style={{flex: 1}}>
+                <Button
+                  mode="contained"
+                  // style={{width: 160}}
+                  onPress={() => imagePicker()}>
+                  Choose File
+                </Button>
+              </View>
+            </View>
+            <View style={{flex: 5}}>
+              <View style={styles.pickedImageContainer}></View>
+            </View>
           </View>
         </View>
-        <View style={styles.contentContainerBtnTwo}>
+        <View style={styles.contentContainerSubmit}>
           <Button
             mode="contained"
             onPress={() => validateFieldsTwo()}
@@ -108,7 +205,9 @@ const availabilityInputSetThree = () => {
               alignItems: 'center',
               backgroundColor: colorConstant.primaryColor,
             }}>
-            <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>Next</Text>
+            <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+              Submit
+            </Text>
           </Button>
         </View>
       </View>
@@ -139,54 +238,56 @@ const styles = StyleSheet.create({
     color: colorConstant.primaryColor,
   },
   //name
-  contentContainerQuantity: {
+  contentContainerFrom: {
     flex: 0.2,
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  textInputQuantity: {
+  fromAddress: {
     width: Dimensions.get('screen').width / 1.1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  quantityText: {
+  fromText: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 20,
     color: colorConstant.primaryColor,
   },
-  quantityTextCon: {
+  fromTextCon: {
     flex: 0.6,
   },
   //cooked Time
-  contentContainerCookedTime: {
+  contentContainerDelivery: {
     flex: 0.2,
     flexDirection: 'column',
     justifyContent: 'center',
     width: Dimensions.get('screen').width / 1.1,
   },
-  cookedTimeTextCon: {
-    flex: 0.3,
+  deliveryTextCon: {
+    flex: 1.5,
   },
-  cookedTimeText: {
+  deliveryText: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 20,
     color: colorConstant.primaryColor,
   },
   //cater
-  contentContainerBestBefore: {
+  contentContainerVehicle: {
     flex: 0.2,
     flexDirection: 'column',
     justifyContent: 'center',
     width: Dimensions.get('screen').width / 1.1,
   },
-  bestBeforeTextCon: {
-    flex: 0.3,
+  vehicleTextCon: {
+    flex: 1.5,
   },
-  bestBeforeText: {
+  vehicleText: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 20,
     color: colorConstant.primaryColor,
   },
   //description
-  contentContainerStorage: {
+  contentContainerImage: {
     flex: 0.5,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -195,22 +296,28 @@ const styles = StyleSheet.create({
   descriptionHeading: {
     flexDirection: 'column',
   },
-  storageDescriptionText: {
+  ImageText: {
     fontFamily: 'Barlow-SemiBold',
     fontSize: 20,
     color: colorConstant.primaryColor,
   },
-  storageDescriptionTextCon: {
+  ImageTextCon: {
     flex: 0.6,
   },
-  textInputStorageDesc: {
+  chosenImageContainer: {
     flex: 4,
     width: Dimensions.get('screen').width / 1.1,
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   //button
-  contentContainerBtnTwo: {
-    flexDirection: 'row-reverse',
+  contentContainerSubmit: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginBottom: 20,
+    width: Dimensions.get('screen').width / 1.1,
+  },
+  pickedImageContainer: {
     width: Dimensions.get('screen').width / 1.1,
   },
 });
