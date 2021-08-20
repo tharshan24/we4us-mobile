@@ -37,6 +37,10 @@ import {useNavigation} from '@react-navigation/native';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
 import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
 import RequestForDonation from '../screens/Public/requestsForDonation';
+import availabilityInputSetOne from '../screens/Public/availabilityInputSetOne';
+import availabilityInputSetTwo from '../screens/Public/availabilityInputSetTwo';
+import availabilityInputSetThree from '../screens/Public/availabilityInputSetThree';
+import CreateRequest from '../screens/Public/CreateRequest';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -447,13 +451,80 @@ const DashboardPublicStack = () => {
           },
         }}
       />
-
       <Stack.Screen
         name="DonationTrackingMap"
         component={DonationTrackingMap}
         options={{
           headerTintColor: '#ffffff',
           title: 'Track Donation',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetOne"
+        component={availabilityInputSetOne}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetTwo"
+        component={availabilityInputSetTwo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetThree"
+        component={availabilityInputSetThree}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CreateRequest"
+        component={CreateRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Request',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

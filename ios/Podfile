@@ -11,6 +11,8 @@ target 'we4us' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
   target 'we4usTests' do
     inherit! :complete
     # Pods for testing

@@ -102,10 +102,9 @@ function DonationTrackingMap(props) {
   }, []);
 
   const destinationMarker = () => (
-    <MapView.Marker
-      coordinate={toLocation}
-      // onDrag={(checkLoc) => console.log(checkLoc.nativeEvent.coordinate)}
-      draggable={true}>
+    <MapView.Marker coordinate={toLocation}>
+      {/*onDrag={(checkLoc) => console.log(checkLoc.nativeEvent.coordinate)}*/}
+      {/*draggable={true}*/}
       <View
         style={{
           // backgroundColor: 'red',

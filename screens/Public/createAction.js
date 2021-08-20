@@ -33,6 +33,7 @@ function CreateAction(props) {
           </Text>
           <View style={styles.BtnContainer}>
             <Button
+              onPress={() => navigation.navigate('availabilityInputSetOne')}
               color={colorConstant.primaryColor}
               style={{
                 borderRadius: 5,
@@ -61,6 +62,7 @@ function CreateAction(props) {
           </Text>
           <View style={styles.btnContainerReq}>
             <Button
+              onPress={() => navigation.navigate('CreateRequest')}
               color={colorConstant.primaryColor}
               style={{
                 borderRadius: 5,

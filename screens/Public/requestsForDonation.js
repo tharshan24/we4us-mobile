@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -14,52 +14,53 @@ import {Button} from 'react-native-paper';
 
 function RequestForDonation(props) {
   const navigation = useNavigation();
+  const [btnState, setBtnState] = useState(true);
 
   return (
     <ScrollView style={{margin: 7}}>
       <View style={styles.mainContainer}>
+        {/*<View style={styles.AvailabilityCon}>*/}
+        {/*  <View style={{flexDirection: 'row', paddingBottom: 12}}>*/}
+        {/*    <View style={styles.ProfilePicCon}>*/}
+        {/*      <Image*/}
+        {/*        style={styles.ProfilePic}*/}
+        {/*        source={require('../../assets/Images/thishan.jpg')}*/}
+        {/*      />*/}
+        {/*    </View>*/}
+        {/*    <View style={{flex: 5}}>*/}
+        {/*      <Text style={styles.headingText}>Thishan Jude</Text>*/}
+        {/*      <Text style={styles.bodyText}>Location: Jaffna</Text>*/}
+        {/*      <Text style={styles.bodyText}>Quantity: 20</Text>*/}
+        {/*      <Text style={styles.bodyText}>*/}
+        {/*        Need Before: 30/05/2021 | 5.00 PM*/}
+        {/*      </Text>*/}
+        {/*    </View>*/}
+        {/*  </View>*/}
+        {/*  <View style={styles.btnContainer}>*/}
+        {/*    <Button*/}
+        {/*      mode="contained"*/}
+        {/*      style={{*/}
+        {/*        marginRight: 15,*/}
+        {/*        backgroundColor: colorConstant.primaryColor,*/}
+        {/*      }}>*/}
+        {/*      Details*/}
+        {/*    </Button>*/}
+        {/*    <Button*/}
+        {/*      mode="contained"*/}
+        {/*      onPress={() => navigation.navigate('DonationTrackingMap')}*/}
+        {/*      style={{*/}
+        {/*        backgroundColor: colorConstant.proRed,*/}
+        {/*      }}>*/}
+        {/*      View on Map*/}
+        {/*    </Button>*/}
+        {/*  </View>*/}
+        {/*</View>*/}
         <View style={styles.AvailabilityCon}>
           <View style={{flexDirection: 'row', paddingBottom: 12}}>
             <View style={styles.ProfilePicCon}>
               <Image
                 style={styles.ProfilePic}
                 source={require('../../assets/Images/thishan.jpg')}
-              />
-            </View>
-            <View style={{flex: 5}}>
-              <Text style={styles.headingText}>Thishan Jude</Text>
-              <Text style={styles.bodyText}>Location: Jaffna</Text>
-              <Text style={styles.bodyText}>Quantity: 20</Text>
-              <Text style={styles.bodyText}>
-                Need Before: 30/05/2021 | 5.00 PM
-              </Text>
-            </View>
-          </View>
-          <View style={styles.btnContainer}>
-            <Button
-              mode="contained"
-              style={{
-                marginRight: 15,
-                backgroundColor: colorConstant.primaryColor,
-              }}>
-              Details
-            </Button>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('DonationTrackingMap')}
-              style={{
-                backgroundColor: colorConstant.proRed,
-              }}>
-              View on Map
-            </Button>
-          </View>
-        </View>
-        <View style={styles.AvailabilityCon}>
-          <View style={{flexDirection: 'row', paddingBottom: 12}}>
-            <View style={styles.ProfilePicCon}>
-              <Image
-                style={styles.ProfilePic}
-                source={require('../../assets/Images/mathura.jpg')}
               />
             </View>
             <View style={{flex: 5}}>
@@ -80,14 +81,28 @@ function RequestForDonation(props) {
               }}>
               Details
             </Button>
-            <Button
-              mode="contained"
-              style={{
-                marginRight: 15,
-                backgroundColor: colorConstant.proGreen,
-              }}>
-              Donate
-            </Button>
+            {btnState ? (
+              <Button
+                mode="contained"
+                onPress={() => {
+                  setBtnState(false);
+                }}
+                style={{
+                  marginRight: 15,
+                  backgroundColor: colorConstant.proGreen,
+                }}>
+                Donate
+              </Button>
+            ) : (
+              <Button
+                mode="contained"
+                onPress={() => navigation.navigate('DonationTrackingMap')}
+                style={{
+                  backgroundColor: colorConstant.proRed,
+                }}>
+                View on Map
+              </Button>
+            )}
           </View>
         </View>
       </View>
