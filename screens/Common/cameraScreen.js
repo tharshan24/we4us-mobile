@@ -13,20 +13,45 @@ const cameraScreen = () => {
       const data = await takePicture();
       const filePath = data.uri;
 
-      let name = new Date();
-      const fileName =
-        'We4Us-' +
-        name.getHours() +
-        name.getMinutes() +
-        name.getSeconds() +
-        name.getMilliseconds();
-      const newFilePath =
-        RNFS.ExternalStorageDirectoryPath +
-        '/DCIM/Camera' +
-        '/' +
-        fileName +
-        '.jpg';
-      RNFS.moveFile(filePath, newFilePath);
+      const checkDir = RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/We4Us';
+      let exists = await RNFS.exists(checkDir);
+
+      if (exists) {
+        let name = new Date();
+        const fileName =
+          'We4Us-' +
+          name.getHours() +
+          name.getMinutes() +
+          name.getSeconds() +
+          name.getMilliseconds();
+        const newFilePath =
+          RNFS.ExternalStorageDirectoryPath +
+          '/DCIM/Camera/We4Us' +
+          '/' +
+          fileName +
+          '.jpg';
+        RNFS.moveFile(filePath, newFilePath);
+      } else {
+        const AppFolder = 'We4Us';
+        const DirectoryPath =
+          RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/' + AppFolder;
+        RNFS.mkdir(DirectoryPath);
+
+        let name = new Date();
+        const fileName =
+          'We4Us-' +
+          name.getHours() +
+          name.getMinutes() +
+          name.getSeconds() +
+          name.getMilliseconds();
+        const newFilePath =
+          RNFS.ExternalStorageDirectoryPath +
+          '/DCIM/Camera/We4Us' +
+          '/' +
+          fileName +
+          '.jpg';
+        RNFS.moveFile(filePath, newFilePath);
+      }
     } catch (e) {
       console.log(e);
     }

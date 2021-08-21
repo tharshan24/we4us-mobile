@@ -6,32 +6,36 @@ import {
   Dimensions,
   ScrollView,
   Alert,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
 import DocumentPicker from 'react-native-document-picker';
+import Swiper from 'react-native-swiper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const availabilityInputSetThree = () => {
   const navigation = useNavigation();
 
   const [address, setAddress] = React.useState('');
-  const [imageLoc, setImageLoc] = React.useState('');
+  const [imageLoc, setImageLoc] = React.useState([]);
   const [deliveryOption, setDeliveryOption] = React.useState('');
   const [vehicle, setVehicle] = React.useState('');
 
   const imagePicker = async () => {
     try {
-      const res = await DocumentPicker.pick({
+      const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.images],
       });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size,
-      );
+      if (results.length < 6 && imageLoc.length < 5) {
+        for (const res of results) {
+          setImageLoc((arr) => [...arr, res.uri]);
+        }
+      } else {
+        Alert.alert('You can Choose upto 5 Images only');
+      }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -40,6 +44,17 @@ const availabilityInputSetThree = () => {
       }
     }
     return <Text>Success</Text>;
+  };
+
+  const removeImage = (item) => {
+    const index = imageLoc.indexOf(item);
+    let tempArray;
+    if (imageLoc.length > -1) {
+      tempArray = imageLoc.filter((item, pos) => pos !== index);
+      setImageLoc(tempArray);
+    } else {
+      Alert.alert('No Images to Delete');
+    }
   };
 
   const validateFieldsTwo = () => {
@@ -59,7 +74,7 @@ const availabilityInputSetThree = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView scrollEnabled={true}>
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textHeader}>
@@ -175,7 +190,7 @@ const availabilityInputSetThree = () => {
               <View style={{flex: 1, marginRight: 30}}>
                 <Button
                   mode="contained"
-                  // style={{width: 160}}
+                  style={{backgroundColor: colorConstant.primaryColor}}
                   onPress={() => navigation.navigate('cameraScreen')}>
                   Camera
                 </Button>
@@ -183,14 +198,48 @@ const availabilityInputSetThree = () => {
               <View style={{flex: 1}}>
                 <Button
                   mode="contained"
-                  // style={{width: 160}}
+                  style={{backgroundColor: colorConstant.primaryColor}}
                   onPress={() => imagePicker()}>
                   Choose File
                 </Button>
               </View>
             </View>
             <View style={{flex: 5}}>
-              <View style={styles.pickedImageContainer}></View>
+              <View style={styles.pickedImageContainer}>
+                <View style={styles.imageContainer}>
+                  <Swiper
+                    showsPagination={false}
+                    showsButtons={false}
+                    index={0}
+                    loop={false}
+                    style={{
+                      height: Dimensions.get('window').height / 3,
+                      borderRadius: 10,
+                    }}>
+                    {imageLoc.map((item, i) => (
+                      <View style={styles.contentImageCon} key={i}>
+                        <Image
+                          style={styles.contentImage}
+                          source={{uri: item}}
+                        />
+                        <Button
+                          mode="contained"
+                          style={{
+                            position: 'absolute',
+                            backgroundColor: '#f53c3c',
+                          }}
+                          onPress={() => removeImage(item)}>
+                          <MaterialCommunityIcons
+                            name="delete-outline"
+                            color="#ffffff"
+                            size={25}
+                          />
+                        </Button>
+                      </View>
+                    ))}
+                  </Swiper>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -318,7 +367,20 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width / 1.1,
   },
   pickedImageContainer: {
+    flex: 1,
     width: Dimensions.get('screen').width / 1.1,
+  },
+  imageContainer: {
+    flex: 1,
+  },
+  contentImageCon: {
+    height: Dimensions.get('window').height / 3,
+    width: Dimensions.get('window').width,
+    // marginRight: 10,
+  },
+  contentImage: {
+    height: Dimensions.get('window').height / 3,
+    width: Dimensions.get('window').width,
   },
 });
 
