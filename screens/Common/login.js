@@ -33,7 +33,6 @@ const Login = (props) => {
         password: pwd,
       })
       .then(function (response) {
-        console.log(response.data.result.userType);
         if (response.data.status_code === 0) {
           const user = {
             result: response.data.result,

@@ -1,12 +1,5 @@
-import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
@@ -14,7 +7,6 @@ import {Select, VStack, NativeBaseProvider} from 'native-base';
 
 const availabilityInputSetOne = () => {
   const navigation = useNavigation();
-
   const [title, setTitle] = React.useState('');
   const [foodType, setFoodType] = React.useState('');
   const [foodCater, setFoodCater] = React.useState('');

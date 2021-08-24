@@ -5,7 +5,7 @@ import {Button} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 
-function CreateAction(props) {
+function AddAvailabilityRequest(props) {
   const navigation = useNavigation();
   return (
     <View style={styles.screenContainer}>
@@ -163,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateAction;
+export default AddAvailabilityRequest;

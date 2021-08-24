@@ -10,7 +10,7 @@ import colorConstant from '../constants/colorConstant';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ExploreAvailability from '../screens/Public/exploreAvailability';
 import ExploreRequest from '../screens/Public/exploreRequest';
-import CreateAction from '../screens/Public/createAction';
+import AddAvailabilityRequest from '../screens/Public/addAvailabilityRequest';
 import DashboardPublic from '../screens/Public/dashboardPublic';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HistoryDonation from '../screens/Public/historyDonation';
@@ -144,7 +144,7 @@ const DashboardNgoTap = () => {
       />
       <Tab.Screen
         name="AddAction"
-        component={CreateAction}
+        component={AddAvailabilityRequest}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
@@ -246,7 +246,7 @@ const DashboardTap = () => {
       />
       <Tab.Screen
         name="AddAction"
-        component={CreateAction}
+        component={AddAvailabilityRequest}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (

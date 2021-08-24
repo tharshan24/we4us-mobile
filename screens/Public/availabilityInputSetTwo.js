@@ -12,7 +12,7 @@ import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const availabilityInputSetTwo = () => {
+const availabilityInputSetTwo = ({route}) => {
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = React.useState('');

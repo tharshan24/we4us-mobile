@@ -1,28 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  Alert,
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Alert,
-  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Button, TextInput} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
-import {Select, VStack, NativeBaseProvider} from 'native-base';
+import {NativeBaseProvider, Select, VStack} from 'native-base';
 import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Geolocation from 'react-native-geolocation-service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const availabilityInputSetThree = () => {
   const navigation = useNavigation();
 
-  const [address, setAddress] = React.useState('');
-  const [imageLoc, setImageLoc] = React.useState([]);
-  const [deliveryOption, setDeliveryOption] = React.useState('');
-  const [vehicle, setVehicle] = React.useState('');
+  const [location, setLocation] = useState('');
+  const [imageLoc, setImageLoc] = useState([]);
+  const [deliveryOption, setDeliveryOption] = useState('');
+  const [vehicle, setVehicle] = useState('');
 
   const imagePicker = async () => {
     try {
@@ -57,6 +59,26 @@ const availabilityInputSetThree = () => {
     }
   };
 
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => Alert.alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+    return navigation.addListener('focus', () => {
+      getData();
+    });
+  }, []);
+
+  const currentLocation = () => {
+    navigation.navigate('findLocationMap', {location});
+  };
+
   const validateFieldsTwo = () => {
     console.log('Submitted Successfully');
     // navigation.navigate('availabilityInputSetThree');
@@ -73,8 +95,20 @@ const availabilityInputSetThree = () => {
     // }
   };
 
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@imageLocation');
+      if (value !== null) {
+        setImageLoc((ar) => [...ar, value]);
+        await AsyncStorage.removeItem('@imageLocation');
+      }
+    } catch (e) {
+      console.log(e, 'three');
+    }
+  };
+
   return (
-    <ScrollView scrollEnabled={true}>
+    <ScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textHeader}>
@@ -86,23 +120,6 @@ const availabilityInputSetThree = () => {
             <Text style={styles.fromText}>From Address</Text>
           </View>
           <View style={styles.fromAddress}>
-            <View style={{flex: 4}}>
-              <TextInput
-                keyboardType="number-pad"
-                mode="outlined"
-                label="Address"
-                selectionColor={colorConstant.primaryColor}
-                outlineColor={colorConstant.primaryColor}
-                underlineColor={colorConstant.primaryColor}
-                value={address}
-                style={{
-                  fontSize: 20,
-                  backgroundColor: '#ffffff',
-                  marginRight: 10,
-                }}
-                onChangeText={(text) => setAddress(text)}
-              />
-            </View>
             <View
               style={{
                 flex: 1,
@@ -111,15 +128,16 @@ const availabilityInputSetThree = () => {
               }}>
               <Button
                 mode="contained"
-                onPress={() => navigation.navigate('findLocationMap')}
+                onPress={() => currentLocation()}
                 style={{
-                  height: 50,
+                  height: 43,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: colorConstant.proYellow,
+                  backgroundColor: colorConstant.primaryColor,
+                  width: Dimensions.get('screen').width / 1.1,
                 }}>
-                <Text style={{fontFamily: 'Barlow-SemiBold', fontSize: 17}}>
-                  Map
+                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>
+                  Choose from Map
                 </Text>
               </Button>
             </View>
@@ -311,6 +329,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     width: Dimensions.get('screen').width / 1.1,
+    zIndex: -1000,
   },
   deliveryTextCon: {
     flex: 1.5,

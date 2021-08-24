@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-function ExploreAvailability(props) {
+function ExploreAvailability({route}) {
   const navigation = useNavigation();
   return (
     <>
