@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const availabilityInputSetTwo = ({route}) => {
   const navigation = useNavigation();
@@ -33,6 +34,10 @@ const availabilityInputSetTwo = ({route}) => {
   const [hourBestBefore, setHourBestBefore] = React.useState('HH');
   const [minuteBestBefore, setMinuteBestBefore] = React.useState('MM');
   const [secondsBestBefore, setSecondsBestBefore] = React.useState('SS');
+  const [cookedTime, setCookedTime] = useState(null);
+  const [cookedDate, setCookedDate] = useState(null);
+  const [beforeDate, setBeforeDate] = useState(null);
+  const [beforeTime, setBeforeTime] = useState(null);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -50,9 +55,8 @@ const availabilityInputSetTwo = ({route}) => {
     setDatePickerVisibilityBestBefore(false);
   };
 
-  const handleConfirmCooked = (date) => {
-    console.log(date);
-    let picker = new Date(date);
+  const handleConfirmCooked = (val) => {
+    let picker = new Date(val);
 
     let dateDate = picker.getDate();
     let dateMonth = picker.getMonth() + 1;
@@ -68,11 +72,14 @@ const availabilityInputSetTwo = ({route}) => {
     setMinute(dateMinute);
     setSeconds(dateSecond);
 
+    setCookedDate(dateDate + '/' + dateMonth + '/' + dateYear);
+    setCookedTime(dateHour + ':' + dateMinute + ':' + dateSecond);
+
     hideDatePicker();
   };
 
-  const handleConfirmBestBefore = (dateBestBefore) => {
-    let picker = new Date(dateBestBefore);
+  const handleConfirmBestBefore = (BestBefore) => {
+    let picker = new Date(BestBefore);
 
     let dateDate = picker.getDate();
     let dateMonth = picker.getMonth() + 1;
@@ -88,22 +95,42 @@ const availabilityInputSetTwo = ({route}) => {
     setMinuteBestBefore(dateMinute);
     setSecondsBestBefore(dateSecond);
 
+    setBeforeDate(dateDate + '/' + dateMonth + '/' + dateYear);
+    setBeforeTime(dateHour + ':' + dateMinute + ':' + dateSecond);
+
     hideDatePickerBestBefore();
   };
 
   const validateFieldsTwo = () => {
-    navigation.navigate('availabilityInputSetThree');
-    // if (quantity === '') {
-    //   Alert.alert('Enter Amount of your Donation');
-    // } else if (hour === 'HH') {
-    //   Alert.alert('Select Cooked / Manufactured Time');
-    // } else if (hourBestBefore === 'HH') {
-    //   Alert.alert('Select Expiry or Best Before Time');
-    // } else if (storageDesc === '') {
-    //   Alert.alert('Give a Short Description about the Utensils');
-    // } else {
-    //   navigation.navigate('availabilityInputSetThree');
-    // }
+    if (quantity === '') {
+      Alert.alert('Enter Amount of your Donation');
+    } else if (hour === 'HH') {
+      Alert.alert('Select Cooked / Manufactured Time');
+    } else if (hourBestBefore === 'HH') {
+      Alert.alert('Select Expiry or Best Before Time');
+    } else if (storageDesc === '') {
+      Alert.alert('Give a Short Description about the Utensils');
+    } else {
+      const inputSetTwo = {
+        quantity: quantity,
+        cookedDate: cookedDate,
+        cookedTime: cookedTime,
+        bestBeforeDate: beforeDate,
+        bestBeforeTime: beforeTime,
+        storageDesc: storageDesc,
+      };
+      storeData(inputSetTwo);
+      navigation.navigate('availabilityInputSetThree');
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@inputSetTwo', jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

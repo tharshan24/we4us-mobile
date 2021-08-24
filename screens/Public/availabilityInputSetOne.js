@@ -1,9 +1,17 @@
 import React, {useEffect} from 'react';
-import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const availabilityInputSetOne = () => {
   const navigation = useNavigation();
@@ -13,18 +21,33 @@ const availabilityInputSetOne = () => {
   const [desc, setDesc] = React.useState('');
 
   const validateFields = () => {
-    navigation.navigate('availabilityInputSetTwo');
-    // if (title === '') {
-    //   Alert.alert('Enter Title for your Donation');
-    // } else if (foodType === '') {
-    //   Alert.alert('Select your Donation Food Type');
-    // } else if (foodCater === '') {
-    //   Alert.alert('Select your Donation Food Category');
-    // } else if (desc === '') {
-    //   Alert.alert('Give a Small description for your Donation');
-    // } else {
-    //   navigation.navigate('availabilityInputSetTwo');
-    // }
+    if (title === '') {
+      Alert.alert('Enter Title for your Donation');
+    } else if (foodType === '') {
+      Alert.alert('Select your Donation Food Type');
+    } else if (foodCater === '') {
+      Alert.alert('Select your Donation Food Category');
+    } else if (desc === '') {
+      Alert.alert('Give a Small description for your Donation');
+    } else {
+      const inputSetOne = {
+        title: title,
+        foodType: foodType,
+        category: foodCater,
+        description: desc,
+      };
+      storeData(inputSetOne);
+      navigation.navigate('availabilityInputSetTwo');
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@inputSetOne', jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

@@ -2,12 +2,10 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Dimensions,
-  Image,
-  Text,
   Alert,
   StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
+  Text,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,16 +13,19 @@ import colorConstant from '../../constants/colorConstant';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import GOOGLE_API_KEY from '../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {Button} from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Button} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
 const findLocationMap = ({route}) => {
   const {location} = route.params;
   const ref = useRef();
 
+  const navigation = useNavigation();
+
   const [initialRegion, setInitialRegion] = useState();
   const [region, setRegion] = useState();
-  const [pickedLocation, setPickedLocation] = useState();
   const [selectedLocation, setSelectedLocation] = useState({
     latitude: location.latitude,
     longitude: location.longitude,
@@ -70,7 +71,7 @@ const findLocationMap = ({route}) => {
     <MapView.Marker
       coordinate={selectedLocation}
       onDragEnd={(checkLoc) => {
-        setPickedLocation(checkLoc.nativeEvent.coordinate);
+        setSelectedLocation(checkLoc.nativeEvent.coordinate);
         setMapRender(2.5);
       }}
       onDrag={(val) => {
@@ -109,6 +110,18 @@ const findLocationMap = ({route}) => {
       </View>
     </MapView.Marker>
   );
+
+  const selectedCoordinates = () => {
+    storeData(selectedLocation);
+    navigation.navigate('availabilityInputSetThree');
+  };
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@selectedLocation', jsonValue);
+    } catch (e) {}
+  };
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -151,7 +164,6 @@ const findLocationMap = ({route}) => {
           enablePoweredByContainer={false}
           nearbyPlacesAPI="GooglePlacesSearch"
           minLength={2}
-          // isFocused={(val) => console.log(val)}
           fetchDetails={true}
           onPress={(data, details = null) => {
             setSelectedLocation({
@@ -189,13 +201,17 @@ const findLocationMap = ({route}) => {
           followsUserLocation={true}>
           {chooseLocationMarker()}
         </MapView>
+        <Button
+          mode="contained"
+          icon="map-marker"
+          labelStyle={{fontSize: 25}}
+          onPress={() => selectedCoordinates()}
+          style={{
+            backgroundColor: colorConstant.proGreen,
+          }}>
+          <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>Select</Text>
+        </Button>
       </View>
-      {/*<Button*/}
-      {/*  onPress={() => {*/}
-      {/*    console.log(pickedLocation);*/}
-      {/*  }}>*/}
-      {/*  Check*/}
-      {/*</Button>*/}
     </SafeAreaView>
   );
 };
@@ -208,11 +224,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   googleAutoComplete: {
-    // position: 'absolute',
     flex: 1,
     width: Dimensions.get('screen').width,
     flexDirection: 'row',
-    // marginTop: 10,
-    // padding: 10,
   },
 });

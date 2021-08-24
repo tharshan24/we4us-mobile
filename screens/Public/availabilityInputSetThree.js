@@ -70,8 +70,11 @@ const availabilityInputSetThree = () => {
       (error) => Alert.alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
+    getDataInputTwo();
+    getDataInputOne();
     return navigation.addListener('focus', () => {
       getData();
+      getDataSelectedLocation();
     });
   }, []);
 
@@ -105,6 +108,45 @@ const availabilityInputSetThree = () => {
     } catch (e) {
       console.log(e, 'three');
     }
+  };
+
+  const getDataInputTwo = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
+      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+    } catch (e) {}
+  };
+
+  const getDataInputOne = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@inputSetOne');
+      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getDataSelectedLocation = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@selectedLocation');
+      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+    } catch (e) {}
+  };
+
+  const removeAllInputs = async () => {
+    // const keys = [
+    //   '@imageLocation',
+    //   '@inputSetTwo',
+    //   '@inputSetOne',
+    //   '@selectedLocation',
+    // ];
+    try {
+      await AsyncStorage.removeItem('@inputSetOne');
+    } catch (e) {
+      // remove error
+    }
+
+    console.log('Done');
   };
 
   return (
@@ -264,7 +306,10 @@ const availabilityInputSetThree = () => {
         <View style={styles.contentContainerSubmit}>
           <Button
             mode="contained"
-            onPress={() => validateFieldsTwo()}
+            onPress={() => {
+              validateFieldsTwo();
+              removeAllInputs();
+            }}
             style={{
               width: 120,
               height: 45,
