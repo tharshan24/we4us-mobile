@@ -25,6 +25,7 @@ const availabilityInputSetThree = () => {
   const [imageLoc, setImageLoc] = useState([]);
   const [deliveryOption, setDeliveryOption] = useState('');
   const [vehicle, setVehicle] = useState('');
+  const [fromLocation, setFromLocation] = useState();
 
   const imagePicker = async () => {
     try {
@@ -83,19 +84,19 @@ const availabilityInputSetThree = () => {
   };
 
   const validateFieldsTwo = () => {
-    console.log('Submitted Successfully');
-    // navigation.navigate('availabilityInputSetThree');
-    // if (quantity === '') {
-    //   Alert.alert('Enter Amount of your Donation');
-    // } else if (hour === 'HH') {
-    //   Alert.alert('Select Cooked / Manufactured Time');
-    // } else if (hourBestBefore === 'HH') {
-    //   Alert.alert('Select Expiry or Best Before Time');
-    // } else if (storageDesc === '') {
-    //   Alert.alert('Give a Short Description about the Utensils');
-    // } else {
-    //   navigation.navigate('availabilityInputSetThree');
-    // }
+    if (fromLocation === undefined) {
+      Alert.alert('Select the From Location');
+    } else if (deliveryOption === '') {
+      Alert.alert('Select Delivery Option');
+    } else if (vehicle === '') {
+      Alert.alert('Select Delivery Vehicle');
+    } else if (imageLoc.length === 0) {
+      Alert.alert('Add Images of Donation. Maximum of 5 Images');
+    } else {
+      Alert.alert('Submitted Successfully');
+      navigation.popToTop();
+      removeAllInputs();
+    }
   };
 
   const getData = async () => {
@@ -110,13 +111,6 @@ const availabilityInputSetThree = () => {
     }
   };
 
-  const getDataInputTwo = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
-      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
-    } catch (e) {}
-  };
-
   const getDataInputOne = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@inputSetOne');
@@ -126,26 +120,39 @@ const availabilityInputSetThree = () => {
     }
   };
 
-  const getDataSelectedLocation = async () => {
+  const getDataInputTwo = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@selectedLocation');
+      const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
       return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
     } catch (e) {}
   };
 
-  const removeAllInputs = async () => {
-    // const keys = [
-    //   '@imageLocation',
-    //   '@inputSetTwo',
-    //   '@inputSetOne',
-    //   '@selectedLocation',
-    // ];
+  const getDataSelectedLocation = async () => {
     try {
-      await AsyncStorage.removeItem('@inputSetOne');
+      const jsonValue = await AsyncStorage.getItem('@selectedLocation');
+      if (jsonValue != null) {
+        setFromLocation(JSON.parse(jsonValue));
+      } else {
+        console.log('No Location Selected');
+      }
     } catch (e) {
-      // remove error
+      console.log(e);
     }
+  };
 
+  const removeAllInputs = async () => {
+    const keys = [
+      '@imageLocation',
+      '@inputSetTwo',
+      '@inputSetOne',
+      '@selectedLocation',
+    ];
+    try {
+      await AsyncStorage.multiRemove(keys);
+      setFromLocation();
+    } catch (e) {
+      console.log(e);
+    }
     console.log('Done');
   };
 
@@ -308,7 +315,6 @@ const availabilityInputSetThree = () => {
             mode="contained"
             onPress={() => {
               validateFieldsTwo();
-              removeAllInputs();
             }}
             style={{
               width: 120,

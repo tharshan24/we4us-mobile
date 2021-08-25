@@ -21,24 +21,25 @@ const availabilityInputSetOne = () => {
   const [desc, setDesc] = React.useState('');
 
   const validateFields = () => {
-    if (title === '') {
-      Alert.alert('Enter Title for your Donation');
-    } else if (foodType === '') {
-      Alert.alert('Select your Donation Food Type');
-    } else if (foodCater === '') {
-      Alert.alert('Select your Donation Food Category');
-    } else if (desc === '') {
-      Alert.alert('Give a Small description for your Donation');
-    } else {
-      const inputSetOne = {
-        title: title,
-        foodType: foodType,
-        category: foodCater,
-        description: desc,
-      };
-      storeData(inputSetOne);
-      navigation.navigate('availabilityInputSetTwo');
-    }
+    navigation.navigate('availabilityInputSetTwo');
+    // if (title === '') {
+    //   Alert.alert('Enter Title for your Donation');
+    // } else if (foodType === '') {
+    //   Alert.alert('Select your Donation Food Type');
+    // } else if (foodCater === '') {
+    //   Alert.alert('Select your Donation Food Category');
+    // } else if (desc === '') {
+    //   Alert.alert('Give a Small description for your Donation');
+    // } else {
+    //   const inputSetOne = {
+    //     title: title,
+    //     foodType: foodType,
+    //     category: foodCater,
+    //     description: desc,
+    //   };
+    //   storeData(inputSetOne);
+    //   navigation.navigate('availabilityInputSetTwo');
+    // }
   };
 
   const storeData = async (value) => {

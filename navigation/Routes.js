@@ -332,7 +332,6 @@ const ExploreStack = () => {
 };
 
 const DashboardPublicStack = () => {
-  const navigation = useNavigation();
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen

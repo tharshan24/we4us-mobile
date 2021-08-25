@@ -102,26 +102,27 @@ const availabilityInputSetTwo = ({route}) => {
   };
 
   const validateFieldsTwo = () => {
-    if (quantity === '') {
-      Alert.alert('Enter Amount of your Donation');
-    } else if (hour === 'HH') {
-      Alert.alert('Select Cooked / Manufactured Time');
-    } else if (hourBestBefore === 'HH') {
-      Alert.alert('Select Expiry or Best Before Time');
-    } else if (storageDesc === '') {
-      Alert.alert('Give a Short Description about the Utensils');
-    } else {
-      const inputSetTwo = {
-        quantity: quantity,
-        cookedDate: cookedDate,
-        cookedTime: cookedTime,
-        bestBeforeDate: beforeDate,
-        bestBeforeTime: beforeTime,
-        storageDesc: storageDesc,
-      };
-      storeData(inputSetTwo);
-      navigation.navigate('availabilityInputSetThree');
-    }
+    navigation.navigate('availabilityInputSetThree');
+    // if (quantity === '') {
+    //   Alert.alert('Enter Amount of your Donation');
+    // } else if (hour === 'HH') {
+    //   Alert.alert('Select Cooked / Manufactured Time');
+    // } else if (hourBestBefore === 'HH') {
+    //   Alert.alert('Select Expiry or Best Before Time');
+    // } else if (storageDesc === '') {
+    //   Alert.alert('Give a Short Description about the Utensils');
+    // } else {
+    //   const inputSetTwo = {
+    //     quantity: quantity,
+    //     cookedDate: cookedDate,
+    //     cookedTime: cookedTime,
+    //     bestBeforeDate: beforeDate,
+    //     bestBeforeTime: beforeTime,
+    //     storageDesc: storageDesc,
+    //   };
+    //   storeData(inputSetTwo);
+    //   navigation.navigate('availabilityInputSetThree');
+    // }
   };
 
   const storeData = async (value) => {
