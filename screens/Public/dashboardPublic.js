@@ -157,7 +157,7 @@ const DashboardPublic = (props) => {
               <View style={styles.DriverHeaderCon}>
                 <Text style={styles.DriverHeaderTxt}>DELIVERIES</Text>
               </View>
-              <View style={styles.DriverHeaderIcon}>
+              <View>
                 <MaterialCommunityIcons
                   name="truck-fast-outline"
                   color={colorConstant.proCharcoal}
@@ -179,10 +179,8 @@ const DashboardPublic = (props) => {
                   height: 30,
                   justifyContent: 'center',
                 }}
-                onPress={() => navigation.navigate('RegisterDriver')}>
-                <Text style={styles.DeliveryConBtnTxt}>
-                  REGISTER AS A DRIVER
-                </Text>
+                onPress={() => navigation.navigate('registerDriverOne')}>
+                <Text>REGISTER AS A DRIVER</Text>
               </Button>
             </View>
           </View>

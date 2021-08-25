@@ -1,12 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../constants/colorConstant';

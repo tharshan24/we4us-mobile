@@ -18,7 +18,6 @@ import HistoryRequest from '../screens/Public/historyRequest';
 import SettingsPublic from '../screens/Public/settingsPublic';
 import OngoingDonation from '../screens/Public/ongoingDonation';
 import OngoingRequest from '../screens/Public/ongoingRequest';
-import RegisterDriver from '../screens/Public/registerDriver';
 import EditProfile from '../screens/Public/editProfile';
 import ChangePassword from '../screens/Common/changePassword';
 import DriverSettings from '../screens/Public/driverSettings';
@@ -33,7 +32,6 @@ import SplashScreen from '../screens/Common/splashScreen';
 import SettingsOrganization from '../screens/NGO/settingsOrganization';
 import BrowseAvailability from '../screens/Public/browseAvailability';
 import FilterResults from '../screens/Public/filterResults';
-import {useNavigation} from '@react-navigation/native';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
 import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
 import RequestForDonation from '../screens/Public/requestsForDonation';
@@ -43,6 +41,8 @@ import availabilityInputSetThree from '../screens/Public/availabilityInputSetThr
 import CreateRequest from '../screens/Public/CreateRequest';
 import findLocationMap from '../screens/Public/findLocationMap';
 import cameraScreen from '../screens/Common/cameraScreen';
+import driverRegistrationSetOne from '../screens/Public/Driver/driverRegistrationSetOne';
+import driverRegistrationSetTwo from '../screens/Public/Driver/driverRegistrationSetTwo';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -359,7 +359,6 @@ const DashboardPublicStack = () => {
         }}
       />
       <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
-      <Stack.Screen name="RegisterDriver" component={RegisterDriver} />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
@@ -560,6 +559,40 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Capture',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="registerDriverOne"
+        component={driverRegistrationSetOne}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Register Driver',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="registerDriverTwo"
+        component={driverRegistrationSetTwo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Register Driver',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
