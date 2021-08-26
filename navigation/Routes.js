@@ -43,6 +43,9 @@ import findLocationMap from '../screens/Public/findLocationMap';
 import cameraScreen from '../screens/Common/cameraScreen';
 import driverRegistrationSetOne from '../screens/Public/Driver/driverRegistrationSetOne';
 import driverRegistrationSetTwo from '../screens/Public/Driver/driverRegistrationSetTwo';
+import CameraLicenseProof from '../screens/Public/Driver/cameraLicenseProof';
+import cameraScreenDriver from '../screens/Public/Driver/cameraScreenDriver';
+import CameraVehicleProof from '../screens/Public/Driver/cameraVehicleProof';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -593,6 +596,57 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Register Driver',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CameraLicenseProof"
+        component={CameraLicenseProof}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Capture Proof',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CameraVehicleProof"
+        component={CameraVehicleProof}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Capture Proof',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="cameraScreenDriver"
+        component={cameraScreenDriver}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Capture Proof',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

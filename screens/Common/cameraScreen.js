@@ -22,7 +22,6 @@ const cameraScreen = () => {
 
   const [{cameraRef, autoFocus, autoFocusPoint}, {takePicture}] = useCamera();
   const [imageUri, setImageUri] = useState(null);
-  const [check, setCheck] = useState('check');
 
   useEffect(() => {
     askPermission().then((r) => console.log(r));
@@ -58,7 +57,6 @@ const cameraScreen = () => {
       const filePath = data.uri;
       const checkDir = RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/We4Us';
       let exists = await RNFS.exists(checkDir);
-
       if (exists) {
         let name = new Date();
         const fileName =
@@ -94,6 +92,7 @@ const cameraScreen = () => {
           '/' +
           fileName +
           '.jpg';
+        setImageUri('file://' + newFilePath);
         RNFS.moveFile(filePath, newFilePath);
       }
     } catch (e) {

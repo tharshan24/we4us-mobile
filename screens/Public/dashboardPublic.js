@@ -12,6 +12,8 @@ import {
   Image,
 } from 'react-native';
 import {Button} from 'react-native-paper';
+import {Badge} from 'native-base';
+import {NativeBaseProvider} from 'native-base/src/core/NativeBaseProvider';
 
 const DashboardPublic = (props) => {
   const navigation = useNavigation();

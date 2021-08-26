@@ -32,7 +32,23 @@ const availabilityInputSetThree = () => {
       const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.images],
       });
-      if (results.length < 6 && imageLoc.length < 5) {
+      if (results.length < 6 && imageLoc.length === 0) {
+        for (const res of results) {
+          setImageLoc((arr) => [...arr, res.uri]);
+        }
+      } else if (results.length < 5 && imageLoc.length === 1) {
+        for (const res of results) {
+          setImageLoc((arr) => [...arr, res.uri]);
+        }
+      } else if (results.length < 4 && imageLoc.length === 2) {
+        for (const res of results) {
+          setImageLoc((arr) => [...arr, res.uri]);
+        }
+      } else if (results.length < 3 && imageLoc.length === 3) {
+        for (const res of results) {
+          setImageLoc((arr) => [...arr, res.uri]);
+        }
+      } else if (results.length < 2 && imageLoc.length === 4) {
         for (const res of results) {
           setImageLoc((arr) => [...arr, res.uri]);
         }
@@ -156,6 +172,14 @@ const availabilityInputSetThree = () => {
     console.log('Done');
   };
 
+  const cameraScreen = () => {
+    if (imageLoc.length < 5) {
+      navigation.navigate('cameraScreen');
+    } else {
+      Alert.alert('Five Images can be Uploaded');
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
@@ -258,7 +282,7 @@ const availabilityInputSetThree = () => {
                 <Button
                   mode="contained"
                   style={{backgroundColor: colorConstant.primaryColor}}
-                  onPress={() => navigation.navigate('cameraScreen')}>
+                  onPress={() => cameraScreen()}>
                   Camera
                 </Button>
               </View>

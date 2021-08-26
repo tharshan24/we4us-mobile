@@ -15,7 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const cameraScreen = () => {
+const CameraScreenDriver = ({page, storeKey}) => {
   const navigation = useNavigation();
 
   const [{cameraRef, autoFocus, autoFocusPoint}, {takePicture}] = useCamera();
@@ -53,44 +53,45 @@ const cameraScreen = () => {
     try {
       const data = await takePicture();
       const filePath = data.uri;
-      const checkDir = RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/We4Us';
+      const checkDir = RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/Proof';
       let exists = await RNFS.exists(checkDir);
 
       if (exists) {
         let name = new Date();
         const fileName =
-          'We4Us-' +
+          'Proof-' +
           name.getHours() +
           name.getMinutes() +
           name.getSeconds() +
           name.getMilliseconds();
         const newFilePath =
           RNFS.ExternalStorageDirectoryPath +
-          '/DCIM/Camera/We4Us' +
+          '/DCIM/Camera/Proof' +
           '/' +
           fileName +
           '.jpg';
         setImageUri('file://' + newFilePath);
         RNFS.moveFile(filePath, newFilePath);
       } else {
-        const AppFolder = 'We4Us';
+        const AppFolder = 'Proof';
         const DirectoryPath =
           RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/' + AppFolder;
         RNFS.mkdir(DirectoryPath);
 
         let name = new Date();
         const fileName =
-          'We4Us-' +
+          'Proof-' +
           name.getHours() +
           name.getMinutes() +
           name.getSeconds() +
           name.getMilliseconds();
         const newFilePath =
           RNFS.ExternalStorageDirectoryPath +
-          '/DCIM/Camera/We4Us' +
+          '/DCIM/Camera/Proof' +
           '/' +
           fileName +
           '.jpg';
+        setImageUri('file://' + newFilePath);
         RNFS.moveFile(filePath, newFilePath);
       }
     } catch (e) {
@@ -99,16 +100,16 @@ const cameraScreen = () => {
   };
 
   const sendCapturedImage = () => {
-    navigation.navigate('availabilityInputSetThree');
+    navigation.navigate(page);
     // const val = JSON.stringify(imageUri);
     storeData(imageUri).then((r) => console.log(r, 'store'));
   };
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('@imageLocation', value);
+      await AsyncStorage.setItem(storeKey, value);
     } catch (e) {
-      console.log(e, 'camera');
+      console.log(e);
     }
   };
 
@@ -174,7 +175,7 @@ const cameraScreen = () => {
   );
 };
 
-export default cameraScreen;
+export default CameraScreenDriver;
 
 const styles = StyleSheet.create({
   captureBtn: {
