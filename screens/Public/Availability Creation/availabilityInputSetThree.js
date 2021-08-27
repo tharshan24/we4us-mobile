@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {NativeBaseProvider, Select, VStack} from 'native-base';
 import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 
 const availabilityInputSetThree = () => {
   const navigation = useNavigation();

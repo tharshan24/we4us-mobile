@@ -2,9 +2,10 @@ import React, {useEffect} from 'react';
 import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 
 const availabilityInputSetOne = () => {
   const navigation = useNavigation();
@@ -12,6 +13,41 @@ const availabilityInputSetOne = () => {
   const [foodType, setFoodType] = React.useState('');
   const [foodCater, setFoodCater] = React.useState('');
   const [desc, setDesc] = React.useState('');
+
+  const requestPermission = () => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
+    console.log('Permission Already Granted');
+  };
+
+  const checkPermissions = () => {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const validateFields = () => {
     navigation.navigate('availabilityInputSetTwo');
@@ -43,6 +79,11 @@ const availabilityInputSetOne = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    requestPermission();
+    checkPermissions();
+  }, []);
 
   return (
     <ScrollView>

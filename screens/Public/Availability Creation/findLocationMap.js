@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import GOOGLE_API_KEY from '../../constants/constantsProject.';
+import GOOGLE_API_KEY from '../../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';

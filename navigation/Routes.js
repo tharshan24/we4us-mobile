@@ -35,17 +35,21 @@ import FilterResults from '../screens/Public/filterResults';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
 import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
 import RequestForDonation from '../screens/Public/requestsForDonation';
-import availabilityInputSetOne from '../screens/Public/availabilityInputSetOne';
-import availabilityInputSetTwo from '../screens/Public/availabilityInputSetTwo';
-import availabilityInputSetThree from '../screens/Public/availabilityInputSetThree';
-import CreateRequest from '../screens/Public/CreateRequest';
-import findLocationMap from '../screens/Public/findLocationMap';
+import availabilityInputSetOne from '../screens/Public/Availability Creation/availabilityInputSetOne';
+import availabilityInputSetTwo from '../screens/Public/Availability Creation/availabilityInputSetTwo';
+import availabilityInputSetThree from '../screens/Public/Availability Creation/availabilityInputSetThree';
+import RequestCreationSetOne from '../screens/Public/Request Creation/RequestCreationSetOne';
+import findLocationMap from '../screens/Public/Availability Creation/findLocationMap';
 import cameraScreen from '../screens/Common/cameraScreen';
 import driverRegistrationSetOne from '../screens/Public/Driver/driverRegistrationSetOne';
 import driverRegistrationSetTwo from '../screens/Public/Driver/driverRegistrationSetTwo';
 import CameraLicenseProof from '../screens/Public/Driver/cameraLicenseProof';
 import cameraScreenDriver from '../screens/Public/Driver/cameraScreenDriver';
 import CameraVehicleProof from '../screens/Public/Driver/cameraVehicleProof';
+import RequestCreationSetTwo from '../screens/Public/Request Creation/RequestCreationSetTwo';
+import findLocationMapRequest from '../screens/Public/Request Creation/findLocationMapRequest';
+import AddItemsRequest from '../screens/Public/Request Creation/addItemsRequest';
+import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreenRequest';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -524,7 +528,24 @@ const DashboardPublicStack = () => {
       />
       <Stack.Screen
         name="CreateRequest"
-        component={CreateRequest}
+        component={RequestCreationSetOne}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RequestCreationSetTwo"
+        component={RequestCreationSetTwo}
         options={{
           headerTintColor: '#ffffff',
           title: 'Create Request',
@@ -542,6 +563,23 @@ const DashboardPublicStack = () => {
       <Stack.Screen
         name="findLocationMap"
         component={findLocationMap}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="findLocationMapRequest"
+        component={findLocationMapRequest}
         options={{
           headerTintColor: '#ffffff',
           title: 'Mark your Place',
@@ -647,6 +685,40 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Capture Proof',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="AddItemsRequest"
+        component={AddItemsRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Add Items',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="cameraScreenRequest"
+        component={cameraScreenRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Camera',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

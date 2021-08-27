@@ -1,11 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import colorConstant from '../../constants/colorConstant';
 import {Button} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddAvailabilityRequest(props) {
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      getAllKeys();
+    });
+  }, []);
+
+  const getAllKeys = async () => {
+    let keys = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+    } catch (e) {
+      console.log('no keys', e);
+    }
+
+    console.log(keys);
+    // example console.log result:
+    // ['@MyApp_user', '@MyApp_key']
+  };
+
   const navigation = useNavigation();
   return (
     <View style={styles.screenContainer}>
