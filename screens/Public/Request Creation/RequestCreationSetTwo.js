@@ -23,6 +23,11 @@ function RequestCreationSetTwo(props) {
   const [address, setAddress] = React.useState('');
   const [imageLoc, setImageLoc] = useState([]);
   const [locationFromMap, setLocationFromMap] = useState();
+  const initialState = {
+    name: '',
+    count: '',
+  };
+  const [formValues, setFormValues] = useState([initialState]);
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -42,6 +47,7 @@ function RequestCreationSetTwo(props) {
     return navigation.addListener('focus', () => {
       getDataCamera();
       getDataSelectedLocation();
+      getRequestedItems();
     });
   }, []);
 
@@ -57,11 +63,28 @@ function RequestCreationSetTwo(props) {
     }
   };
 
+  const getRequestedItems = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@requestedItems');
+      const values = JSON.parse(jsonValue);
+      // console.log(values);
+      if (values === null) {
+        console.log('No Items Given');
+      } else {
+        setFormValues(values);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@requestInputSetOne');
       return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const currentLocation = () => {
@@ -118,20 +141,39 @@ function RequestCreationSetTwo(props) {
   };
 
   const validateFieldsTwo = () => {
-    // navigation.navigate('AddItemsRequest');
-    if (locationFromMap === undefined) {
-      Alert.alert(
-        'Choose Location from the Map, Where you need to Deliver your request',
-      );
-    } else if (address === '') {
-      Alert.alert(
-        'Provide your Address where you need to Deliver your request',
-      );
-    } else {
-      Alert.alert('Request has been Placed.');
-      navigation.popToTop();
-      removeAllInputsRequest();
+    // console.log(locationFromMap);
+    // setFormValues();
+    // setLocationFromMap();
+    // removeAllInputsRequest();
+    // console.log(formValues);
+    // getAllKeys();
+    // if (locationFromMap === undefined) {
+    //   Alert.alert(
+    //     'Choose Location from the Map, Where you need to Deliver your request',
+    //   );
+    // } else if (address === '') {
+    //   Alert.alert(
+    //     'Provide your Address where you need to Deliver your request',
+    //   );
+    // } else if (formValues === undefined) {
+    //   Alert.alert('Add atleast on Item to request');
+    // } else {
+    //   Alert.alert('Request has been Placed.');
+    //   console.log(formValues);
+    //   navigation.popToTop();
+    //   removeAllInputsRequest();
+    // }
+  };
+
+  const getAllKeys = async () => {
+    let keys = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+    } catch (e) {
+      console.log(e);
     }
+
+    console.log(keys);
   };
 
   const removeAllInputsRequest = async () => {
@@ -139,6 +181,7 @@ function RequestCreationSetTwo(props) {
       '@requestInputSetOne',
       '@selectedLocationRequest',
       '@requestCreationImage',
+      '@requestedItems',
     ];
     try {
       await AsyncStorage.multiRemove(keys);
@@ -185,20 +228,37 @@ function RequestCreationSetTwo(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Button
-                mode="contained"
-                onPress={() => currentLocation()}
-                style={{
-                  height: 43,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: colorConstant.primaryColor,
-                  width: Dimensions.get('screen').width / 1.1,
-                }}>
-                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>
-                  Choose from Map
-                </Text>
-              </Button>
+              {locationFromMap === undefined ? (
+                <Button
+                  mode="contained"
+                  onPress={() => currentLocation()}
+                  style={{
+                    height: 43,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: colorConstant.primaryColor,
+                    width: Dimensions.get('screen').width / 1.1,
+                  }}>
+                  <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>
+                    Choose from Map
+                  </Text>
+                </Button>
+              ) : (
+                <Button
+                  mode="contained"
+                  onPress={() => currentLocation()}
+                  style={{
+                    height: 43,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f53c3c',
+                    width: Dimensions.get('screen').width / 1.1,
+                  }}>
+                  <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>
+                    EDIT CHOOSEN LOCATION
+                  </Text>
+                </Button>
+              )}
             </View>
           </View>
         </View>
@@ -285,6 +345,39 @@ function RequestCreationSetTwo(props) {
               </View>
             </View>
           </View>
+        </View>
+        <View style={styles.addItems}>
+          {formValues === undefined ? (
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('AddItemsRequest')}
+              style={{
+                height: 43,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: colorConstant.primaryColor,
+                width: Dimensions.get('screen').width / 1.1,
+              }}>
+              <Text style={{fontFamily: 'Barlow-SemiBold', fontSize: 17}}>
+                ADD ITEMS FOR REQUEST
+              </Text>
+            </Button>
+          ) : (
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('AddItemsRequest')}
+              style={{
+                height: 43,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#f53c3c',
+                width: Dimensions.get('screen').width / 1.1,
+              }}>
+              <Text style={{fontFamily: 'Barlow-SemiBold', fontSize: 17}}>
+                EDIT ITEMS
+              </Text>
+            </Button>
+          )}
         </View>
         <View style={styles.contentContainerSubmit}>
           <Button
@@ -410,5 +503,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: Dimensions.get('screen').width / 1.1,
     // backgroundColor: 'red',
+  },
+  addItems: {
+    marginBottom: 20,
   },
 });

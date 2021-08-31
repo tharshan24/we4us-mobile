@@ -560,6 +560,24 @@ const DashboardPublicStack = () => {
           },
         }}
       />
+
+      <Stack.Screen
+        name="AddItemsRequest"
+        component={AddItemsRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Add Items',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="findLocationMap"
         component={findLocationMap}
@@ -685,23 +703,6 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Capture Proof',
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: colorConstant.primaryColor,
-            elevation: 0, // remove shadow on Android
-            shadowOpacity: 0, // remove shadow on iOS
-          },
-          headerTitleStyle: {
-            fontFamily: 'Barlow-SemiBold',
-          },
-        }}
-      />
-      <Stack.Screen
-        name="AddItemsRequest"
-        component={AddItemsRequest}
-        options={{
-          headerTintColor: '#ffffff',
-          title: 'Add Items',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
