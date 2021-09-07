@@ -55,7 +55,7 @@ const EditProfile = (props) => {
         },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setCities(response.data.result.rows);
         setLoading(false);
       })

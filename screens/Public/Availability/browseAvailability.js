@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -8,11 +8,107 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 
 function BrowseAvailability(props) {
+  const navigation = useNavigation();
+  const [userId, setUserId] = useState('');
+  const [receiverId, setReceiverId] = useState(20);
+  const [conversations, setConversations] = useState([]);
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    getConversations();
+    return navigation.addListener('focus', () => {
+      getConversations();
+    });
+  }, [userId]);
+
+  const chatWindow = async () => {
+    // console.log(conversations.length, 'ppppppppppppppppp');
+    let flag = 0;
+    conversations.map((val) => {
+      if (
+        val.members[0] === userId.toString() &&
+        val.members[1] === receiverId.toString()
+      ) {
+        const senderReceiver = {
+          sender: val.members[0],
+          receiver: val.members[1],
+          conversationId: val._id,
+          userId: userId,
+        };
+        navigation.navigate('chatComponent', {senderReceiver});
+      } else if (userId === receiverId) {
+        const senderReceiver = {
+          sender: val.members[0],
+          receiver: val.members[1],
+          conversationId: val._id,
+          userId: userId,
+        };
+        navigation.navigate('chatComponent', {senderReceiver});
+      } else {
+        // console.log('varaatha');
+        flag = flag + 1;
+        // console.log(flag, 'mmmmmmmmmmmmm');
+      }
+    });
+
+    if (conversations.length === flag) {
+      await axios
+        .post('http://10.0.2.2:5000/conversation', {
+          senderId: userId.toString(),
+          receiverId: receiverId.toString(),
+        })
+        .then(function (response) {
+          const senderReceiver = {
+            sender: userId.toString(),
+            receiver: receiverId.toString(),
+            conversationId: response.data._id,
+            userId: userId,
+          };
+          navigation.navigate('chatComponent', {senderReceiver});
+          flag = 0;
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
+  };
+
+  const getCurrentUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      if (jsonValue !== null) {
+        const value = JSON.parse(jsonValue);
+        setUserId(value.result.id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getConversations = async () => {
+    try {
+      await axios
+        .get('http://10.0.2.2:5000/conversation/' + userId)
+        .then(function (response) {
+          // console.log(response.data);
+          setConversations(response.data);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
@@ -33,7 +129,7 @@ function BrowseAvailability(props) {
                 }}
               />
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => chatWindow()}>
               <MaterialCommunityIcons
                 name="message-reply-text"
                 color="#ffffff"
@@ -164,25 +260,25 @@ function BrowseAvailability(props) {
             <View style={styles.contentImageCon}>
               <Image
                 style={styles.contentImage}
-                source={require('../../assets/Images/food1.jpg')}
+                source={require('../../../assets/Images/food1.jpg')}
               />
             </View>
             <View style={styles.contentImageCon}>
               <Image
                 style={styles.contentImage}
-                source={require('../../assets/Images/food2.jpg')}
+                source={require('../../../assets/Images/food2.jpg')}
               />
             </View>
             <View style={styles.contentImageCon}>
               <Image
                 style={styles.contentImage}
-                source={require('../../assets/Images/food3.jpg')}
+                source={require('../../../assets/Images/food3.jpg')}
               />
             </View>
             <View style={styles.contentImageCon}>
               <Image
                 style={styles.contentImage}
-                source={require('../../assets/Images/food4.jpg')}
+                source={require('../../../assets/Images/food4.jpg')}
               />
             </View>
           </Swiper>

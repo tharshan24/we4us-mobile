@@ -8,7 +8,7 @@ import Notifications from '../screens/Public/notifications';
 import forgotPassword from '../screens/Common/forgotPassword';
 import colorConstant from '../constants/colorConstant';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import ExploreAvailability from '../screens/Public/exploreAvailability';
+import ExploreAvailability from '../screens/Public/Availability/exploreAvailability';
 import ExploreRequest from '../screens/Public/exploreRequest';
 import AddAvailabilityRequest from '../screens/Public/addAvailabilityRequest';
 import DashboardPublic from '../screens/Public/dashboardPublic';
@@ -30,7 +30,7 @@ import PersonRegister from '../screens/Public/personRegister';
 import DashboardNgo from '../screens/NGO/dashboardNgo';
 import SplashScreen from '../screens/Common/splashScreen';
 import SettingsOrganization from '../screens/NGO/settingsOrganization';
-import BrowseAvailability from '../screens/Public/browseAvailability';
+import BrowseAvailability from '../screens/Public/Availability/browseAvailability';
 import FilterResults from '../screens/Public/filterResults';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
 import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
@@ -50,6 +50,7 @@ import RequestCreationSetTwo from '../screens/Public/Request Creation/RequestCre
 import findLocationMapRequest from '../screens/Public/Request Creation/findLocationMapRequest';
 import AddItemsRequest from '../screens/Public/Request Creation/addItemsRequest';
 import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreenRequest';
+import ChatComponent from '../screens/Common/chatComponent';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -720,6 +721,23 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Camera',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="chatComponent"
+        component={ChatComponent}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Chat',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
