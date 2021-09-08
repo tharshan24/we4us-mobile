@@ -116,32 +116,36 @@ function BrowseAvailability(props) {
           <View style={styles.txtCon}>
             <Text style={styles.headingTxt}>Wedding Lunch</Text>
           </View>
-          <View style={styles.iconCon}>
-            <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-              <MaterialCommunityIcons
-                name="phone"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.primaryColor,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7} onPress={() => chatWindow()}>
-              <MaterialCommunityIcons
-                name="message-reply-text"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.primaryColor,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
+          {userId === receiverId ? null : (
+            <View style={styles.iconCon}>
+              <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
+                <MaterialCommunityIcons
+                  name="phone"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => chatWindow()}>
+                <MaterialCommunityIcons
+                  name="message-reply-text"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <View
           style={{

@@ -1,12 +1,6 @@
 import React, {useState, useCallback, useEffect, useContext} from 'react';
-import {View, ImageBackground, Button} from 'react-native';
-import {
-  Avatar,
-  Bubble,
-  GiftedChat,
-  InputToolbar,
-  Send,
-} from 'react-native-gifted-chat';
+import {View, ImageBackground} from 'react-native';
+import {Bubble, GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
 import colorConstant from '../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
@@ -152,6 +146,7 @@ const ChatComponent = ({route}) => {
         senderId: senderReceiver.userId,
         receiverId: parseInt(senderReceiver.receiver),
         text: text[0].text,
+        conversationId: senderReceiver.conversationId,
       });
     } else {
       socket.emit('sendMessage', {
@@ -159,6 +154,7 @@ const ChatComponent = ({route}) => {
         senderId: senderReceiver.userId,
         receiverId: parseInt(senderReceiver.sender),
         text: text[0].text,
+        conversationId: senderReceiver.conversationId,
       });
     }
 

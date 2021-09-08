@@ -51,6 +51,8 @@ import findLocationMapRequest from '../screens/Public/Request Creation/findLocat
 import AddItemsRequest from '../screens/Public/Request Creation/addItemsRequest';
 import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreenRequest';
 import ChatComponent from '../screens/Common/chatComponent';
+import Conversations from '../screens/Public/Conversations';
+import CommonCheck from '../screens/Public/commonCheck';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -224,7 +226,9 @@ const DashboardTap = () => {
       initialRouteName="Home"
       activeColor={colorConstant.proRed}
       inactiveColor="#727E8E"
-      barStyle={{backgroundColor: '#ffffff'}}>
+      barStyle={{
+        backgroundColor: '#ffffff',
+      }}>
       <Tab.Screen
         name="Home"
         component={DashboardPublic}
@@ -275,6 +279,21 @@ const DashboardTap = () => {
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               name="bell-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="conversations"
+        component={Conversations}
+        options={{
+          tabBarLabel: 'Messages',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="chat-outline"
               color={color}
               size={26}
               style={({alignItems: 'center'}, {flexDirection: 'column'})}
@@ -738,6 +757,23 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Chat',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CommonCheck"
+        component={CommonCheck}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'CommonCheck',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
