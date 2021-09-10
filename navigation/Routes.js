@@ -50,6 +50,60 @@ import RequestCreationSetTwo from '../screens/Public/Request Creation/RequestCre
 import findLocationMapRequest from '../screens/Public/Request Creation/findLocationMapRequest';
 import AddItemsRequest from '../screens/Public/Request Creation/addItemsRequest';
 import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreenRequest';
+//Ngo
+import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
+import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
+import OngoingDonationNgo from '../screens/NGO/ongoingDonationNgo';
+import OngoingRequestNgo from '../screens/NGO/ongoingRequestNgo';
+import HistoryCollectionPoint from '../screens/NGO/historyCollectionPoint';
+import OngoingCollectionPoint from '../screens/NGO/ongoingCollectionPoint';
+import OngoingDeliveryDetailsNgo from '../screens/NGO/ongoingDeliveryDetailsNgo';
+import OngoingRequestDetailsNgo from '../screens/NGO/ongoingRequestDetailsNgo';
+import CreateActionNgo from '../screens/NGO/createActionNgo';
+import availabilityInputSetOneNgo from '../screens/NGO/availabilityInputSetOne';
+import availabilityInputSetTwoNgo from '../screens/NGO/availabilityInputSetTwo';
+import availabilityInputSetThreeNgo from '../screens/NGO/availabilityInputSetThree';
+import RequestForDonationNgo from '../screens/NGO/requestsForDonationNgo';
+import DonationTrackingMapNgo from '../screens/NGO/donationTrackingMapNgo';
+import NotificationsNgo from '../screens/NGO/notificationsNgo';
+import BrowseAvailabilityNgo from '../screens/NGO/browseAvailabilityNgo';
+import ExploreAvailabilityNgo from '../screens/NGO/exploreAvailabilityNgo';
+import ExploreRequestNgo from '../screens/NGO/exploreRequestNgo';
+import FilterResultsNgo from '../screens/NGO/filterResultsNgo';
+import collectionpointInputSetOne from '../screens/NGO/collectionpointInputSetOne';
+import collectionpointInputSetTwo from '../screens/NGO/collectionpointInputSetTwo';
+import OngoingCollectionpointDetailsNgo from '../screens/NGO/ongoingCollectionpointDetailsNgo';
+import BrowseCollectionpointNgo from '../screens/NGO/browseCollectionpointNgo';
+import CollectionpointTrackingMapNgo from '../screens/NGO/collectionpointTrackingMapNgo';
+import findLocationMapAvailability from '../screens/NGO/findLocationMapAvailability';
+import RequestCreationSetOneNgo from '../screens/NGO/Request Creation/RequestCreationSetOne';
+import RequestCreationSetTwoNgo from '../screens/NGO/Request Creation/RequestCreationSetTwo';
+import findLocationMapRequestNgo from '../screens/NGO/Request Creation/findLocationMapRequest';
+import AddItemsRequestNgo from '../screens/NGO/Request Creation/addItemsRequest';
+import cameraScreenRequestNgo from '../screens/NGO/Request Creation/cameraScreenRequest';
+import AddMember from '../screens/NGO/addMember';
+//home
+import DashboardHome from '../screens/CareHome/dashboardHome';
+import HistoryDonationHome from '../screens/CareHome/historyDonationHome';
+import HistoryRequestHome from '../screens/CareHome/historyRequestHome';
+import CreateActionHome from '../screens/CareHome/createActionHome';
+import OngoingDeliveryDetailsHome from '../screens/CareHome/ongoingDeliveryDetailsHome';
+import RequestForDonationHome from '../screens/CareHome/requestsForDonationHome';
+import OngoingDonationHome from '../screens/CareHome/ongoingDonationHome';
+import DonationTrackingMapHome from '../screens/CareHome/donationTrackingMapHome';
+import OngoingRequestHome from '../screens/CareHome/ongoingRequestHome';
+import availabilityInputSetOneHome from '../screens/CareHome/Availability Creation/availabilityInputSetOne';
+import availabilityInputSetTwoHome from '../screens/CareHome/Availability Creation/availabilityInputSetTwo';
+import availabilityInputSetThreeHome from '../screens/CareHome/Availability Creation/availabilityInputSetThree';
+import RequestCreationSetOneHome from '../screens/CareHome/Request Creation/RequestCreationSetOne';
+import findLocationMapHome from '../screens/CareHome/Availability Creation/findLocationMap';
+import findLocationMapRequestHome from '../screens/CareHome/Request Creation/findLocationMapRequest';
+import NotificationsHome from '../screens/CareHome/notificationsHome';
+import RequestCreationSetTwoHome from '../screens/CareHome/Request Creation/RequestCreationSetTwo';
+import BrowseAvailabilityHome from '../screens/CareHome/browseAvailabilityHome';
+import ExploreAvailabilityHome from '../screens/CareHome/exploreAvailabilityHome';
+import ExploreRequestHome from '../screens/CareHome/exploreRequestHome';
+import FilterResultsHome from '../screens/CareHome/filterResultsHome';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -64,12 +118,86 @@ const DashboardNgoStack = () => {
         name="Home"
         component={DashboardNgoTap}
       />
-      <Stack.Screen name="History-Donation" component={HistoryDonation} />
-      <Stack.Screen name="History-Request" component={HistoryRequest} />
+      <Stack.Screen name="History-Donation" component={HistoryDonationNgo} />
+      <Stack.Screen name="History-Request" component={HistoryRequestNgo} />
       <Stack.Screen name="PublicSetting" component={SettingsPublic} />
-      <Stack.Screen name="OngoingDonation" component={OngoingDonation} />
-      <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
-      <Stack.Screen name="RegisterDriver" component={RegisterDriver} />
+      <Stack.Screen name="OngoingDonation" component={OngoingDonationNgo} />
+      <Stack.Screen name="OngoingRequest" component={OngoingRequestNgo} />
+    
+      <Stack.Screen name="History-Collection-Point" component={HistoryCollectionPoint} />
+      <Stack.Screen name="OngoingCollectionPoint" component={OngoingCollectionPoint} />
+      <Stack.Screen
+        name="OngoingDeliveryDetailsNgo"
+        component={OngoingDeliveryDetailsNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="OngoingCollectionpointDetailsNgo"
+        component={OngoingCollectionpointDetailsNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="AddMember"
+        component={AddMember}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Add Member',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="OngoingRequestDetailsNgo"
+        component={OngoingRequestDetailsNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
@@ -91,6 +219,299 @@ const DashboardNgoStack = () => {
       <Stack.Screen name="AboutUs" component={AboutUs} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="TermsCondition" component={TermsCondition} />
+      <Stack.Screen
+        name="BrowseAvailabilityNgo"
+        component={BrowseAvailabilityNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="BrowseCollectionpointNgo"
+        component={BrowseCollectionpointNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Collection Point',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="FilterResultsNgo"
+        component={FilterResultsNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Filter',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetOne"
+        component={availabilityInputSetOneNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetTwo"
+        component={availabilityInputSetTwoNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetThree"
+        component={availabilityInputSetThreeNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="collectionpointInputSetOne"
+        component={collectionpointInputSetOne}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Collection Point',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="collectionpointInputSetTwo"
+        component={collectionpointInputSetTwo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Collection Point',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="RequestForDonationNgo"
+        component={RequestForDonationNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Requests',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="DonationTrackingMapNgo"
+        component={DonationTrackingMapNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Track Donation',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="CollectionpointTrackingMapNgo"
+        component={CollectionpointTrackingMapNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="findLocationMapAvailability"
+        component={findLocationMapAvailability}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="CreateRequestNgo"
+        component={RequestCreationSetOneNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RequestCreationSetTwoNgo"
+        component={RequestCreationSetTwoNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="AddItemsRequest"
+        component={AddItemsRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Add Items',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+         <Stack.Screen
+        name="findLocationMapRequest"
+        component={findLocationMapRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="cameraScreenRequest"
+        component={cameraScreenRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Camera',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -151,7 +572,7 @@ const DashboardNgoTap = () => {
       />
       <Tab.Screen
         name="AddAction"
-        component={AddAvailabilityRequest}
+        component={CreateActionNgo}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
@@ -164,9 +585,9 @@ const DashboardNgoTap = () => {
           ),
         }}
       />
-      <Tab.Screen
+       <Tab.Screen
         name="Notification"
-        component={Notification}
+        component={NotificationsNgo}
         options={{
           tabBarLabel: 'Notification',
           tabBarIcon: ({color}) => (
@@ -195,6 +616,7 @@ const DashboardNgoTap = () => {
         }}
       />
     </Tab.Navigator>
+
   );
 };
 
@@ -210,8 +632,8 @@ const ExploreNgoStack = () => {
         labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
         style: {backgroundColor: colorConstant.primaryColor},
       }}>
-      <Top.Screen name="Availability" component={ExploreAvailability} />
-      <Top.Screen name="Request" component={ExploreRequest} />
+      <Top.Screen name="Availability" component={ExploreAvailabilityNgo} />
+      <Top.Screen name="Request" component={ExploreRequestNgo} />
     </Top.Navigator>
   );
 };
@@ -735,6 +1157,412 @@ const DashboardPublicStack = () => {
   );
 };
 
+//home
+const DashboardHomeStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Home"
+        component={DashboardHomeTap}
+      />
+      <Stack.Screen name="History-Donation" component={HistoryDonationHome} />
+      <Stack.Screen name="History-Request" component={HistoryRequestHome} />
+      <Stack.Screen name="PublicSetting" component={SettingsPublic} />
+      <Stack.Screen name="OngoingDonation" component={OngoingDonationHome} />
+      <Stack.Screen name="OngoingRequest" component={OngoingRequestHome} />
+    
+      <Stack.Screen name="History-Collection-Point" component={HistoryCollectionPoint} />
+      <Stack.Screen name="OngoingCollectionPoint" component={OngoingCollectionPoint} />
+      <Stack.Screen
+        name="OngoingDeliveryDetailsNgo"
+        component={OngoingDeliveryDetailsHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="OngoingRequestDetailsNgo"
+        component={OngoingRequestDetailsNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Edit Profile',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="DriverSettings" component={DriverSettings} />
+      <Stack.Screen name="AboutUs" component={AboutUs} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="TermsCondition" component={TermsCondition} />
+      <Stack.Screen
+        name="BrowseAvailabilityHome"
+        component={BrowseAvailabilityHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="FilterResultsHome"
+        component={FilterResultsHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Filter',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetOneHome"
+        component={availabilityInputSetOneHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetTwoHome"
+        component={availabilityInputSetTwoHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="availabilityInputSetThreeHome"
+        component={availabilityInputSetThreeHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="RequestForDonationHome"
+        component={RequestForDonationHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Requests',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="DonationTrackingMapHome"
+        component={DonationTrackingMapHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Track Donation',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="findLocationMapHome"
+        component={findLocationMapHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="CreateRequestHome"
+        component={RequestCreationSetOneHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RequestCreationSetTwoHome"
+        component={RequestCreationSetTwoHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="AddItemsRequest"
+        component={AddItemsRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Add Items',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+         <Stack.Screen
+        name="findLocationMapRequest"
+        component={findLocationMapRequestHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Mark your Place',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="cameraScreenRequest"
+        component={cameraScreenRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Camera',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const DashboardHomeTap = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      activeColor={colorConstant.proRed}
+      inactiveColor="#727E8E"
+      barStyle={{backgroundColor: '#ffffff'}}>
+      <Tab.Screen
+        name="Home"
+        component={DashboardHome}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="home-outline"
+              color={color}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Explore"
+        component={ExploreHomeStack}
+        options={{
+          tabBarLabel: 'Explore',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="layers-search-outline"
+              color={color}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="AddAction"
+        component={CreateActionHome}
+        options={{
+          tabBarLabel: 'Add',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="plus-box"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+       <Tab.Screen
+        name="NotificationHome"
+        component={NotificationsHome}
+        options={{
+          tabBarLabel: 'Notification',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="bell-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsOrganization}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="cog-outline"
+              color={color}
+              size={26}
+              style={{alignItems: 'center', flexDirection: 'column'}}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+
+  );
+};
+
+const ExploreHomeStack = () => {
+  return (
+    <Top.Navigator
+      tabBarOptions={{
+        indicatorStyle: {
+          backgroundColor: '#ffffff',
+          paddingTop: 5,
+          borderRadius: 10,
+        },
+        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
+        style: {backgroundColor: colorConstant.primaryColor},
+      }}>
+      <Top.Screen name="Availability" component={ExploreAvailabilityHome} />
+      <Top.Screen name="Request" component={ExploreRequestHome} />
+    </Top.Navigator>
+  );
+};
+
+
 function InitialStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -742,7 +1570,8 @@ function InitialStack() {
       <Stack.Screen name="AuthNgo" component={AuthStackNgo} />
       <Stack.Screen name="Dashboard" component={DashboardPublicStack} />
       <Stack.Screen name="DashboardNgo" component={DashboardNgoStack} />
-      {/* <Stack.Screen name="DashboardShops" component={DashboardShops} /> */}
+      <Stack.Screen name="DashboardHome" component={DashboardHomeStack} />
+      {/*<Stack.Screen name="DashboardShops" component={DashboardShops} />*/ }
       {/* <Stack.Screen name="Password" component={changePwd} /> */}
     </Stack.Navigator>
   );

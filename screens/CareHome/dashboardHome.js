@@ -27,17 +27,17 @@ const DashboardNgo = (props) => {
         <View style={styles.ProfilePicCon}>
           <Image
             style={styles.ProfilePic}
-            source={require('../../assets/Images/logo.png')}
+            source={require('../../assets/Images/carehome.jpg')}
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> Rotaract Club </Text>
+          <Text style={styles.UserName}> Nagai Luxury elder care </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 8}}>
-              <Text style={styles.Email}>rotaract@gmail.com </Text>
+              <Text style={styles.Email}>nagailuxury@gmail.com </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -150,55 +150,6 @@ const DashboardNgo = (props) => {
                   }}
                   onPress={() => navigation.navigate('OngoingRequest')}>
                   <Text style={styles.BtnTxt2Request}>5 on request</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View style={styles.RegisterDriverCon}>
-            <View style={styles.Heading}>
-              <View style={styles.DriverHeaderCon}>
-                <Text style={styles.DriverHeaderTxt}>COLLECTION POINTS</Text>
-              </View>
-              <View style={styles.DriverHeaderIcon}>
-                <MaterialCommunityIcons
-                  name="garage-open-variant"
-                  color={colorConstant.proCharcoal}
-                  size={25}
-                />
-              </View>
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View style={styles.DonationCampCount}>
-                <Text style={styles.DonationCampCountTxt}>4</Text>
-                <Text style={styles.DonationCampSuccess}>
-                  SUCCESSFUL DONATIONS
-                </Text>
-              </View>
-              <View style={styles.ButtonsConDonationCamp}>
-                <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Collection-Point')}>
-                  <Text style={styles.BtnTxtDonationCamp}>History</Text>
-                </Button>
-                <Button
-                  color={colorConstant.proRed}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('OngoingCollectionPoint')}>
-                  <Text style={styles.BtnTxt2DonationCamp}>5 on request</Text>
                 </Button>
               </View>
             </View>
