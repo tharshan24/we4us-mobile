@@ -8,7 +8,7 @@ import Notifications from '../screens/Public/notifications';
 import forgotPassword from '../screens/Common/forgotPassword';
 import colorConstant from '../constants/colorConstant';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import ExploreAvailability from '../screens/Public/exploreAvailability';
+import ExploreAvailability from '../screens/Public/Availability/exploreAvailability';
 import ExploreRequest from '../screens/Public/exploreRequest';
 import AddAvailabilityRequest from '../screens/Public/addAvailabilityRequest';
 import DashboardPublic from '../screens/Public/dashboardPublic';
@@ -30,7 +30,7 @@ import PersonRegister from '../screens/Public/personRegister';
 import DashboardNgo from '../screens/NGO/dashboardNgo';
 import SplashScreen from '../screens/Common/splashScreen';
 import SettingsOrganization from '../screens/NGO/settingsOrganization';
-import BrowseAvailability from '../screens/Public/browseAvailability';
+import BrowseAvailability from '../screens/Public/Availability/browseAvailability';
 import FilterResults from '../screens/Public/filterResults';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
 import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
@@ -50,6 +50,9 @@ import RequestCreationSetTwo from '../screens/Public/Request Creation/RequestCre
 import findLocationMapRequest from '../screens/Public/Request Creation/findLocationMapRequest';
 import AddItemsRequest from '../screens/Public/Request Creation/addItemsRequest';
 import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreenRequest';
+import ChatComponent from '../screens/Common/chatComponent';
+import Conversations from '../screens/Public/Conversations';
+import CommonCheck from '../screens/Public/commonCheck';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -306,9 +309,47 @@ const DashboardNgoStack = () => {
           },
         }}
       />
+        </Tab.Navigator>
+  );
+};
+
+
       <Stack.Screen
         name="availabilityInputSetThree"
         component={availabilityInputSetThreeNgo}
+
+const ExploreNgoStack = () => {
+  return (
+    <Top.Navigator
+      tabBarOptions={{
+        indicatorStyle: {
+          backgroundColor: '#ffffff',
+          paddingTop: 5,
+          borderRadius: 10,
+        },
+        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
+        style: {backgroundColor: colorConstant.primaryColor},
+      }}>
+      <Top.Screen name="Availability" component={ExploreAvailability} />
+      <Top.Screen name="Request" component={ExploreRequest} />
+    </Top.Navigator>
+  );
+};
+
+//Public Dashboard
+const DashboardTap = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      activeColor={colorConstant.proRed}
+      inactiveColor="#727E8E"
+      barStyle={{
+        backgroundColor: '#ffffff',
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={DashboardPublic}
+
         options={{
           headerTintColor: '#ffffff',
           title: 'Create Availability',
@@ -593,6 +634,21 @@ const DashboardNgoTap = () => {
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               name="bell-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="conversations"
+        component={Conversations}
+        options={{
+          tabBarLabel: 'Messages',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="chat-outline"
               color={color}
               size={26}
               style={({alignItems: 'center'}, {flexDirection: 'column'})}
@@ -1444,6 +1500,40 @@ const DashboardHomeStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Camera',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="chatComponent"
+        component={ChatComponent}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Chat',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CommonCheck"
+        component={CommonCheck}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'CommonCheck',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

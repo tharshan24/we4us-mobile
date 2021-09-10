@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -37,7 +37,7 @@ function ExploreAvailability({route}) {
               <View style={styles.ProfilePicCon}>
                 <Image
                   style={styles.ProfilePic}
-                  source={require('../../assets/Images/profilePic.jpg')}
+                  source={require('../../../assets/Images/profilePic.jpg')}
                 />
               </View>
               <View>

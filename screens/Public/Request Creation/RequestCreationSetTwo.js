@@ -141,28 +141,29 @@ function RequestCreationSetTwo(props) {
   };
 
   const validateFieldsTwo = () => {
+    // console.log(formValues[0]['name']);
     // console.log(locationFromMap);
     // setFormValues();
     // setLocationFromMap();
     // removeAllInputsRequest();
     // console.log(formValues);
     // getAllKeys();
-    // if (locationFromMap === undefined) {
-    //   Alert.alert(
-    //     'Choose Location from the Map, Where you need to Deliver your request',
-    //   );
-    // } else if (address === '') {
-    //   Alert.alert(
-    //     'Provide your Address where you need to Deliver your request',
-    //   );
-    // } else if (formValues === undefined) {
-    //   Alert.alert('Add atleast on Item to request');
-    // } else {
-    //   Alert.alert('Request has been Placed.');
-    //   console.log(formValues);
-    //   navigation.popToTop();
-    //   removeAllInputsRequest();
-    // }
+    if (locationFromMap === undefined) {
+      Alert.alert(
+        'Choose Location from the Map, Where you need to Deliver your request',
+      );
+    } else if (address === '') {
+      Alert.alert(
+        'Provide your Address where you need to Deliver your request',
+      );
+    } else if (formValues === undefined) {
+      Alert.alert('Add atleast on Item to request');
+    } else {
+      Alert.alert('Request has been Placed.');
+      console.log(formValues);
+      navigation.popToTop();
+      removeAllInputsRequest();
+    }
   };
 
   const getAllKeys = async () => {
@@ -347,7 +348,9 @@ function RequestCreationSetTwo(props) {
           </View>
         </View>
         <View style={styles.addItems}>
-          {formValues === undefined ? (
+          {formValues === undefined ||
+          formValues[0]['name'] === '' ||
+          formValues[0]['count'] === '' ? (
             <Button
               mode="contained"
               onPress={() => navigation.navigate('AddItemsRequest')}
