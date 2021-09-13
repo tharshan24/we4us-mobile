@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -12,6 +12,7 @@ import {Select, VStack, NativeBaseProvider} from 'native-base';
 import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const driverRegistrationSetOne = () => {
   const navigation = useNavigation();
@@ -22,33 +23,36 @@ const driverRegistrationSetOne = () => {
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [vehicleColor, setVehicleColor] = useState('');
   const [licenseNumber, setLicenseNumber] = useState('');
+  const [token, setToken] = useState();
+  const [loading, setLoading] = useState(true);
+  const [vehicleTypes, setVehicleTypes] = useState([]);
 
   const validateFields = () => {
-    navigation.navigate('registerDriverTwo');
-    // if (vehicleType === '') {
-    //   Alert.alert('Select Vehicle Type');
-    // } else if (vehicleBrand === '') {
-    //   Alert.alert('Give your Vehicle Brand');
-    // } else if (vehicleModel === '') {
-    //   Alert.alert('Give your Vehicle Model');
-    // } else if (vehicleNumber === '') {
-    //   Alert.alert('Give your Vehicle Number');
-    // } else if (vehicleColor === '') {
-    //   Alert.alert('Give your Vehicle Color');
-    // } else if (licenseNumber === '') {
-    //   Alert.alert('Give your Vehicle License Number');
-    // } else {
-    //   const driverRegisterOne = {
-    //     vehicleType: vehicleType,
-    //     vehicleBrand: vehicleBrand,
-    //     vehicleModel: vehicleModel,
-    //     vehicleNumber: vehicleNumber,
-    //     vehicleColor: vehicleColor,
-    //     licenseNumber: licenseNumber,
-    //   };
-    //   storeData(driverRegisterOne);
-    //   navigation.navigate('registerDriverTwo');
-    // }
+    // navigation.navigate('registerDriverTwo');
+    if (vehicleType === '') {
+      Alert.alert('Select Vehicle Type');
+    } else if (vehicleBrand === '') {
+      Alert.alert('Give your Vehicle Brand');
+    } else if (vehicleModel === '') {
+      Alert.alert('Give your Vehicle Model');
+    } else if (vehicleNumber === '') {
+      Alert.alert('Give your Vehicle Number');
+    } else if (vehicleColor === '') {
+      Alert.alert('Give your Vehicle Color');
+    } else if (licenseNumber === '') {
+      Alert.alert('Give your Vehicle License Number');
+    } else {
+      const driverRegisterOne = {
+        vehicleType: vehicleType,
+        vehicleBrand: vehicleBrand,
+        vehicleModel: vehicleModel,
+        vehicleNumber: vehicleNumber,
+        vehicleColor: vehicleColor,
+        licenseNumber: licenseNumber,
+      };
+      storeData(driverRegisterOne);
+      navigation.navigate('registerDriverTwo');
+    }
   };
 
   const storeData = async (value) => {
@@ -59,6 +63,40 @@ const driverRegistrationSetOne = () => {
       console.log(e);
     }
   };
+
+  const getUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(value);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getVehicleType = () => {
+    axios
+      .get('http://10.0.2.2:8000/system/getVehicleTypes', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        setVehicleTypes(response.data.result.rows);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getUser();
+    getVehicleType();
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -81,9 +119,16 @@ const driverRegistrationSetOne = () => {
                   selectedValue={vehicleType}
                   placeholder="Select Vehicle Type"
                   onValueChange={(itemValue) => setVehicleType(itemValue)}>
-                  <Select.Item label="Vegetarian" value="veg" />
-                  <Select.Item label="Non-Vegetarian" value="nonveg" />
-                  <Select.Item label="Mixed" value="mix" />
+                  {vehicleTypes.map((types) => (
+                    <Select.Item
+                      label={types.name}
+                      value={types.id}
+                      key={types.id}
+                    />
+                  ))}
+
+                  {/*<Select.Item label="Non-Vegetarian" value="nonveg" />*/}
+                  {/*<Select.Item label="Mixed" value="mix" />*/}
                 </Select>
               </VStack>
             </NativeBaseProvider>

@@ -158,20 +158,20 @@ const ChatComponent = ({route}) => {
       });
     }
 
-    await axios
-      .post('http://10.0.2.2:5000/messages', {
-        conversationId: senderReceiver.conversationId,
-        text: text[0].text,
-        user: {
-          _id: text[0].user._id,
-        },
-      })
-      .then(function (response) {
-        // console.log(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
+    // await axios
+    //   .post('http://10.0.2.2:5000/messages', {
+    //     conversationId: senderReceiver.conversationId,
+    //     text: text[0].text,
+    //     user: {
+    //       _id: text[0].user._id,
+    //     },
+    //   })
+    //   .then(function (response) {
+    //     // console.log(response.data);
+    //   })
+    //   .catch(function (err) {
+    //     console.log(err);
+    //   });
   }, []);
 
   return (

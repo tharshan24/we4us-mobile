@@ -8,107 +8,241 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import {Spinner, Center, NativeBaseProvider} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colorConstant from '../../../constants/colorConstant';
 import {Button} from 'react-native-paper';
-import Swiper from 'react-native-swiper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentPicker from 'react-native-document-picker';
+import axios from 'axios';
+// import * as Progress from 'react-native-progress';
+// import RNFS from 'react-native-fs';
 
 function driverRegistrationSetTwo() {
   const navigation = useNavigation();
-  const [imageLocLicense, setImageLocLicense] = useState([]);
-  const [imageLocVehicle, setImageLocVehicle] = useState([]);
+  const [imageLocLicense, setImageLocLicense] = useState();
+  const [imageLocVehicle, setImageLocVehicle] = useState();
+  const [token, setToken] = useState();
+  const [inputSetOne, setInputSetOne] = useState();
+  const [progress, setProgress] = useState(null);
 
   const imagePickerLicense = async () => {
-    try {
-      console.log(imageLocLicense);
-      const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images],
-      });
-      if (results.length < 3 && imageLocLicense.length === 0) {
-        for (const res of results) {
-          setImageLocLicense((arr) => [...arr, res.uri]);
+    if (!imageLocLicense) {
+      try {
+        const results = await DocumentPicker.pick({
+          type: [DocumentPicker.types.images],
+        });
+        if (results) {
+          //   for (const res of results) {
+          //     setImageLocLicense((arr) => [...arr, res.uri]);
+          //   }
+          // } else if (results.length < 2 && imageLocLicense.length === 1) {
+          //   for (const res of results) {
+          setImageLocLicense(results.uri);
+          //   }
+        } else {
+          Alert.alert('Upload Front Image of License');
         }
-      } else if (results.length < 2 && imageLocLicense.length === 1) {
-        for (const res of results) {
-          setImageLocLicense((arr) => [...arr, res.uri]);
+      } catch (err) {
+        if (DocumentPicker.isCancel(err)) {
+          // User cancelled the picker, exit any dialogs or menus and move on
+        } else {
+          throw err;
         }
-      } else {
-        Alert.alert(
-          'Upload Front and Back Side only. Two images are allowed to upload',
-        );
       }
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
+    } else {
+      Alert.alert('Only can select one Image');
     }
     return <Text>Success</Text>;
   };
 
   const imagePickerVehicle = async () => {
-    try {
-      const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images],
-      });
-      if (results.length < 3 && imageLocVehicle.length === 0) {
-        for (const res of results) {
-          setImageLocVehicle((arr) => [...arr, res.uri]);
+    if (!imageLocVehicle) {
+      try {
+        const results = await DocumentPicker.pick({
+          type: [DocumentPicker.types.images],
+        });
+        if (results) {
+          // console.log(results);
+          //   for (const res of results) {
+          //     setImageLocVehicle((arr) => [...arr, res.uri]);
+          //   }
+          // } else if (results.length < 2 && imageLocVehicle.length === 1) {
+          //   for (const res of results) {
+          setImageLocVehicle(results.uri);
+          //   }
+        } else {
+          Alert.alert('Upload Front Image of Vehicle Book');
         }
-      } else if (results.length < 2 && imageLocVehicle.length === 1) {
-        for (const res of results) {
-          setImageLocVehicle((arr) => [...arr, res.uri]);
+      } catch (err) {
+        if (DocumentPicker.isCancel(err)) {
+          // User cancelled the picker, exit any dialogs or menus and move on
+        } else {
+          throw err;
         }
-      } else {
-        Alert.alert(
-          'Upload Front and Back Side only. Two images are allowed to upload',
-        );
       }
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
+    } else {
+      Alert.alert('You can Select only one Image');
     }
     return <Text>Success</Text>;
   };
 
-  const removeImageLicense = (item) => {
-    const index = imageLocLicense.indexOf(item);
-    let tempArray;
-    if (imageLocLicense.length > -1) {
-      tempArray = imageLocLicense.filter((item, pos) => pos !== index);
-      setImageLocLicense(tempArray);
+  const removeImageLicense = () => {
+    // const index = imageLocLicense.indexOf(item);
+    // let tempArray;
+    if (imageLocLicense) {
+      // tempArray = imageLocLicense.filter((item, pos) => pos !== index);
+      setImageLocLicense();
     } else {
       Alert.alert('No Images to Delete');
     }
   };
 
-  const removeImageVehicle = (item) => {
-    const index = imageLocVehicle.indexOf(item);
-    let tempArray;
-    if (imageLocVehicle.length > -1) {
-      tempArray = imageLocVehicle.filter((item, pos) => pos !== index);
-      setImageLocVehicle(tempArray);
+  const removeImageVehicle = () => {
+    // const index = imageLocVehicle.indexOf(item);
+    // let tempArray;
+    if (imageLocVehicle) {
+      // tempArray = imageLocVehicle.filter((item, pos) => pos !== index);
+      setImageLocVehicle();
     } else {
       Alert.alert('No Images to Delete');
     }
   };
 
-  const validateFields = () => {
-    if (imageLocLicense.length === 0) {
-      Alert.alert('Upload License Proof, Font and Back Side of License');
-    } else if (imageLocVehicle.length === 0) {
+  const validateFields = async () => {
+    setProgress(1);
+    if (!imageLocLicense) {
+      Alert.alert('Upload License Proof');
+    } else if (!imageLocVehicle) {
       Alert.alert('Upload Vehicle book Proof');
     } else {
-      Alert.alert('Submitted Successfully');
-      navigation.popToTop();
-      removeValue('@DriverInputSetOne');
+      const formData = new FormData();
+      formData.append('files', {
+        name: new Date() + 'LicenseProof',
+        uri: imageLocLicense,
+        type: 'image/jpeg',
+      });
+      formData.append('license_no', inputSetOne.licenseNumber);
+
+      const formDataLic = new FormData();
+      formDataLic.append('files', {
+        name: new Date() + 'LicenseProof',
+        uri: imageLocVehicle,
+        type: 'image/jpeg',
+      });
+      formDataLic.append('vehicle_type', inputSetOne.vehicleType);
+      formDataLic.append('vehicle_no', inputSetOne.vehicleNumber);
+      formDataLic.append('brand', inputSetOne.vehicleBrand);
+      formDataLic.append('model', inputSetOne.vehicleModel);
+      formDataLic.append('color', inputSetOne.vehicleColor);
+
+      await axios
+        .all([
+          await axios({
+            url: 'http://10.0.2.2:8000/public/driverRegister',
+            method: 'post',
+            data: formData,
+            headers: {
+              Authorization: `Driver ${token}`,
+              Accept: 'application/json',
+              'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: ({loaded, total}) => {
+              let percent = Math.floor((loaded * 100) / total);
+              setProgress(percent);
+            },
+          }),
+          await axios({
+            url: 'http://10.0.2.2:8000/public/vehicleRegister',
+            method: 'post',
+            data: formDataLic,
+            headers: {
+              Authorization: `Driver ${token}`,
+              Accept: 'application/json',
+              'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: ({loaded, total}) => {
+              let percent = Math.floor((loaded * 100) / total);
+              setProgress(percent);
+            },
+          }),
+        ])
+        .then(
+          axios.spread((response1, response2) => {
+            if (
+              response1.data.status_code === 0 &&
+              response2.data.status_code === 0
+            ) {
+              navigation.popToTop();
+              Alert.alert('Submitted Successfully');
+              removeValue('@DriverInputSetOne');
+            } else {
+              setProgress(null);
+              Alert.alert('Driver Registration Failed');
+            }
+          }),
+        )
+        .catch(function (error) {
+          console.log(error, 'pppppppppppppppppp');
+          setProgress(null);
+        });
+      //vehicle proof
+      // await axios({
+      //   url: 'http://10.0.2.2:8000/public/driverRegister',
+      //   method: 'post',
+      //   data: formData,
+      //   headers: {
+      //     Authorization: `Driver ${token}`,
+      //     Accept: 'application/json',
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      //   onUploadProgress: ({loaded, total}) => {
+      //     let percent = Math.floor((loaded * 100) / total);
+      //     setProgress(percent);
+      //   },
+      // })
+      //   .then(function (response) {
+      //     if (response.data.status_code === 0) {
+      //       setResponseOne(response.data.status_code);
+      //     } else {
+      //       // Alert.alert('Driver Registration Failed');
+      //       setProgress(null);
+      //     }
+      //   })
+      //   .catch(function (error) {
+      //     setProgress(null);
+      //     console.log(error);
+      //     Alert.alert('Error in Creating availability');
+      //   });
+      //license proof
+      // await axios({
+      //   url: 'http://10.0.2.2:8000/public/vehicleRegister',
+      //   method: 'post',
+      //   data: formDataLic,
+      //   headers: {
+      //     Authorization: `Driver ${token}`,
+      //     Accept: 'application/json',
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      //   onUploadProgress: ({loaded, total}) => {
+      //     let percent = Math.floor((loaded * 100) / total);
+      //     setProgress(percent);
+      //   },
+      // })
+      //   .then(function (response) {
+      //     if (response.data.status_code === 0) {
+      //       setResponseTwo(response.data.status_code);
+      //     } else {
+      //       // Alert.alert('Driver Registration Failed');
+      //       setProgress(null);
+      //     }
+      //   })
+      //   .catch(function (error) {
+      //     setProgress(null);
+      //     console.log(error);
+      //     Alert.alert('Error in Creating availability');
+      //   });
     }
   };
 
@@ -124,17 +258,29 @@ function driverRegistrationSetTwo() {
 
   useEffect(() => {
     getDataInputOne();
-
+    getUser();
     return navigation.addListener('focus', () => {
       getDataLicense();
       getDataVehicle();
     });
   }, []);
 
+  const getUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(value);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   const getDataInputOne = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@DriverInputSetOne');
-      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+      return jsonValue != null ? setInputSetOne(JSON.parse(jsonValue)) : null;
     } catch (e) {}
   };
 
@@ -142,7 +288,7 @@ function driverRegistrationSetTwo() {
     try {
       const value = await AsyncStorage.getItem('@LicenseProof');
       if (value !== null) {
-        setImageLocLicense((ar) => [...ar, value]);
+        setImageLocLicense(value);
         await AsyncStorage.removeItem('@LicenseProof');
       }
     } catch (e) {
@@ -154,7 +300,7 @@ function driverRegistrationSetTwo() {
     try {
       const value = await AsyncStorage.getItem('@VehicleProof');
       if (value !== null) {
-        setImageLocVehicle((ar) => [...ar, value]);
+        setImageLocVehicle(value);
         await AsyncStorage.removeItem('@VehicleProof');
       }
     } catch (e) {
@@ -163,155 +309,152 @@ function driverRegistrationSetTwo() {
   };
 
   const cameraLicense = () => {
-    if (imageLocLicense.length < 2) {
+    if (!imageLocLicense) {
       navigation.navigate('CameraLicenseProof');
     } else {
-      Alert.alert('Two Images can be Uploaded');
+      Alert.alert('Two Images cannot be Uploaded');
     }
   };
 
   const cameraVehicle = () => {
-    if (imageLocVehicle.length < 2) {
+    if (!imageLocVehicle) {
       navigation.navigate('CameraVehicleProof');
     } else {
-      Alert.alert('Two Images can be Uploaded');
+      Alert.alert('Two Images cannot be Uploaded');
     }
   };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.LicenseProof}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>
-            Upload License Front and Back Image
-          </Text>
-        </View>
-        <View style={styles.chooseContainer}>
-          <View style={{flex: 1, marginRight: 30}}>
-            <Button
-              mode="contained"
-              style={{backgroundColor: colorConstant.primaryColor}}
-              onPress={() => cameraLicense()}>
-              Camera
-            </Button>
-          </View>
-          <View style={{flex: 1}}>
-            <Button
-              mode="contained"
-              style={{backgroundColor: colorConstant.primaryColor}}
-              onPress={() => imagePickerLicense()}>
-              Choose File
-            </Button>
-          </View>
-        </View>
-        <View style={styles.imageContainer}>
-          <View style={{flex: 1}}>
+      {progress === null ? (
+        <>
+          <View style={styles.LicenseProof}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Upload License Front Image</Text>
+            </View>
+            <View style={styles.chooseContainer}>
+              <View style={{flex: 1, marginRight: 30}}>
+                <Button
+                  mode="contained"
+                  style={{backgroundColor: colorConstant.primaryColor}}
+                  onPress={() => cameraLicense()}>
+                  Camera
+                </Button>
+              </View>
+              <View style={{flex: 1}}>
+                <Button
+                  mode="contained"
+                  style={{backgroundColor: colorConstant.primaryColor}}
+                  onPress={() => imagePickerLicense()}>
+                  Choose File
+                </Button>
+              </View>
+            </View>
             <View style={styles.imageContainer}>
-              <Swiper
-                showsPagination={false}
-                showsButtons={false}
-                index={0}
-                loop={false}
-                style={{
-                  height: Dimensions.get('window').height / 3,
-                  borderRadius: 10,
-                }}>
-                {imageLocLicense.map((item, i) => (
-                  <View style={styles.contentImageCon} key={i}>
-                    <Image style={styles.contentImage} source={{uri: item}} />
-                    <Button
-                      mode="contained"
-                      style={{
-                        position: 'absolute',
-                        backgroundColor: '#f53c3c',
-                      }}
-                      onPress={() => removeImageLicense(item)}>
-                      <MaterialCommunityIcons
-                        name="delete-outline"
-                        color="#ffffff"
-                        size={25}
-                      />
-                    </Button>
+              <View style={{flex: 1}}>
+                <View style={styles.imageContainer}>
+                  <View style={styles.contentImageCon}>
+                    <Image
+                      style={styles.contentImage}
+                      source={{uri: imageLocLicense}}
+                    />
+                    {imageLocLicense ? (
+                      <Button
+                        mode="contained"
+                        style={{
+                          position: 'absolute',
+                          backgroundColor: '#f53c3c',
+                        }}
+                        onPress={() => removeImageLicense()}>
+                        <MaterialCommunityIcons
+                          name="delete-outline"
+                          color="#ffffff"
+                          size={25}
+                        />
+                      </Button>
+                    ) : null}
                   </View>
-                ))}
-              </Swiper>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-      </View>
-      <View style={styles.vehicleProof}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Upload Vehicle Book Proof</Text>
-        </View>
-        <View style={styles.chooseContainer}>
-          <View style={{flex: 1, marginRight: 30}}>
-            <Button
-              mode="contained"
-              style={{backgroundColor: colorConstant.primaryColor}}
-              onPress={() => cameraVehicle()}>
-              Camera
-            </Button>
-          </View>
-          <View style={{flex: 1}}>
-            <Button
-              mode="contained"
-              style={{backgroundColor: colorConstant.primaryColor}}
-              onPress={() => imagePickerVehicle()}>
-              Choose File
-            </Button>
-          </View>
-        </View>
-        <View style={styles.imageContainer}>
-          <View style={{flex: 1}}>
+          <View style={styles.vehicleProof}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Upload Vehicle Book Proof</Text>
+            </View>
+            <View style={styles.chooseContainer}>
+              <View style={{flex: 1, marginRight: 30}}>
+                <Button
+                  mode="contained"
+                  style={{backgroundColor: colorConstant.primaryColor}}
+                  onPress={() => cameraVehicle()}>
+                  Camera
+                </Button>
+              </View>
+              <View style={{flex: 1}}>
+                <Button
+                  mode="contained"
+                  style={{backgroundColor: colorConstant.primaryColor}}
+                  onPress={() => imagePickerVehicle()}>
+                  Choose File
+                </Button>
+              </View>
+            </View>
             <View style={styles.imageContainer}>
-              <Swiper
-                showsPagination={false}
-                showsButtons={false}
-                index={0}
-                loop={false}
-                style={{
-                  height: Dimensions.get('window').height / 3,
-                  borderRadius: 10,
-                }}>
-                {imageLocVehicle.map((item, i) => (
-                  <View style={styles.contentImageCon} key={i}>
-                    <Image style={styles.contentImage} source={{uri: item}} />
-                    <Button
-                      mode="contained"
-                      style={{
-                        position: 'absolute',
-                        backgroundColor: '#f53c3c',
-                      }}
-                      onPress={() => removeImageVehicle(item)}>
-                      <MaterialCommunityIcons
-                        name="delete-outline"
-                        color="#ffffff"
-                        size={25}
-                      />
-                    </Button>
+              <View style={{flex: 1}}>
+                <View style={styles.imageContainer}>
+                  <View style={styles.contentImageCon}>
+                    <Image
+                      style={styles.contentImage}
+                      source={{uri: imageLocVehicle}}
+                    />
+                    {imageLocVehicle ? (
+                      <Button
+                        mode="contained"
+                        style={{
+                          position: 'absolute',
+                          backgroundColor: '#f53c3c',
+                        }}
+                        onPress={() => removeImageVehicle()}>
+                        <MaterialCommunityIcons
+                          name="delete-outline"
+                          color="#ffffff"
+                          size={25}
+                        />
+                      </Button>
+                    ) : null}
                   </View>
-                ))}
-              </Swiper>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-      </View>
-      <View style={styles.btnContainer}>
-        <Button
-          mode="contained"
-          onPress={() => {
-            validateFields();
-          }}
-          style={{
-            width: 120,
-            height: 45,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: colorConstant.primaryColor,
-          }}>
-          <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>Submit</Text>
-        </Button>
-      </View>
+          <View style={styles.btnContainer}>
+            <Button
+              mode="contained"
+              onPress={() => {
+                validateFields();
+              }}
+              style={{
+                width: 120,
+                height: 45,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: colorConstant.primaryColor,
+              }}>
+              <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+                Submit
+              </Text>
+            </Button>
+          </View>
+        </>
+      ) : (
+        <NativeBaseProvider>
+          <Center flex={1}>
+            <Spinner color="danger.400" />
+            <Text>Image Uploading</Text>
+          </Center>
+        </NativeBaseProvider>
+      )}
     </ScrollView>
   );
 }

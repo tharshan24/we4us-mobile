@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,10 +11,178 @@ import {
   StatusBar,
   Image,
 } from 'react-native';
+import {Switch, HStack, Center, NativeBaseProvider} from 'native-base';
 import {Button} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import constants from '../../constants/constantsProject.';
+import axios from 'axios';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import Geolocation from 'react-native-geolocation-service';
+import SocketContext from '../../Context/SocketContext';
 
 const DashboardPublic = (props) => {
   const navigation = useNavigation();
+  const socket = useContext(SocketContext);
+  const [token, setToken] = useState();
+  const [userId, setUserId] = useState();
+  const [driverStatus, setDriverStatus] = useState(null);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [currentLongitude, setCurrentLongitude] = useState('');
+  const [currentLatitude, setCurrentLatitude] = useState('');
+  const [permission, setPermission] = useState(null);
+  const [accNo, setAccNo] = useState(null);
+
+  useEffect(() => {
+    getUser();
+    getDriverStatus();
+  }, [userId]);
+
+  useEffect(() => {
+    requestPermission();
+    checkPermissions();
+  }, [permission]);
+
+  const requestPermission = () => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+      setPermission(result);
+    });
+    // console.log('Permission Already Granted');
+  };
+
+  const checkPermissions = () => {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            getOneTimeLocation();
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(jsonValue);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+        setUserId(parsedValue.result.id);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Done.');
+  };
+
+  const getOneTimeLocation = () => {
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      (position) => {
+        // console.log(position);
+        // console.log(position);
+        //getting the Longitude from the location json
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+        //getting the Latitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+        //Setting Longitude state
+        setCurrentLongitude(currentLongitude);
+        //Setting Longitude state
+        setCurrentLatitude(currentLatitude);
+      },
+      (error) => {
+        console.log(error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 30000,
+        maximumAge: 1000,
+      },
+    );
+  };
+
+  const getDriverStatus = async () => {
+    await axios
+      .get(constants.BASE_URL + 'public/viewProfile/' + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        response.data.result.map((val) => {
+          // console.log(val);
+          setAccNo(val.account_number);
+          setDriverStatus(val.driver_status);
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     sendData();
+  //   }, 5000);
+  //   return () => clearInterval(interval);
+  // }, [isEnabled, driverStatus, currentLongitude, accNo, currentLatitude]);
+
+  const sendData = async () => {
+    console.log(isEnabled, 'iiiisssssEEEEEEnnnnnaaaabbbbbllllllleeeeedddddd');
+    const data = {
+      longitude: currentLongitude,
+      latitude: currentLatitude,
+      driverMode: isEnabled,
+      isDriver: null,
+      paymentType: null,
+      socketId: socket.id,
+    };
+    {
+      driverStatus === 1 ? (data.isDriver = 1) : (data.isDriver = 0);
+    }
+    {
+      accNo === null ? (data.paymentType = 0) : (data.paymentType = 1);
+    }
+    // console.log(data, 'wwwwwwwwwwwwwwwwwwwwwwwwwwwww');
+    await axios({
+      url: constants.BASE_URL + 'user/updateRealUser',
+      method: 'post',
+      data: data,
+      headers: {
+        Authorization: `UserData ${token}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+  };
+
   return (
     <SafeAreaView style={styles.Container}>
       <StatusBar backgroundColor={colorConstant.primaryColor} />
@@ -171,22 +339,70 @@ const DashboardPublic = (props) => {
                 style={styles.DeliveryImage}
                 source={require('../../assets/Images/registerDriver.png')}
               />
-              <Button
-                color={colorConstant.primaryColor}
-                mode="contained"
-                style={{
-                  marginTop: 5,
-                  width: 205,
-                  height: 30,
-                  justifyContent: 'center',
-                }}
-                onPress={() => navigation.navigate('registerDriverOne')}>
-                <Text>REGISTER AS A DRIVER</Text>
-              </Button>
+              {driverStatus === 0 ? (
+                <Button
+                  color={colorConstant.primaryColor}
+                  mode="contained"
+                  style={{
+                    marginTop: 5,
+                    width: 205,
+                    height: 30,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => navigation.navigate('registerDriverOne')}>
+                  <Text>REGISTER AS A DRIVER</Text>
+                </Button>
+              ) : driverStatus === 1 ? (
+                <View>
+                  <NativeBaseProvider>
+                    <HStack alignItems="center" space={8}>
+                      {isEnabled ? (
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            fontFamily: 'Barlow-SemiBold',
+                            color: '#157918',
+                          }}>
+                          Driver Mode is ON
+                        </Text>
+                      ) : (
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            fontFamily: 'Barlow-SemiBold',
+                            color: '#5f5f5f',
+                          }}>
+                          Enable Driving Mode
+                        </Text>
+                      )}
+                      <Switch
+                        colorScheme="emerald"
+                        size="lg"
+                        onToggle={toggleSwitch}
+                        isChecked={isEnabled}
+                      />
+                    </HStack>
+                  </NativeBaseProvider>
+                </View>
+              ) : driverStatus === 2 ? (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: 'Barlow-SemiBold',
+                    color: '#b8b6b6',
+                  }}>
+                  Your Driver Application is Pending
+                </Text>
+              ) : null}
             </View>
           </View>
         </View>
       </View>
+      {/*<Button*/}
+      {/*  onPress={() => clearInterval(myInterval)}*/}
+      {/*  mode="contained"*/}
+      {/*  title="lklklklk"*/}
+      {/*/>*/}
     </SafeAreaView>
   );
 };

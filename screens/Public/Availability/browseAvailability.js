@@ -18,7 +18,7 @@ import {useNavigation} from '@react-navigation/native';
 function BrowseAvailability(props) {
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
-  const [receiverId, setReceiverId] = useState(20);
+  const [receiverId, setReceiverId] = useState(22);
   const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
@@ -289,7 +289,7 @@ function BrowseAvailability(props) {
         </View>
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-            <Text style={styles.btnTxt}>Accept</Text>
+            <Text style={styles.btnTxt}>Request</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorConstant.proGreen,
     padding: 10,
     width: Dimensions.get('window').width / 3,
-    borderRadius: 10,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
