@@ -102,7 +102,7 @@ const CameraScreenDriver = ({page, storeKey}) => {
   const sendCapturedImage = () => {
     navigation.navigate(page);
     // const val = JSON.stringify(imageUri);
-    storeData(imageUri).then((r) => console.log(r, 'store'));
+    storeData(imageUri);
   };
 
   const storeData = async (value) => {

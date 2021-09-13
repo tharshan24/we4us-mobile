@@ -1,11 +1,19 @@
 import React, {useEffect} from 'react';
-import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import moment from 'moment';
 
 const availabilityInputSetOne = () => {
   const navigation = useNavigation();
@@ -13,6 +21,7 @@ const availabilityInputSetOne = () => {
   const [foodType, setFoodType] = React.useState('');
   const [foodCater, setFoodCater] = React.useState('');
   const [desc, setDesc] = React.useState('');
+  const [now, setNow] = React.useState();
 
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
@@ -50,25 +59,32 @@ const availabilityInputSetOne = () => {
   };
 
   const validateFields = () => {
-    navigation.navigate('availabilityInputSetTwo');
-    // if (title === '') {
-    //   Alert.alert('Enter Title for your Donation');
-    // } else if (foodType === '') {
-    //   Alert.alert('Select your Donation Food Type');
-    // } else if (foodCater === '') {
-    //   Alert.alert('Select your Donation Food Category');
-    // } else if (desc === '') {
-    //   Alert.alert('Give a Small description for your Donation');
-    // } else {
-    //   const inputSetOne = {
-    //     title: title,
-    //     foodType: foodType,
-    //     category: foodCater,
-    //     description: desc,
-    //   };
-    //   storeData(inputSetOne);
-    //   navigation.navigate('availabilityInputSetTwo');
-    // }
+    // const inputSetOne = {
+    //   title: title,
+    //   foodType: foodType,
+    //   category: foodCater,
+    //   description: desc,
+    // };
+    // storeData(inputSetOne);
+    // navigation.navigate('availabilityInputSetTwo');
+    if (title === '') {
+      Alert.alert('Enter Title for your Donation');
+    } else if (foodType === '') {
+      Alert.alert('Select your Donation Food Type');
+    } else if (foodCater === '') {
+      Alert.alert('Select your Donation Food Category');
+    } else if (desc === '') {
+      Alert.alert('Give a Small description for your Donation');
+    } else {
+      const inputSetOne = {
+        title: title,
+        foodType: foodType,
+        category: foodCater,
+        description: desc,
+      };
+      storeData(inputSetOne);
+      navigation.navigate('availabilityInputSetTwo');
+    }
   };
 
   const storeData = async (value) => {
@@ -83,6 +99,11 @@ const availabilityInputSetOne = () => {
   useEffect(() => {
     requestPermission();
     checkPermissions();
+  }, []);
+
+  useEffect(() => {
+    const now = moment().format('HH');
+    setNow(now);
   }, []);
 
   return (
@@ -189,20 +210,42 @@ const availabilityInputSetOne = () => {
             />
           </View>
         </View>
-        <View style={styles.contentContainerBtn}>
-          <Button
-            mode="contained"
-            onPress={() => validateFields()}
-            style={{
-              width: 120,
-              height: 45,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: colorConstant.primaryColor,
-            }}>
-            <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>Next</Text>
-          </Button>
-        </View>
+        {now <= 22 ? (
+          <View style={styles.contentContainerBtn}>
+            <Button
+              mode="contained"
+              onPress={() => validateFields()}
+              style={{
+                width: 120,
+                height: 45,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: colorConstant.primaryColor,
+              }}>
+              <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+                Next
+              </Text>
+            </Button>
+          </View>
+        ) : (
+          <View style={styles.contentContainerBtn}>
+            <Button
+              disabled={true}
+              mode="contained"
+              style={{
+                width: 120,
+                height: 45,
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: '#ffffff',
+                backgroundColor: colorConstant.primaryColor,
+              }}>
+              <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+                Next
+              </Text>
+            </Button>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
