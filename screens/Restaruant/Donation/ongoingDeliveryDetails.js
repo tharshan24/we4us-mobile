@@ -8,19 +8,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
 import {useNavigation} from '@react-navigation/native';
 
-function OngoingCollectionpointDetailsNgo(props) {
+function OngoingDeliveryDetails(props) {
   const navigation = useNavigation();
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <View style={styles.txtCon}>
-            <Text style={styles.headingTxt}>{'Corona Disaster \nCollection Point'}</Text>
+            <Text style={styles.headingTxt}>Lunch</Text>
           </View>
           <View style={styles.iconCon}>
             <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
@@ -30,6 +30,20 @@ function OngoingCollectionpointDetailsNgo(props) {
                 size={30}
                 style={{
                   backgroundColor: colorConstant.proRed,
+                  borderRadius: 100,
+                  padding: 7,
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('RequestForDonationRest')}>
+              <MaterialCommunityIcons
+                name="account-group"
+                color="#ffffff"
+                size={30}
+                style={{
+                  backgroundColor: colorConstant.proGreen,
                   borderRadius: 100,
                   padding: 7,
                 }}
@@ -47,44 +61,42 @@ function OngoingCollectionpointDetailsNgo(props) {
           }}
         />
         <View style={styles.contentContainer}>
+          <View style={styles.txtContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.subHeadingTxt}>Type :</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.resultsTxt}>Vegetarian</Text>
+            </View>
+          </View>
           {/*txt2*/}
           <View style={styles.txtContainer}>
             <View style={{flex: 1}}>
               <Text style={styles.subHeadingTxt}>Created by :</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Rotaract Club</Text>
+              <Text style={styles.resultsTxt}>Elite Indian Restaruant</Text>
             </View>
           </View>
           {/*txt3*/}
+          <View style={styles.txtContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.subHeadingTxt}>Cooked Around :</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.resultsTxt}> 29/05/2021 | 02:00 PM</Text>
+            </View>
+          </View>
           {/*txt4*/}
           <View style={styles.txtContainer}>
             <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Assigned to :</Text>
+              <Text style={styles.subHeadingTxt}>Best before :</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Mithula Tharmarasa</Text>
+              <Text style={styles.resultsTxt}>29/05/2021 | 09:00 PM</Text>
             </View>
           </View>
           {/*txt5*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Start Time :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>29/05/2021 | 09:00 AM</Text>
-            </View>
-          </View>
-           {/*txt*/}
-           <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>End Time :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>29/05/2021 | 06:00 PM</Text>
-            </View>
-          </View>
-          {/*txt6*/}
           <View style={styles.txtContainer}>
             <View style={{flex: 1}}>
               <Text style={styles.subHeadingTxt}>Count :</Text>
@@ -93,29 +105,57 @@ function OngoingCollectionpointDetailsNgo(props) {
               <Text style={styles.resultsTxt}>45</Text>
             </View>
           </View>
-          {/*txt7*/}
+          {/*txt6*/}
           <View style={styles.txtContainer}>
             <View style={{flex: 1}}>
               <Text style={styles.subHeadingTxt}>Location :</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Valvettithurai, Jaffna</Text>
+              <Text style={styles.resultsTxt}>Inuvil, Jaffna</Text>
+            </View>
+          </View>
+          {/*txt7*/}
+          <View style={styles.txtContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.subHeadingTxt}>Event :</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.resultsTxt}>Wedding Function</Text>
             </View>
           </View>
           {/*txt8*/}
-          {/*txt9*/}
           <View style={styles.txtContainer}>
             <View style={{flex: 1}}>
               <Text style={styles.subHeadingTxt}>Description :</Text>
             </View>
             <View style={{flex: 1}}>
               <Text style={styles.resultsTxt}>
-                Biscuit
+                Rice meal with Dhal , Brinjal , Beans , Potato and Panneer
+                Curries. Catering taken from MAHENDRANS.
               </Text>
             </View>
           </View>
+          {/*txt9*/}
+          <View style={styles.txtContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.subHeadingTxt}>Delivery :</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.resultsTxt}>Self Delivery</Text>
+            </View>
+          </View>
           {/*txt10*/}
-          {/*txt11*/}
+          <View style={styles.txtContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.subHeadingTxt}>Utensils :</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.resultsTxt}>
+                Utensils : Separate Containers for Rice and each Curries. All
+                together 6 containers
+              </Text>
+            </View>
+          </View>
         </View>
         <View style={styles.imageContainer}>
           <Swiper
@@ -128,7 +168,25 @@ function OngoingCollectionpointDetailsNgo(props) {
             <View style={styles.contentImageCon}>
               <Image
                 style={styles.contentImage}
-                source={require('../../assets/Images/collection.png')}
+                source={require('../../../assets/Images/food1.jpg')}
+              />
+            </View>
+            <View style={styles.contentImageCon}>
+              <Image
+                style={styles.contentImage}
+                source={require('../../../assets/Images/food2.jpg')}
+              />
+            </View>
+            <View style={styles.contentImageCon}>
+              <Image
+                style={styles.contentImage}
+                source={require('../../../assets/Images/food3.jpg')}
+              />
+            </View>
+            <View style={styles.contentImageCon}>
+              <Image
+                style={styles.contentImage}
+                source={require('../../../assets/Images/food4.jpg')}
               />
             </View>
           </Swiper>
@@ -230,4 +288,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingCollectionpointDetailsNgo;
+export default OngoingDeliveryDetails;

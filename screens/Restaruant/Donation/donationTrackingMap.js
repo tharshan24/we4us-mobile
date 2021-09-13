@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import MapViewDirections from 'react-native-maps-directions';
-import GOOGLE_API_KEY from '../../constants/constantsProject.';
+import GOOGLE_API_KEY from '../../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {Button} from 'react-native-paper';
 
@@ -101,8 +101,10 @@ function DonationTrackingMap(props) {
     checkPermissions();
   }, []);
 
-  const locationMarker = () => (
+  const destinationMarker = () => (
     <MapView.Marker coordinate={toLocation}>
+      {/*onDrag={(checkLoc) => console.log(checkLoc.nativeEvent.coordinate)}*/}
+      {/*draggable={true}*/}
       <View
         style={{
           // backgroundColor: 'red',
@@ -131,7 +133,51 @@ function DonationTrackingMap(props) {
       </View>
     </MapView.Marker>
   );
- 
+  const fromLocationMarker = () => (
+    <MapView.Marker
+      coordinate={fromLocation}
+      flat={true}
+      anchor={{x: 0.5, y: 0.5}}
+      rotation={angle}>
+      <View
+        style={{
+          // backgroundColor: 'red',
+          height: 60,
+          width: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            backgroundColor: '#ffffff',
+            borderRadius: 100,
+            height: 50,
+            width: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <MaterialCommunityIcons
+            name="navigation"
+            size={40}
+            color={colorConstant.proRed}
+          />
+        </View>
+      </View>
+    </MapView.Marker>
+  );
+
+  function calculateAngle(coordinates) {
+    let startLat = coordinates[0]['latitude'];
+    let startLng = coordinates[0]['longitude'];
+    let endLat = coordinates[1]['latitude'];
+    let endLng = coordinates[1]['latitude'];
+
+    let dx = endLat - startLat;
+    let dy = endLng - startLng;
+
+    return (Math.atan2(dy, dx) * 180) / Math.PI;
+  }
+
   return (
     <View style={{flex: 1}}>
       <MapView
@@ -142,10 +188,115 @@ function DonationTrackingMap(props) {
         followsUserLocation={true}
         showsUserLocation={true}
         showsMyLocationButton={true}>
-        
-        {locationMarker()}
-        
+        <MapViewDirections
+          origin={fromLocation}
+          destination={toLocation}
+          strokeColor={colorConstant.proGreyDark}
+          strokeWidth={4}
+          apikey={GOOGLE_API_KEY}
+          showsUserLocation={true}
+          optimizeWaypoints={true}
+          onReady={(result) => {
+            setDuration(result.duration);
+            if (!isReady) {
+              //fit route into maps
+              mapView.current.fitToCoordinates(result.coordinates, {
+                edgePadding: {
+                  right: Dimensions.get('window').width / 20,
+                  left: Dimensions.get('window').width / 8,
+                  top: Dimensions.get('window').height / 20,
+                  bottom: Dimensions.get('window').height / 4,
+                },
+              });
+
+              //reposition the car icon
+              let nextLoc = {
+                latitude: result.coordinates[0]['latitude'],
+                longitude: result.coordinates[0]['longitude'],
+              };
+
+              if (result.coordinates.length >= 2) {
+                let angle = calculateAngle(result.coordinates);
+                setAngle(angle);
+              }
+
+              setFromLocation(nextLoc);
+              setIsReady(true);
+            }
+          }}
+        />
+        {destinationMarker()}
+        {fromLocationMarker()}
       </MapView>
+      <View style={styles.deliveryDetailsContainer}>
+        <View style={styles.deliveryDetailsContent}>
+          <View style={styles.driverDetailContainer}>
+            <View style={styles.imageContainer}>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  source={require('../../../assets/Images/assets.jpg')}
+                  style={styles.profilePicture}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.detailContainer}>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Text style={styles.nameTxt}> Priyatharshan </Text>
+                <Text style={styles.detailsTxt}> Volunteer Driver </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <MaterialCommunityIcons
+                    name="star"
+                    color={colorConstant.proYellow}
+                    size={20}
+                  />
+                  <Text style={styles.ratingTxt}> 4.7 </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.BtnContainer}>
+            <Button
+              mode="contained"
+              icon="phone"
+              labelStyle={{
+                fontSize: 18,
+                fontFamily: 'Barlow-Bold',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              style={{
+                backgroundColor: colorConstant.proGreen,
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 40,
+                width: 150,
+                marginRight: 30,
+              }}>
+              Call
+            </Button>
+            <Button
+              mode="outlined"
+              icon="message"
+              labelStyle={{
+                color: colorConstant.proGreen,
+                fontSize: 18,
+                fontFamily: 'Barlow-Bold',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 2,
+                borderColor: colorConstant.proGreen,
+                height: 40,
+                width: 150,
+              }}>
+              Chat
+            </Button>
+          </View>
+        </View>
+      </View>
     </View>
   );
 }

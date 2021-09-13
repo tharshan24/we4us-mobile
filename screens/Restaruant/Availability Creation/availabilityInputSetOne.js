@@ -1,29 +1,89 @@
-import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 
-const availabilityInputSetOneNgo = () => {
+const availabilityInputSetOne = () => {
   const navigation = useNavigation();
-
   const [title, setTitle] = React.useState('');
   const [foodType, setFoodType] = React.useState('');
   const [foodCater, setFoodCater] = React.useState('');
   const [desc, setDesc] = React.useState('');
 
-  const validateFields = () => {
-    navigation.navigate('availabilityInputSetTwo');
-
+  const requestPermission = () => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
+    console.log('Permission Already Granted');
   };
+
+  const checkPermissions = () => {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const validateFields = () => {
+    navigation.navigate('availabilityInputSetTwoRest');
+    // if (title === '') {
+    //   Alert.alert('Enter Title for your Donation');
+    // } else if (foodType === '') {
+    //   Alert.alert('Select your Donation Food Type');
+    // } else if (foodCater === '') {
+    //   Alert.alert('Select your Donation Food Category');
+    // } else if (desc === '') {
+    //   Alert.alert('Give a Small description for your Donation');
+    // } else {
+    //   const inputSetOne = {
+    //     title: title,
+    //     foodType: foodType,
+    //     category: foodCater,
+    //     description: desc,
+    //   };
+    //   storeData(inputSetOne);
+    //   navigation.navigate('availabilityInputSetTwo');
+    // }
+  };
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@inputSetOne', jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    requestPermission();
+    checkPermissions();
+  }, []);
 
   return (
     <ScrollView>
@@ -245,4 +305,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default availabilityInputSetOneNgo;
+export default availabilityInputSetOne;

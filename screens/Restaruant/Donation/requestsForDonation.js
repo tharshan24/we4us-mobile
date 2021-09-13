@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
 
-function RequestForDonation(props) {
+function RequestForDonationRest(props) {
   const navigation = useNavigation();
   const [btnState, setBtnState] = useState(true);
 
@@ -60,7 +60,7 @@ function RequestForDonation(props) {
             <View style={styles.ProfilePicCon}>
               <Image
                 style={styles.ProfilePic}
-                source={require('../../assets/Images/thishan.jpg')}
+                source={require('../../../assets/Images/thishan.jpg')}
               />
             </View>
             <View style={{flex: 5}}>
@@ -96,7 +96,7 @@ function RequestForDonation(props) {
             ) : (
               <Button
                 mode="contained"
-                onPress={() => navigation.navigate('DonationTrackingMapNgo')}
+                onPress={() => navigation.navigate('DonationTrackingMapRest')}
                 style={{
                   backgroundColor: colorConstant.proRed,
                 }}>
@@ -160,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RequestForDonation;
+export default RequestForDonationRest;

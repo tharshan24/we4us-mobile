@@ -19,6 +19,12 @@ function SplashScreen(props) {
           navigation.navigate('Dashboard');
         } else if (JSON.parse(user).result.userType === 2) {
           navigation.navigate('DashboardNgo');
+        }else if (JSON.parse(user).result.userType === 3) {
+          navigation.navigate('DashboardHome');
+        }else if (JSON.parse(user).result.userType === 4) {
+          navigation.navigate('DashboardShops');
+        }else if (JSON.parse(user).result.userType === 5) {
+          navigation.navigate('DashboardRestaurant');
         }
       } else {
         navigation.navigate('Welcome_page');

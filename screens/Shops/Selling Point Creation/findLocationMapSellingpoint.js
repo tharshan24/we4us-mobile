@@ -9,16 +9,16 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import GOOGLE_API_KEY from '../../constants/constantsProject.';
+import GOOGLE_API_KEY from '../../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-const findLocationMapAvailability = ({route}) => {
+const findLocationMapRequestNgo = ({route}) => {
   const {location} = route.params;
   const ref = useRef();
 
@@ -113,13 +113,13 @@ const findLocationMapAvailability = ({route}) => {
 
   const selectedCoordinates = () => {
     storeData(selectedLocation);
-    navigation.navigate('availabilityInputSetThree');
+    navigation.navigate('RequestCreationSetTwoNgo');
   };
 
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@selectedLocation', jsonValue);
+      await AsyncStorage.setItem('@selectedLocationRequest', jsonValue);
     } catch (e) {}
   };
 
@@ -216,7 +216,7 @@ const findLocationMapAvailability = ({route}) => {
   );
 };
 
-export default findLocationMapAvailability;
+export default findLocationMapRequestNgo;
 
 const styles = StyleSheet.create({
   mainContainerFindLocation: {

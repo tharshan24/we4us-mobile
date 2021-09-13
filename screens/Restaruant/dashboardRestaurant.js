@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-paper';
 
-const DashboardShops = (props) => {
+const DashboardRestaurant = (props) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.Container}>
@@ -26,17 +26,17 @@ const DashboardShops = (props) => {
         <View style={styles.ProfilePicCon}>
           <Image
             style={styles.ProfilePic}
-            source={require('../../assets/Images/keels.jpg')}
+            source={require('../../assets/Images/rest.png')}
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> Keells </Text>
+          <Text style={styles.UserName}> Elite Indian Restaruant </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 8}}>
-              <Text style={styles.Email}>Keells@gmail.com </Text>
+              <Text style={styles.Email}>elite@gmail.com </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -67,11 +67,11 @@ const DashboardShops = (props) => {
             <View style={styles.Donations}>
               <View style={styles.DonationHeader}>
                 <View style={styles.DonationHeaderTxtCon}>
-                  <Text style={styles.DonationHeaderTxt}>SELLING POINTS</Text>
+                  <Text style={styles.DonationHeaderTxt}>DONATIONS</Text>
                 </View>
                 <View style={styles.DonationHeaderIcon}>
                   <MaterialCommunityIcons
-                    name="shopping-outline"
+                    name="handshake"
                     color={colorConstant.proGreen}
                     size={27}
                   />
@@ -91,7 +91,7 @@ const DashboardShops = (props) => {
                     width: 120,
                     justifyContent: 'center',
                   }}
-                  onPress={() => navigation.navigate('History-Sellingpoint')}>
+                  onPress={() => navigation.navigate('History-Donation')}>
                   <Text style={styles.BtnTxt}>History</Text>
                 </Button>
                 <Button
@@ -103,7 +103,7 @@ const DashboardShops = (props) => {
                     width: 170,
                     justifyContent: 'center',
                   }}
-                  onPress={() => navigation.navigate('OngoingSellingpoint')}>
+                  onPress={() => navigation.navigate('OngoingDonation')}>
                   <Text style={styles.BtnTxt2}>3 in Progress</Text>
                 </Button>
               </View>
@@ -272,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardShops;
+export default DashboardRestaurant;

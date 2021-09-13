@@ -8,19 +8,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
 import {useNavigation} from '@react-navigation/native';
 
-function OngoingCollectionpointDetailsNgo(props) {
+function OngoingSellingpointDetails(props) {
   const navigation = useNavigation();
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <View style={styles.txtCon}>
-            <Text style={styles.headingTxt}>{'Corona Disaster \nCollection Point'}</Text>
+            <Text style={styles.headingTxt}>{'Selling Point'}</Text>
           </View>
           <View style={styles.iconCon}>
             <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
@@ -128,7 +128,7 @@ function OngoingCollectionpointDetailsNgo(props) {
             <View style={styles.contentImageCon}>
               <Image
                 style={styles.contentImage}
-                source={require('../../assets/Images/collection.png')}
+                source={require('../../../assets/Images/collection.png')}
               />
             </View>
           </Swiper>
@@ -230,4 +230,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingCollectionpointDetailsNgo;
+export default OngoingSellingpointDetails;

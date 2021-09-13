@@ -9,19 +9,18 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider} from 'native-base';
 
-const collectionpointInputSetOne = () => {
+const sellingpointInputSetOne = () => {
   const navigation = useNavigation();
 
   const [title, setTitle] = React.useState('');
-  const [foodType, setFoodType] = React.useState('');
-  const [foodCater, setFoodCater] = React.useState('');
+  const [member, setMember] = React.useState('');
   const [desc, setDesc] = React.useState('');
 
   const validateFields = () => {
-    navigation.navigate('collectionpointInputSetTwo');
+    navigation.navigate('sellingpointInputSetTwo');
     // if (title === '') {
     //   Alert.alert('Enter Title for your Donation');
     // } else if (foodType === '') {
@@ -40,7 +39,7 @@ const collectionpointInputSetOne = () => {
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textHeader}>
-            {'During pandamic/disaster time \nYou help everyone'}
+            {'During pandamic/disaster time '}
           </Text>
         </View>
         <View style={styles.contentContainerName}>
@@ -78,9 +77,9 @@ const collectionpointInputSetOne = () => {
                     borderColor: colorConstant.primaryColor,
                   }}
                   width={Dimensions.get('screen').width / 1.1}
-                  selectedValue={foodCater}
+                  selectedValue={member}
                   placeholder="Select Member"
-                  onValueChange={(itemValue) => setFoodCater(itemValue)}>
+                  onValueChange={(itemValue) => setMember(itemValue)}>
                   <Select.Item label="Mithula Tharmarasa" value="mithula" />
                   <Select.Item label="Mathura Muthulingam" value="mathura" />
                   <Select.Item label="Balachandaran Piriyatharshan" value="piriyatharshan" />
@@ -98,7 +97,7 @@ const collectionpointInputSetOne = () => {
           <View style={styles.textInputDes}>
             <TextInput
               mode="outlined"
-              label="Describe your Collection Point"
+              label="Describe your Selling Point"
               selectionColor={colorConstant.primaryColor}
               outlineColor={colorConstant.primaryColor}
               underlineColor={colorConstant.primaryColor}
@@ -229,4 +228,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default collectionpointInputSetOne;
+export default sellingpointInputSetOne;

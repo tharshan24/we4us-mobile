@@ -45,6 +45,12 @@ const Login = (props) => {
             navigation.replace('Dashboard');
           } else if (response.data.result.userType === 2) {
             navigation.replace('DashboardNgo');
+          }else if (response.data.result.userType === 3) {
+            navigation.replace('DashboardHome');
+          }else if (JSON.parse(user).result.userType === 4) {
+            navigation.navigate('DashboardShops');
+          }else if (JSON.parse(user).result.userType === 5) {
+            navigation.navigate('DashboardRestaurant');
           }
         } else {
           Alert.alert('Enter valid Credentials');
