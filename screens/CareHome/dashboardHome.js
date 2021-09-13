@@ -15,7 +15,7 @@ import {
 import {Button} from 'react-native-paper';
 import {flexDirection} from 'styled-system';
 
-const DashboardNgo = (props) => {
+const DashboardHome = (props) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.Container}>
@@ -380,4 +380,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardNgo;
+export default DashboardHome;

@@ -30,14 +30,22 @@ const availabilityInputSetThree = () => {
   const navigation = useNavigation();
 
   const [location, setLocation] = useState('');
-  const [imageLoc, setImageLoc] = useState([]);
-  const [deliveryOption, setDeliveryOption] = useState('');
   const [district, setDistrict] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
   const [city, setCity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(null);
+  const [madeOn, setMadeOn] = useState(null);
+  const [bestBefore, setBestBefore] = useState(null);
+  const [storageDesc, setStorageDesc] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [foodType, SetFoodType] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [imageLoc, setImageLoc] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [fromLocation, setFromLocation] = useState();
-  const [loading, setLoading] = useState(true);
+  const [deliveryOption, setDeliveryOption] = useState('');
 
   const imagePicker = async () => {
     try {
@@ -114,10 +122,12 @@ const availabilityInputSetThree = () => {
   const validateFieldsTwo = () => {
     if (fromLocation === undefined) {
       Alert.alert('Select the From Location');
+    } else if (selectedDistrict === '') {
+      Alert.alert('Select your District');
+    } else if (selectedCity === '') {
+      Alert.alert('Select your City');
     } else if (deliveryOption === '') {
       Alert.alert('Select Delivery Option');
-    } else if (vehicle === '') {
-      Alert.alert('Select Delivery Vehicle');
     } else if (imageLoc.length === 0) {
       Alert.alert('Add Images of Donation. Maximum of 5 Images');
     } else {
@@ -142,9 +152,13 @@ const availabilityInputSetThree = () => {
   const getDataInputOne = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@inputSetOne');
-      return jsonValue != null
-        ? console.log(JSON.parse(jsonValue), '11111')
-        : null;
+      const value = JSON.parse(jsonValue);
+      if (value !== null) {
+        setTitle(value.title);
+        setCategory(value.foodType);
+        SetFoodType(value.category);
+        setDescription(value.description);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -153,7 +167,14 @@ const availabilityInputSetThree = () => {
   const getDataInputTwo = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
-      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+      const value = JSON.parse(jsonValue);
+      console.log(value);
+      if (value !== null) {
+        setQuantity(value.quantity);
+        setMadeOn(value.madeOn);
+        setBestBefore(value.bestBefore);
+        setStorageDesc(value.storageDesc);
+      }
     } catch (e) {}
   };
 
@@ -268,34 +289,6 @@ const availabilityInputSetThree = () => {
                 </View>
               </View>
             </View>
-            <View style={styles.contentContainerDelivery}>
-              <View style={styles.deliveryTextCon}>
-                <Text style={styles.deliveryText}>Delivery</Text>
-              </View>
-              <View style={{flex: 3}}>
-                <NativeBaseProvider>
-                  <VStack>
-                    <Select
-                      style={{
-                        fontSize: 20,
-                        backgroundColor: '#ffffff',
-                        borderWidth: 1,
-                        borderColor: colorConstant.primaryColor,
-                      }}
-                      width={Dimensions.get('screen').width / 1.1}
-                      selectedValue={deliveryOption}
-                      placeholder="Select Delivery Option"
-                      onValueChange={(itemValue) =>
-                        setDeliveryOption(itemValue)
-                      }>
-                      <Select.Item label="Self Delivery" value="self" />
-                      <Select.Item label="Volunteer Driver" value="volunteer" />
-                      <Select.Item label="Paid Driver" value="paid" />
-                    </Select>
-                  </VStack>
-                </NativeBaseProvider>
-              </View>
-            </View>
             <View style={styles.contentContainerDistrict}>
               <View style={styles.vehicleTextCon}>
                 <Text style={styles.vehicleText}>District</Text>
@@ -358,6 +351,34 @@ const availabilityInputSetThree = () => {
                     ))}
                   </Select>
                 </VStack>
+              </View>
+            </View>
+            <View style={styles.contentContainerDelivery}>
+              <View style={styles.deliveryTextCon}>
+                <Text style={styles.deliveryText}>Delivery</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <NativeBaseProvider>
+                  <VStack>
+                    <Select
+                      style={{
+                        fontSize: 20,
+                        backgroundColor: '#ffffff',
+                        borderWidth: 1,
+                        borderColor: colorConstant.primaryColor,
+                      }}
+                      width={Dimensions.get('screen').width / 1.1}
+                      selectedValue={deliveryOption}
+                      placeholder="Select Delivery Option"
+                      onValueChange={(itemValue) =>
+                        setDeliveryOption(itemValue)
+                      }>
+                      <Select.Item label="Self Delivery" value="self" />
+                      <Select.Item label="Volunteer Driver" value="volunteer" />
+                      <Select.Item label="Paid Driver" value="paid" />
+                    </Select>
+                  </VStack>
+                </NativeBaseProvider>
               </View>
             </View>
             <View style={styles.contentContainerImage}>

@@ -18,7 +18,7 @@ import {useNavigation} from '@react-navigation/native';
 function BrowseAvailability(props) {
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
-  const [receiverId, setReceiverId] = useState(22);
+  const [receiverId, setReceiverId] = useState(21);
   const [conversations, setConversations] = useState([]);
 
   useEffect(() => {

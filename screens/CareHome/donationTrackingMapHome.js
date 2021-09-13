@@ -15,7 +15,7 @@ import GOOGLE_API_KEY from '../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {Button} from 'react-native-paper';
 
-function DonationTrackingMap(props) {
+function DonationTrackingMapHome(props) {
   const [fromLocation, setFromLocation] = useState();
   const [toLocation, setToLocation] = useState(null);
   const [duration, setDuration] = useState();
@@ -364,4 +364,4 @@ const styles = StyleSheet.create({
     color: colorConstant.proYellow,
   },
 });
-export default DonationTrackingMap;
+export default DonationTrackingMapHome;

@@ -147,7 +147,7 @@ const DashboardPublic = (props) => {
   // }, [isEnabled, driverStatus, currentLongitude, accNo, currentLatitude]);
 
   const sendData = async () => {
-    console.log(isEnabled, 'iiiisssssEEEEEEnnnnnaaaabbbbbllllllleeeeedddddd');
+    console.log(isEnabled);
     const data = {
       longitude: currentLongitude,
       latitude: currentLatitude,

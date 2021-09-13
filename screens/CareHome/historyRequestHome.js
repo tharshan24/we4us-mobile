@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-function HistoryRequestNgo(props) {
+function HistoryRequestHome(props) {
   return (
     <View>
-      <Text> Home Request  </Text>
+      <Text> Home Request </Text>
     </View>
   );
 }
 
-export default HistoryRequestNgo;
+export default HistoryRequestHome;

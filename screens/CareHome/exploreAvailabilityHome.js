@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-function ExploreAvailabilityNgo({route}) {
+function ExploreAvailabilityHome({route}) {
   const navigation = useNavigation();
   return (
     <>
@@ -41,8 +41,12 @@ function ExploreAvailabilityNgo({route}) {
                 />
               </View>
               <View>
-                <Text style={styles.headingText}>Care home 100th Anniversary</Text>
-                <Text style={styles.bodyText}>From:Nagai Luxury elder care</Text>
+                <Text style={styles.headingText}>
+                  Care home 100th Anniversary
+                </Text>
+                <Text style={styles.bodyText}>
+                  From:Nagai Luxury elder care
+                </Text>
                 <Text style={styles.bodyText}>Quantity: 20</Text>
                 <Text style={styles.bodyText}>Best Before: 30/05/2021</Text>
               </View>
@@ -125,4 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreAvailabilityNgo;
+export default ExploreAvailabilityHome;

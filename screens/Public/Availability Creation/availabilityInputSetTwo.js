@@ -18,22 +18,10 @@ const availabilityInputSetTwo = ({route}) => {
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = React.useState('');
-  const [date, setDate] = React.useState('DD');
-  const [month, setMonth] = React.useState('MM');
-  const [year, setYear] = React.useState('YYYY');
-  const [hour, setHour] = React.useState('HH');
-  const [minute, setMinute] = React.useState('MM');
-  const [seconds, setSeconds] = React.useState('SS');
   const [storageDesc, setStorageDesc] = React.useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDatePickerVisibleBestBefore, setDatePickerVisibilityBestBefore] =
     useState(false);
-  const [dateBestBefore, setDateBestBefore] = React.useState('DD');
-  const [monthBestBefore, setMonthBestBefore] = React.useState('MM');
-  const [yearBestBefore, setYearBestBefore] = React.useState('YYYY');
-  const [hourBestBefore, setHourBestBefore] = React.useState('HH');
-  const [minuteBestBefore, setMinuteBestBefore] = React.useState('MM');
-  const [secondsBestBefore, setSecondsBestBefore] = React.useState('SS');
   const [madeTime, setMadeTime] = useState('HH:MM:SS');
   const [madeDate, setMadeDate] = useState('YYYY-MM-DD');
   const [beforeDate, setBeforeDate] = useState('YYYY-MM-DD');
@@ -98,28 +86,29 @@ const availabilityInputSetTwo = ({route}) => {
   };
 
   const validateFieldsTwo = () => {
-    if (quantity === '') {
-      Alert.alert('Enter Amount of your Donation');
-    } else if (dataOne.category === 'cooked' && madeTime === 'HH:MM:SS') {
-      Alert.alert('Select Cooked Time');
-    } else if (dataOne.category !== 'cooked' && madeDate === 'YYYY-MM-DD') {
-      Alert.alert('Select Cooked Date');
-    } else if (dataOne.category !== 'cooked' && beforeDate === 'YYYY-MM-DD') {
-      Alert.alert('Select Expiry Date');
-    } else if (dataOne.category === 'cooked' && beforeTime === 'HH:MM:SS') {
-      Alert.alert('Select Expiry Time');
-    } else if (storageDesc === '') {
-      Alert.alert('Give a Short Description about the Utensils');
-    } else {
-      const inputSetTwo = {
-        quantity: quantity,
-        madeOn: assignMade,
-        bestBefore: assignBest,
-        storageDesc: storageDesc,
-      };
-      storeData(inputSetTwo);
-      navigation.navigate('availabilityInputSetThree');
-    }
+    navigation.navigate('availabilityInputSetThree');
+    // if (quantity === '') {
+    //   Alert.alert('Enter Amount of your Donation');
+    // } else if (dataOne.category === 'cooked' && madeTime === 'HH:MM:SS') {
+    //   Alert.alert('Select Cooked Time');
+    // } else if (dataOne.category !== 'cooked' && madeDate === 'YYYY-MM-DD') {
+    //   Alert.alert('Select Cooked Date');
+    // } else if (dataOne.category !== 'cooked' && beforeDate === 'YYYY-MM-DD') {
+    //   Alert.alert('Select Expiry Date');
+    // } else if (dataOne.category === 'cooked' && beforeTime === 'HH:MM:SS') {
+    //   Alert.alert('Select Expiry Time');
+    // } else if (storageDesc === '') {
+    //   Alert.alert('Give a Short Description about the Utensils');
+    // } else {
+    //   const inputSetTwo = {
+    //     quantity: quantity,
+    //     madeOn: assignMade,
+    //     bestBefore: assignBest,
+    //     storageDesc: storageDesc,
+    //   };
+    //   storeData(inputSetTwo);
+    //   navigation.navigate('availabilityInputSetThree');
+    // }
   };
 
   const storeData = async (value) => {

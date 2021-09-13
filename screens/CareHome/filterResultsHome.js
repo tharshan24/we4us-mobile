@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-function FilterResultsNgo(props) {
+function FilterResultsHome(props) {
   const [mode1, setMode1] = React.useState('contained');
   const [sortMode1, setSortMode1] = React.useState('contained');
   const [sortMode4, setSortMode4] = React.useState('contained');
@@ -387,4 +387,4 @@ const styles = StyleSheet.create({
     color: colorConstant.primaryColor,
   },
 });
-export default FilterResultsNgo;
+export default FilterResultsHome;
