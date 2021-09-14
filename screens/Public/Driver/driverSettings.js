@@ -33,7 +33,11 @@ function DriverSettings(props) {
           </View>
           <View style={styles.contentSwitch}>
             <View style={styles.contentTxtContainer}>
-              <Text style={styles.contentTxt}>Switch to Paid Driver Mode</Text>
+              <Text style={styles.contentTxt}>
+                {isEnabled
+                  ? `Now in PAID Driver mode`
+                  : 'Now in FREE Driver mode'}
+              </Text>
             </View>
             <View style={styles.switchBtn}>
               <HStack>
