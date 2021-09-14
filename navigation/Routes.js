@@ -690,6 +690,7 @@ const ExploreNgoStack = () => {
     </Top.Navigator>
   );
 };
+
 //Public Dashboard
 const DashboardTap = () => {
   return (
@@ -874,7 +875,24 @@ const DashboardPublicStack = () => {
         }}
       />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
-      <Stack.Screen name="DriverSettings" component={DriverSettings} />
+      <Stack.Screen
+        name="DriverSettings"
+        component={DriverSettings}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Driver Option',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen name="AboutUs" component={AboutUs} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="TermsCondition" component={TermsCondition} />
