@@ -46,6 +46,8 @@ const availabilityInputSetThree = () => {
   const [selectedCity, setSelectedCity] = useState('');
   const [fromLocation, setFromLocation] = useState();
   const [deliveryOption, setDeliveryOption] = useState('');
+  const [token, setToken] = React.useState();
+  const [progress, setProgress] = useState(null);
 
   const imagePicker = async () => {
     try {
@@ -109,9 +111,11 @@ const availabilityInputSetThree = () => {
     );
     getDataInputTwo();
     getDataInputOne();
+    getUser();
     return navigation.addListener('focus', () => {
       getData();
       getDataSelectedLocation();
+      getUser();
     });
   }, []);
 
@@ -119,7 +123,20 @@ const availabilityInputSetThree = () => {
     navigation.navigate('findLocationMap', {location});
   };
 
-  const validateFieldsTwo = () => {
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(jsonValue);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Done.');
+  };
+
+  const validateFieldsTwo = async () => {
     if (fromLocation === undefined) {
       Alert.alert('Select the From Location');
     } else if (selectedDistrict === '') {
@@ -131,9 +148,51 @@ const availabilityInputSetThree = () => {
     } else if (imageLoc.length === 0) {
       Alert.alert('Add Images of Donation. Maximum of 5 Images');
     } else {
-      Alert.alert('Submitted Successfully');
-      navigation.popToTop();
-      removeAllInputs();
+      setLoading(true);
+      const availabilityData = new FormData();
+
+      availabilityData.append('name', title);
+      availabilityData.append('food_type', foodType);
+      availabilityData.append('availability_type', category);
+      availabilityData.append('description', description);
+      availabilityData.append('total_quantity', quantity);
+      availabilityData.append('cooked_time', madeOn);
+      availabilityData.append('best_before', bestBefore);
+      availabilityData.append('storage_description', storageDesc);
+      availabilityData.append('latitude', fromLocation.latitude);
+      availabilityData.append('longitude', fromLocation.longitude);
+      availabilityData.append('city', selectedCity);
+      availabilityData.append('creator_delivery_option', deliveryOption);
+      availabilityData.append('image_status', 1);
+      imageLoc.map((image) => {
+        availabilityData.append('files', {
+          name: new Date() + 'availabilityImages',
+          uri: image,
+          type: 'image/jpeg',
+        });
+      });
+      await axios({
+        url: constants.BASE_URL + 'availability/createAvailability',
+        method: 'post',
+        data: availabilityData,
+        headers: {
+          Authorization: `UserData ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(function (response) {
+          console.log(response.data);
+          Alert.alert('Availability Created Successfully');
+          navigation.popToTop();
+          removeAllInputs();
+          setLoading(false);
+        })
+        .catch(function (error) {
+          console.log(error);
+          Alert.alert('Error in Creating Availabilities');
+          setLoading(false);
+        });
     }
   };
 
@@ -154,9 +213,10 @@ const availabilityInputSetThree = () => {
       const jsonValue = await AsyncStorage.getItem('@inputSetOne');
       const value = JSON.parse(jsonValue);
       if (value !== null) {
+        console.log(value, 'first');
         setTitle(value.title);
-        setCategory(value.foodType);
-        SetFoodType(value.category);
+        setCategory(value.category);
+        SetFoodType(value.foodType);
         setDescription(value.description);
       }
     } catch (e) {
@@ -168,7 +228,7 @@ const availabilityInputSetThree = () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
       const value = JSON.parse(jsonValue);
-      console.log(value);
+      console.log(value, 'two');
       if (value !== null) {
         setQuantity(value.quantity);
         setMadeOn(value.madeOn);
@@ -183,7 +243,6 @@ const availabilityInputSetThree = () => {
       const jsonValue = await AsyncStorage.getItem('@selectedLocation');
       if (jsonValue != null) {
         setFromLocation(JSON.parse(jsonValue));
-        console.log(JSON.parse(jsonValue), 'location');
         await AsyncStorage.removeItem('@selectedLocation');
       } else {
         console.log('No Location Selected');
@@ -242,6 +301,9 @@ const availabilityInputSetThree = () => {
 
   useEffect(() => {
     loadDistrict();
+    return navigation.addListener('focus', () => {
+      loadDistrict();
+    });
   }, []);
 
   const changeDistrict = (districtId) => {

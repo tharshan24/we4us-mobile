@@ -48,7 +48,7 @@ const availabilityInputSetTwo = ({route}) => {
   };
 
   const handleConfirmCooked = (val) => {
-    if (dataOne.category === 'cooked') {
+    if (dataOne.category === 1) {
       setCondition(val);
       const chooseTime = moment(val).format('HH:mm:00');
       const assignMade = moment(val).format('YYYY-MM-DD HH:mm:00');
@@ -64,7 +64,7 @@ const availabilityInputSetTwo = ({route}) => {
   };
 
   const handleConfirmBestBefore = (BestBefore) => {
-    if (dataOne.category === 'cooked') {
+    if (dataOne.category === 1) {
       const chooseTime = moment(BestBefore).format('HH:mm:00');
       const a = moment(condition);
       const b = moment(BestBefore);
@@ -86,29 +86,29 @@ const availabilityInputSetTwo = ({route}) => {
   };
 
   const validateFieldsTwo = () => {
-    navigation.navigate('availabilityInputSetThree');
-    // if (quantity === '') {
-    //   Alert.alert('Enter Amount of your Donation');
-    // } else if (dataOne.category === 'cooked' && madeTime === 'HH:MM:SS') {
-    //   Alert.alert('Select Cooked Time');
-    // } else if (dataOne.category !== 'cooked' && madeDate === 'YYYY-MM-DD') {
-    //   Alert.alert('Select Cooked Date');
-    // } else if (dataOne.category !== 'cooked' && beforeDate === 'YYYY-MM-DD') {
-    //   Alert.alert('Select Expiry Date');
-    // } else if (dataOne.category === 'cooked' && beforeTime === 'HH:MM:SS') {
-    //   Alert.alert('Select Expiry Time');
-    // } else if (storageDesc === '') {
-    //   Alert.alert('Give a Short Description about the Utensils');
-    // } else {
-    //   const inputSetTwo = {
-    //     quantity: quantity,
-    //     madeOn: assignMade,
-    //     bestBefore: assignBest,
-    //     storageDesc: storageDesc,
-    //   };
-    //   storeData(inputSetTwo);
-    //   navigation.navigate('availabilityInputSetThree');
-    // }
+    // navigation.navigate('availabilityInputSetThree');
+    if (quantity === '') {
+      Alert.alert('Enter Amount of your Donation');
+    } else if (dataOne.category === 1 && madeTime === 'HH:MM:SS') {
+      Alert.alert('Select Cooked Time');
+    } else if (dataOne.category !== 1 && madeDate === 'YYYY-MM-DD') {
+      Alert.alert('Select Manufactured Date');
+    } else if (dataOne.category !== 1 && beforeDate === 'YYYY-MM-DD') {
+      Alert.alert('Select Expiry Date');
+    } else if (dataOne.category === 1 && beforeTime === 'HH:MM:SS') {
+      Alert.alert('Select Expiry Time');
+    } else if (storageDesc === '') {
+      Alert.alert('Give a Short Description about the Utensils');
+    } else {
+      const inputSetTwo = {
+        quantity: quantity,
+        madeOn: assignMade,
+        bestBefore: assignBest,
+        storageDesc: storageDesc,
+      };
+      storeData(inputSetTwo);
+      navigation.navigate('availabilityInputSetThree');
+    }
   };
 
   const storeData = async (value) => {
@@ -129,8 +129,8 @@ const availabilityInputSetTwo = ({route}) => {
       const value = await AsyncStorage.getItem('@inputSetOne');
       const val = JSON.parse(value);
       if (value !== null) {
+        console.log(value);
         setDataOne(val);
-        await AsyncStorage.removeItem('@inputSetOne');
       }
     } catch (e) {
       console.log(e);
@@ -169,9 +169,7 @@ const availabilityInputSetTwo = ({route}) => {
         <View style={styles.contentContainerCookedTime}>
           <View style={styles.cookedTimeTextCon}>
             <Text style={styles.cookedTimeText}>
-              {dataOne.category === 'cooked'
-                ? 'Cooked Time'
-                : 'Manufactured Date'}
+              {dataOne.category === 1 ? 'Cooked Time' : 'Manufactured Date'}
             </Text>
           </View>
           <View
@@ -197,11 +195,11 @@ const availabilityInputSetTwo = ({route}) => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                {dataOne.category === 'cooked' ? 'Choose Time' : 'Choose Date'}
+                {dataOne.category === 1 ? 'Choose Time' : 'Choose Date'}
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
-              {dataOne.category === 'cooked' ? (
+              {dataOne.category === 1 ? (
                 <Text
                   style={{
                     marginLeft: 10,
@@ -224,7 +222,7 @@ const availabilityInputSetTwo = ({route}) => {
             </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
-              mode={dataOne.category === 'cooked' ? 'time' : 'date'}
+              mode={dataOne.category === 1 ? 'time' : 'date'}
               onConfirm={handleConfirmCooked}
               onCancel={hideDatePicker}
             />
@@ -233,9 +231,7 @@ const availabilityInputSetTwo = ({route}) => {
         <View style={styles.contentContainerBestBefore}>
           <View style={styles.bestBeforeTextCon}>
             <Text style={styles.bestBeforeText}>
-              {dataOne.category === 'cooked'
-                ? 'Best before Time'
-                : 'Expiry Date'}
+              {dataOne.category === 1 ? 'Best before Time' : 'Expiry Date'}
             </Text>
           </View>
           <View
@@ -261,11 +257,11 @@ const availabilityInputSetTwo = ({route}) => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                {dataOne.category === 'cooked' ? 'Choose Time' : 'Choose Date'}
+                {dataOne.category === 1 ? 'Choose Time' : 'Choose Date'}
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
-              {dataOne.category === 'cooked' ? (
+              {dataOne.category === 1 ? (
                 <Text
                   style={{
                     marginLeft: 10,
@@ -288,7 +284,7 @@ const availabilityInputSetTwo = ({route}) => {
             </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisibleBestBefore}
-              mode={dataOne.category === 'cooked' ? 'time' : 'date'}
+              mode={dataOne.category === 1 ? 'time' : 'date'}
               onConfirm={handleConfirmBestBefore}
               onCancel={hideDatePickerBestBefore}
             />

@@ -35,6 +35,9 @@ const DashboardPublic = (props) => {
   useEffect(() => {
     getUser();
     getDriverStatus();
+    return navigation.addListener('focus', () => {
+      getDriverStatus();
+    });
   }, [userId]);
 
   useEffect(() => {

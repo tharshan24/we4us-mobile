@@ -39,7 +39,7 @@ function driverRegistrationSetTwo() {
           //   }
           // } else if (results.length < 2 && imageLocLicense.length === 1) {
           //   for (const res of results) {
-          setImageLocLicense(results.uri);
+          setImageLocLicense(results[0].uri);
           //   }
         } else {
           Alert.alert('Upload Front Image of License');
@@ -70,7 +70,7 @@ function driverRegistrationSetTwo() {
           //   }
           // } else if (results.length < 2 && imageLocVehicle.length === 1) {
           //   for (const res of results) {
-          setImageLocVehicle(results.uri);
+          setImageLocVehicle(results[0].uri);
           //   }
         } else {
           Alert.alert('Upload Front Image of Vehicle Book');

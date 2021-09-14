@@ -20,7 +20,7 @@ import OngoingDonation from '../screens/Public/ongoingDonation';
 import OngoingRequest from '../screens/Public/ongoingRequest';
 import EditProfile from '../screens/Public/editProfile';
 import ChangePassword from '../screens/Common/changePassword';
-import DriverSettings from '../screens/Public/driverSettings';
+import DriverSettings from '../screens/Public/Driver/driverSettings';
 import AboutUs from '../screens/Public/aboutUs';
 import PrivacyPolicy from '../screens/Public/privacyPolicy';
 import TermsCondition from '../screens/Public/termsCondition';
@@ -153,9 +153,15 @@ const DashboardNgoStack = () => {
       <Stack.Screen name="PublicSetting" component={SettingsPublic} />
       <Stack.Screen name="OngoingDonation" component={OngoingDonationNgo} />
       <Stack.Screen name="OngoingRequest" component={OngoingRequestNgo} />
-    
-      <Stack.Screen name="History-Collection-Point" component={HistoryCollectionPoint} />
-      <Stack.Screen name="OngoingCollectionPoint" component={OngoingCollectionPoint} />
+
+      <Stack.Screen
+        name="History-Collection-Point"
+        component={HistoryCollectionPoint}
+      />
+      <Stack.Screen
+        name="OngoingCollectionPoint"
+        component={OngoingCollectionPoint}
+      />
       <Stack.Screen
         name="OngoingDeliveryDetailsNgo"
         component={OngoingDeliveryDetailsNgo}
@@ -174,7 +180,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="OngoingCollectionpointDetailsNgo"
         component={OngoingCollectionpointDetailsNgo}
         options={{
@@ -192,7 +198,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="AddMember"
         component={AddMember}
         options={{
@@ -267,7 +273,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="BrowseCollectionpointNgo"
         component={BrowseCollectionpointNgo}
         options={{
@@ -285,7 +291,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="FilterResultsNgo"
         component={FilterResultsNgo}
         options={{
@@ -370,7 +376,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="collectionpointInputSetTwo"
         component={collectionpointInputSetTwo}
         options={{
@@ -387,7 +393,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="RequestForDonationNgo"
         component={RequestForDonationNgo}
         options={{
@@ -405,7 +411,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="DonationTrackingMapNgo"
         component={DonationTrackingMapNgo}
         options={{
@@ -422,7 +428,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="CollectionpointTrackingMapNgo"
         component={CollectionpointTrackingMapNgo}
         options={{
@@ -439,7 +445,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="findLocationMapAvailability"
         component={findLocationMapAvailability}
         options={{
@@ -456,7 +462,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="CreateRequestNgo"
         component={RequestCreationSetOneNgo}
         options={{
@@ -508,7 +514,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-         <Stack.Screen
+      <Stack.Screen
         name="findLocationMapRequest"
         component={findLocationMapRequestNgo}
         options={{
@@ -525,7 +531,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="cameraScreenRequestNgo"
         component={cameraScreenRequestNgo}
         options={{
@@ -542,7 +548,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="cameraScreen"
         component={cameraScreen}
         options={{
@@ -632,7 +638,7 @@ const DashboardNgoTap = () => {
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="Notification"
         component={NotificationsNgo}
         options={{
@@ -663,7 +669,6 @@ const DashboardNgoTap = () => {
         }}
       />
     </Tab.Navigator>
-
   );
 };
 
@@ -1269,7 +1274,7 @@ const DashboardHomeStack = () => {
       <Stack.Screen name="PublicSetting" component={SettingsPublic} />
       <Stack.Screen name="OngoingDonation" component={OngoingDonationHome} />
       <Stack.Screen name="OngoingRequest" component={OngoingRequestHome} />
-  
+
       <Stack.Screen
         name="OngoingDeliveryDetailsHome"
         component={OngoingDeliveryDetailsHome}
@@ -1327,7 +1332,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="FilterResultsHome"
         component={FilterResultsHome}
         options={{
@@ -1395,7 +1400,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="RequestForDonationHome"
         component={RequestForDonationHome}
         options={{
@@ -1413,7 +1418,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="DonationTrackingMapHome"
         component={DonationTrackingMapHome}
         options={{
@@ -1430,7 +1435,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="findLocationMapHome"
         component={findLocationMapHome}
         options={{
@@ -1447,7 +1452,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="CreateRequestHome"
         component={RequestCreationSetOneHome}
         options={{
@@ -1481,7 +1486,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-         <Stack.Screen
+      <Stack.Screen
         name="findLocationMapRequest"
         component={findLocationMapRequestHome}
         options={{
@@ -1552,7 +1557,7 @@ const DashboardHomeTap = () => {
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="NotificationHome"
         component={NotificationsHome}
         options={{
@@ -1583,7 +1588,6 @@ const DashboardHomeTap = () => {
         }}
       />
     </Tab.Navigator>
-
   );
 };
 
@@ -1615,11 +1619,15 @@ const DashboardShopStack = () => {
         name="Home"
         component={DashboardShopTap}
       />
-      <Stack.Screen name="History-Sellingpoint" component={HistorySellingpoint} />
+      <Stack.Screen
+        name="History-Sellingpoint"
+        component={HistorySellingpoint}
+      />
       <Stack.Screen name="PublicSetting" component={SettingsPublic} />
-      <Stack.Screen name="OngoingSellingpoint" component={OngoingSellingpoint} />
-    
-      
+      <Stack.Screen
+        name="OngoingSellingpoint"
+        component={OngoingSellingpoint}
+      />
       <Stack.Screen
         name="OngoingSellingpointDetails"
         component={OngoingSellingpointDetails}
@@ -1658,7 +1666,8 @@ const DashboardShopStack = () => {
       <Stack.Screen name="DriverSettings" component={DriverSettings} />
       <Stack.Screen name="AboutUs" component={AboutUs} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-      <Stack.Screen name="TermsCondition" component={TermsCondition} /> <Stack.Screen
+      <Stack.Screen name="TermsCondition" component={TermsCondition} />{' '}
+      <Stack.Screen
         name="FilterResultsShop"
         component={FilterResultsShop}
         options={{
@@ -1709,7 +1718,7 @@ const DashboardShopStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="findLocationMapSellingpoint"
         component={findLocationMapSellingpoint}
         options={{
@@ -1726,7 +1735,7 @@ const DashboardShopStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="cameraScreenSellingPoint"
         component={cameraScreenSellingPoint}
         options={{
@@ -1797,7 +1806,7 @@ const DashboardShopTap = () => {
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="NotificationHome"
         component={NotificationsShop}
         options={{
@@ -1828,7 +1837,6 @@ const DashboardShopTap = () => {
         }}
       />
     </Tab.Navigator>
-
   );
 };
 
@@ -1862,8 +1870,7 @@ const DashboardRestaurantStack = () => {
       <Stack.Screen name="History-Donation" component={HistoryDonationRest} />
       <Stack.Screen name="PublicSetting" component={SettingsPublic} />
       <Stack.Screen name="OngoingDonation" component={OngoingDonationRest} />
-    
-      
+
       <Stack.Screen
         name="OngoingDeliveryDetailsRest"
         component={OngoingDeliveryDetailsRest}
@@ -1937,7 +1944,7 @@ const DashboardRestaurantStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="availabilityInputSetTwoRest"
         component={availabilityInputSetTwoRest}
         options={{
@@ -1954,7 +1961,7 @@ const DashboardRestaurantStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="availabilityInputSetThreeRest"
         component={availabilityInputSetThreeRest}
         options={{
@@ -1971,7 +1978,7 @@ const DashboardRestaurantStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="DonationTrackingMapRest"
         component={DonationTrackingMapRest}
         options={{
@@ -1988,7 +1995,7 @@ const DashboardRestaurantStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="findLocationMapRest"
         component={findLocationMapRest}
         options={{
@@ -2060,7 +2067,6 @@ const DashboardRestaruantTap = () => {
         }}
       />
     </Tab.Navigator>
-
   );
 };
 
@@ -2082,8 +2088,6 @@ const ExploreRestaruantStack = () => {
   );
 };
 
-
-
 function InitialStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -2093,7 +2097,10 @@ function InitialStack() {
       <Stack.Screen name="DashboardNgo" component={DashboardNgoStack} />
       <Stack.Screen name="DashboardHome" component={DashboardHomeStack} />
       <Stack.Screen name="DashboardShops" component={DashboardShopStack} />
-      <Stack.Screen name="DashboardRestaurant" component={DashboardRestaurantStack} />
+      <Stack.Screen
+        name="DashboardRestaurant"
+        component={DashboardRestaurantStack}
+      />
       {/* <Stack.Screen name="Password" component={changePwd} /> */}
     </Stack.Navigator>
   );
