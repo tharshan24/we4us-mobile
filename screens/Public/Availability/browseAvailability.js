@@ -18,6 +18,7 @@ import SocketContext from '../../../Context/SocketContext';
 import constants from '../../../constants/constantsProject.';
 import moment from 'moment';
 import {Spinner} from 'native-base';
+import {Button} from 'react-native-paper';
 
 function BrowseAvailability(props) {
   const {availabilityId} = props.route.params;
@@ -277,7 +278,23 @@ function BrowseAvailability(props) {
                 <Text style={styles.subHeadingTxt}>Location :</Text>
               </View>
               <View style={{flex: 1}}>
-                <Text style={styles.resultsTxt}>Inuvil, Jaffna</Text>
+                <Button
+                  mode="contained"
+                  onPress={() =>
+                    navigation.navigate('ViewOnMapAvailability', {
+                      longitude: data.longitude,
+                      latitude: data.latitude,
+                    })
+                  }
+                  style={{
+                    backgroundColor: colorConstant.proRed,
+                    width: 140,
+                    height: 30,
+                    padding: 0,
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={styles.resultsTxtBtn}>View on Map</Text>
+                </Button>
               </View>
             </View>
             {/*txt7*/}
@@ -424,6 +441,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Barlow-SemiBold',
     fontSize: 16,
     color: '#727E8E',
+  },
+  resultsTxtBtn: {
+    fontFamily: 'Barlow-SemiBold',
+    fontSize: 13,
+    color: '#ffffff',
   },
   contentImageCon: {
     height: Dimensions.get('window').height / 3,

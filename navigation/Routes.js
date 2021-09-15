@@ -56,6 +56,7 @@ import Conversations from '../screens/Public/Conversations';
 import CommonCheck from '../screens/Public/commonCheck';
 import collectionPointsPublic from '../screens/Public/collectionPoints';
 import sellingPointsPublic from '../screens/Public/sellingPoints';
+import ViewOnMapAvailability from '../screens/Public/Availability/viewOnMapAvailability';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -1272,6 +1273,23 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'CommonCheck',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ViewOnMapAvailability"
+        component={ViewOnMapAvailability}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Location',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
