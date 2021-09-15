@@ -14,6 +14,7 @@ import colorConstant from '../../constants/colorConstant';
 import {Button} from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import constants from '../../constants/constantsProject.';
 
 // import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 // import ThreeDRotationIcon from '@material-ui/icons/ThreeDRotation';
@@ -28,7 +29,7 @@ const Login = (props) => {
 
   const login = () => {
     axios
-      .post('http://10.0.2.2:8000/user/login', {
+      .post(constants.BASE_URL + 'user/login', {
         user_name: email,
         password: pwd,
       })
@@ -45,11 +46,11 @@ const Login = (props) => {
             navigation.replace('Dashboard');
           } else if (response.data.result.userType === 2) {
             navigation.replace('DashboardNgo');
-          }else if (response.data.result.userType === 3) {
+          } else if (response.data.result.userType === 3) {
             navigation.replace('DashboardHome');
-          }else if (JSON.parse(user).result.userType === 4) {
+          } else if (JSON.parse(user).result.userType === 4) {
             navigation.navigate('DashboardShops');
-          }else if (JSON.parse(user).result.userType === 5) {
+          } else if (JSON.parse(user).result.userType === 5) {
             navigation.navigate('DashboardRestaurant');
           }
         } else {

@@ -135,21 +135,19 @@ const availabilityInputSetOne = () => {
   useEffect(() => {
     requestPermission();
     checkPermissions();
-    loadAvailabilityTypes();
   }, []);
 
   useEffect(() => {
     loadAvailabilityTypes();
-    return navigation.addListener('focus', () => {
-      loadAvailabilityTypes();
-    });
+    // return navigation.addListener('focus', () => {
+    //   loadAvailabilityTypes();
+    // });
   }, [token]);
 
   useEffect(() => {
     getUser();
     const now = moment().format('HH');
     setNow(now);
-    console.log(now);
     return navigation.addListener('focus', () => {
       const now = moment().format('HH');
       setNow(now);

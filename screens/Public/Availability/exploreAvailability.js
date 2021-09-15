@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,6 +13,12 @@ import {
 } from 'react-native';
 
 function ExploreAvailability({route}) {
+  const [name, setName] = useState();
+  const [from, setFrom] = useState();
+  const [quantity, SetQuantity] = useState();
+  const [bestBefore, SetBestBefore] = useState();
+  const [availabilityId, setAvailabilityId] = useState(null);
+
   const navigation = useNavigation();
   return (
     <>
@@ -32,7 +38,9 @@ function ExploreAvailability({route}) {
       <ScrollView style={{margin: 7}}>
         <View style={styles.mainContainer}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('BrowseAvailability')}>
+            onPress={() =>
+              navigation.navigate('BrowseAvailability', {availabilityId})
+            }>
             <View style={styles.AvailabilityCon}>
               <View style={styles.ProfilePicCon}>
                 <Image

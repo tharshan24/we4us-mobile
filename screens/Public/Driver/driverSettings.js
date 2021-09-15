@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, Text, View, StyleSheet, ScrollView} from 'react-native';
 import {
   NativeBaseProvider,
@@ -12,18 +12,65 @@ import {
 import colorConstant from '../../../constants/colorConstant';
 import {Button} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import constants from '../../../constants/constantsProject.';
+import {useNavigation} from '@react-navigation/native';
 
 function DriverSettings(props) {
   const [bank, setBank] = useState(null);
   const [accNo, setAccNo] = useState(null);
   const [show, setShow] = React.useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState();
+  const [paymentMethod, setPaymentMethod] = useState();
+  const navigation = useNavigation();
+
+  const getCurrentUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      if (jsonValue !== null) {
+        const value = JSON.parse(jsonValue);
+        setUserId(value.result.id);
+        setToken(value.token);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getPaymentType = async () => {
+    await axios
+      .get(constants.BASE_URL + 'public/viewProfile/' + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        setPaymentMethod(response.data.result[0].account_number);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+    getPaymentType();
+    return navigation.addListener('focus', () => {
+      getPaymentType();
+    });
+  }, [token]);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
   };
 
   const handleClick = () => setShow(!show);
+
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
@@ -34,7 +81,9 @@ function DriverSettings(props) {
           <View style={styles.contentSwitch}>
             <View style={styles.contentTxtContainer}>
               <Text style={styles.contentTxt}>
-                {isEnabled
+                {paymentMethod === null
+                  ? `Register your Account Details to Enable toggle`
+                  : isEnabled
                   ? `Now in PAID Driver mode`
                   : 'Now in FREE Driver mode'}
               </Text>
@@ -42,6 +91,7 @@ function DriverSettings(props) {
             <View style={styles.switchBtn}>
               <HStack>
                 <Switch
+                  isDisabled={paymentMethod === null ? true : false}
                   colorScheme="primary"
                   size="lg"
                   onToggle={toggleSwitch}

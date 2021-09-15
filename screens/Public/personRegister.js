@@ -43,6 +43,7 @@ const PersonRegister = (props) => {
   const [loading, setLoading] = React.useState(true);
   const [selectedCity, setSelectedCity] = React.useState(true);
   const [selectedDistrict, setSelectedDistrict] = React.useState(true);
+  import constants from '../../constants/constantsProject.';
 
   let flag = 0;
 

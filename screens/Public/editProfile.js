@@ -15,6 +15,7 @@ import {TextInput, Provider} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Select, VStack, Spinner, NativeBaseProvider} from 'native-base';
+import constants from '../../constants/constantsProject.';
 
 const EditProfile = (props) => {
   // functions
@@ -49,7 +50,7 @@ const EditProfile = (props) => {
 
   const loadCities = () => {
     axios
-      .get('http://10.0.2.2:8000/system/districts', {
+      .get(constants.BASE_URL + '/system/districts', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

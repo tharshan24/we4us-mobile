@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+//Public
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
 import PublicRegistration from '../screens/Common/publicRegistration';
@@ -53,6 +54,8 @@ import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreen
 import ChatComponent from '../screens/Common/chatComponent';
 import Conversations from '../screens/Public/Conversations';
 import CommonCheck from '../screens/Public/commonCheck';
+import collectionPointsPublic from '../screens/Public/collectionPoints';
+import sellingPointsPublic from '../screens/Public/sellingPoints';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -814,18 +817,24 @@ const AuthStack = () => {
 const ExploreStack = () => {
   return (
     <Top.Navigator
-      screenOptions={{}}
       tabBarOptions={{
         indicatorStyle: {
           backgroundColor: '#ffffff',
           paddingTop: 5,
           borderRadius: 10,
         },
-        labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
+        labelStyle: {fontSize: 15, fontFamily: 'Barlow-Bold', color: '#ffffff'},
         style: {backgroundColor: colorConstant.primaryColor},
+        scrollEnabled: true,
+        tabStyle: {width: 180},
       }}>
-      <Top.Screen name="Availability" component={ExploreAvailability} />
+      <Top.Screen name="Donations" component={ExploreAvailability} />
       <Top.Screen name="Request" component={ExploreRequest} />
+      <Top.Screen
+        name="collection  points"
+        component={collectionPointsPublic}
+      />
+      <Top.Screen name="selling  points" component={sellingPointsPublic} />
     </Top.Navigator>
   );
 };

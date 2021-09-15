@@ -16,6 +16,7 @@ import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 
 function BrowseAvailability(props) {
+  // const {availabilityId} = props.route.params;
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
   const [receiverId, setReceiverId] = useState(21);

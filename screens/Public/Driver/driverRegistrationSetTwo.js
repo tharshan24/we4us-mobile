@@ -16,6 +16,7 @@ import {Button} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentPicker from 'react-native-document-picker';
 import axios from 'axios';
+import constants from '../../../constants/constantsProject.';
 // import * as Progress from 'react-native-progress';
 // import RNFS from 'react-native-fs';
 
@@ -140,7 +141,7 @@ function driverRegistrationSetTwo() {
       await axios
         .all([
           await axios({
-            url: 'http://10.0.2.2:8000/public/driverRegister',
+            url: constants.BASE_URL + 'public/driverRegister',
             method: 'post',
             data: formData,
             headers: {
@@ -154,7 +155,7 @@ function driverRegistrationSetTwo() {
             },
           }),
           await axios({
-            url: 'http://10.0.2.2:8000/public/vehicleRegister',
+            url: constants.BASE_URL + 'public/vehicleRegister',
             method: 'post',
             data: formDataLic,
             headers: {
