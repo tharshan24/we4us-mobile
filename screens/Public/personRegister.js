@@ -22,6 +22,7 @@ import {
 } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import constants from '../../constants/constantsProject.';
 
 const PersonRegister = (props) => {
   const navigation = useNavigation();
@@ -96,7 +97,7 @@ const PersonRegister = (props) => {
 
   const loadDistrict = () => {
     axios
-      .get('http://10.0.2.2:8000/system/districts')
+      .get(constants.BASE_URL + 'system/districts')
       .then(function (response) {
         setDistrict(response.data.result.rows);
         setLoading(false);
@@ -108,7 +109,7 @@ const PersonRegister = (props) => {
 
   const loadCities = (districtId) => {
     axios
-      .get(`http://10.0.2.2:8000/system/citiesByDistrict/${districtId}`)
+      .get(constants.BASE_URL + `system/citiesByDistrict/${districtId}`)
       .then(function (response) {
         setCity(response.data.result.rows);
       })
@@ -139,7 +140,7 @@ const PersonRegister = (props) => {
 
   const RegisterUser = () => {
     axios
-      .post('http://10.0.2.2:8000/user/publicRegister', {
+      .post(constants.BASE_URL + 'user/publicRegister', {
         user_name: name,
         email: email,
         mobile_number: mobile,
