@@ -1660,9 +1660,9 @@ const DashboardShopStack = () => {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
-        options={{headerShown: false}}
         name="Home"
         component={DashboardShopTap}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="History-Sellingpoint"
@@ -1711,7 +1711,7 @@ const DashboardShopStack = () => {
       <Stack.Screen name="DriverSettings" component={DriverSettings} />
       <Stack.Screen name="AboutUs" component={AboutUs} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-      <Stack.Screen name="TermsCondition" component={TermsCondition} />{' '}
+      <Stack.Screen name="TermsCondition" component={TermsCondition} />
       <Stack.Screen
         name="FilterResultsShop"
         component={FilterResultsShop}
