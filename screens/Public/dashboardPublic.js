@@ -22,7 +22,7 @@ import SocketContext from '../../Context/SocketContext';
 
 const DashboardPublic = (props) => {
   const navigation = useNavigation();
-  const socket = useContext(SocketContext);
+  const context = useContext(SocketContext);
   const [token, setToken] = useState();
   const [userId, setUserId] = useState();
   const [driverStatus, setDriverStatus] = useState(null);
@@ -31,6 +31,7 @@ const DashboardPublic = (props) => {
   const [currentLatitude, setCurrentLatitude] = useState('');
   const [permission, setPermission] = useState(null);
   const [accNo, setAccNo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getUser();
@@ -157,7 +158,7 @@ const DashboardPublic = (props) => {
       driverMode: isEnabled,
       isDriver: null,
       paymentType: null,
-      socketId: socket.id,
+      socketId: context.socket.id,
     };
     {
       driverStatus === 1 ? (data.isDriver = 1) : (data.isDriver = 0);
