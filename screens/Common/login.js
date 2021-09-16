@@ -16,9 +16,6 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import constants from '../../constants/constantsProject.';
 
-// import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
-// import ThreeDRotationIcon from '@material-ui/icons/ThreeDRotation';
-
 const Login = (props) => {
   const navigation = useNavigation();
   const [show, setShow] = React.useState(false);
@@ -74,7 +71,6 @@ const Login = (props) => {
     <NativeBaseProvider>
       <SafeAreaView style={styles.Container}>
         <StatusBar backgroundColor={colorConstant.primaryColor} />
-
         <View style={styles.HeaderContainer}>
           <Text style={styles.Heading}>We4Us</Text>
         </View>

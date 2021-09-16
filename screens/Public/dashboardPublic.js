@@ -11,7 +11,7 @@ import {
   StatusBar,
   Image,
 } from 'react-native';
-import {Switch, HStack, Center, NativeBaseProvider} from 'native-base';
+import {Switch, HStack, Center, NativeBaseProvider, Spinner} from 'native-base';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import constants from '../../constants/constantsProject.';
@@ -137,9 +137,10 @@ const DashboardPublic = (props) => {
           setAccNo(val.account_number);
           setDriverStatus(val.driver_status);
         });
+        setLoading(false);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(function (e) {
+        console.log(e);
       });
   };
 
@@ -325,88 +326,87 @@ const DashboardPublic = (props) => {
               </View>
             </View>
           </View>
-          <View style={styles.RegisterDriverCon}>
-            <View style={styles.Heading}>
-              <View style={styles.DriverHeaderCon}>
-                <Text style={styles.DriverHeaderTxt}>DELIVERIES</Text>
-              </View>
-              <View>
-                <MaterialCommunityIcons
-                  name="truck-fast-outline"
-                  color={colorConstant.proCharcoal}
-                  size={25}
-                />
-              </View>
-            </View>
-            <View style={styles.ImageCon}>
-              <Image
-                style={styles.DeliveryImage}
-                source={require('../../assets/Images/registerDriver.png')}
-              />
-              {driverStatus === 0 ? (
-                <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 5,
-                    width: 205,
-                    height: 30,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('registerDriverOne')}>
-                  <Text>REGISTER AS A DRIVER</Text>
-                </Button>
-              ) : driverStatus === 1 ? (
-                <View>
-                  <NativeBaseProvider>
-                    <HStack alignItems="center" space={8}>
-                      {isEnabled ? (
-                        <Text
-                          style={{
-                            fontSize: 20,
-                            fontFamily: 'Barlow-SemiBold',
-                            color: '#157918',
-                          }}>
-                          Driver Mode is ON
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{
-                            fontSize: 20,
-                            fontFamily: 'Barlow-SemiBold',
-                            color: '#5f5f5f',
-                          }}>
-                          Enable Driving Mode
-                        </Text>
-                      )}
-                      <Switch
-                        colorScheme="emerald"
-                        size="lg"
-                        onToggle={toggleSwitch}
-                        isChecked={isEnabled}
-                      />
-                    </HStack>
-                  </NativeBaseProvider>
+          {loading ? (
+            <Spinner size="sm" />
+          ) : (
+            <View style={styles.RegisterDriverCon}>
+              <View style={styles.Heading}>
+                <View style={styles.DriverHeaderCon}>
+                  <Text style={styles.DriverHeaderTxt}>DELIVERIES</Text>
                 </View>
-              ) : driverStatus === 2 ? (
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontFamily: 'Barlow-SemiBold',
-                    color: '#b8b6b6',
-                  }}>
-                  Your Driver Application is Pending
-                </Text>
-              ) : null}
+                <View>
+                  <MaterialCommunityIcons
+                    name="truck-fast-outline"
+                    color={colorConstant.proCharcoal}
+                    size={25}
+                  />
+                </View>
+              </View>
+              <View style={styles.ImageCon}>
+                <Image
+                  style={styles.DeliveryImage}
+                  source={require('../../assets/Images/registerDriver.png')}
+                />
+                {driverStatus === 0 ? (
+                  <Button
+                    color={colorConstant.primaryColor}
+                    mode="contained"
+                    style={{
+                      marginTop: 5,
+                      width: 205,
+                      height: 30,
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => navigation.navigate('registerDriverOne')}>
+                    <Text>REGISTER AS A DRIVER</Text>
+                  </Button>
+                ) : driverStatus === 1 ? (
+                  <View>
+                    <NativeBaseProvider>
+                      <HStack alignItems="center" space={8}>
+                        {isEnabled ? (
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontFamily: 'Barlow-SemiBold',
+                              color: '#157918',
+                            }}>
+                            Driver Mode is ON
+                          </Text>
+                        ) : (
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontFamily: 'Barlow-SemiBold',
+                              color: '#5f5f5f',
+                            }}>
+                            Enable Driving Mode
+                          </Text>
+                        )}
+                        <Switch
+                          colorScheme="emerald"
+                          size="lg"
+                          onToggle={toggleSwitch}
+                          isChecked={isEnabled}
+                        />
+                      </HStack>
+                    </NativeBaseProvider>
+                  </View>
+                ) : driverStatus === 2 ? (
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontFamily: 'Barlow-SemiBold',
+                      color: '#b8b6b6',
+                    }}>
+                    Your Driver Application is Pending
+                  </Text>
+                ) : null}
+              </View>
             </View>
-          </View>
+          )}
         </View>
       </View>
-      {/*<Button*/}
-      {/*  onPress={() => clearInterval(myInterval)}*/}
-      {/*  mode="contained"*/}
-      {/*  title="lklklklk"*/}
-      {/*/>*/}
     </SafeAreaView>
   );
 };
