@@ -12,6 +12,7 @@ import {
   Image,
 } from 'react-native';
 import {Switch, HStack, Center, NativeBaseProvider, Spinner} from 'native-base';
+import {Modal, Input} from 'native-base';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import constants from '../../constants/constantsProject.';
@@ -32,6 +33,8 @@ const DashboardPublic = (props) => {
   const [permission, setPermission] = useState(null);
   const [accNo, setAccNo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const initialRef = React.useRef(null);
 
   useEffect(() => {
     getUser();
@@ -187,6 +190,8 @@ const DashboardPublic = (props) => {
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
   };
+
+  const modalRequest = () => {};
 
   return (
     <SafeAreaView style={styles.Container}>
