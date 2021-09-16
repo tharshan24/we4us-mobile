@@ -31,7 +31,9 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
-
+         maven {
+                    url  "https://repo.repsy.io/mvn/payhere/payhere-mobilesdk-android/"
+                }
         google()
         jcenter()
         maven { url 'https://www.jitpack.io' }

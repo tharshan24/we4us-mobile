@@ -27,6 +27,7 @@ function BrowseAvailability(props) {
   const [userId, setUserId] = useState('');
   const [receiverId, setReceiverId] = useState(21);
   const [conversations, setConversations] = useState([]);
+  const [images, setImages] = useState();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -137,6 +138,7 @@ function BrowseAvailability(props) {
           },
         )
         .then(function (response) {
+          setImages(response.data.result.images);
           setData(response.data.result.data[0]);
           setReceiverId(response.data.result.data[0].user_id);
           setLoading(false);
@@ -156,36 +158,34 @@ function BrowseAvailability(props) {
             <View style={styles.txtCon}>
               <Text style={styles.headingTxt}>Wedding Lunch</Text>
             </View>
-            {userId === receiverId ? null : (
-              <View style={styles.iconCon}>
-                <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-                  <MaterialCommunityIcons
-                    name="phone"
-                    color="#ffffff"
-                    size={30}
-                    style={{
-                      backgroundColor: colorConstant.primaryColor,
-                      borderRadius: 100,
-                      padding: 7,
-                    }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => chatWindow()}>
-                  <MaterialCommunityIcons
-                    name="message-reply-text"
-                    color="#ffffff"
-                    size={30}
-                    style={{
-                      backgroundColor: colorConstant.primaryColor,
-                      borderRadius: 100,
-                      padding: 7,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
+            <View style={styles.iconCon}>
+              <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
+                <MaterialCommunityIcons
+                  name="phone"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => chatWindow()}>
+                <MaterialCommunityIcons
+                  name="message-reply-text"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <View
             style={{
@@ -350,25 +350,31 @@ function BrowseAvailability(props) {
               <View style={styles.contentImageCon}>
                 <Image
                   style={styles.contentImage}
-                  source={require('../../../assets/Images/food1.jpg')}
+                  source={{uri: images[0].image_path.split(' ')[0].toString()}}
                 />
               </View>
               <View style={styles.contentImageCon}>
                 <Image
                   style={styles.contentImage}
-                  source={require('../../../assets/Images/food2.jpg')}
+                  source={{uri: images[1].image_path.split(' ')[0].toString()}}
                 />
               </View>
               <View style={styles.contentImageCon}>
                 <Image
                   style={styles.contentImage}
-                  source={require('../../../assets/Images/food3.jpg')}
+                  source={{uri: images[2].image_path.split(' ')[0].toString()}}
                 />
               </View>
               <View style={styles.contentImageCon}>
                 <Image
                   style={styles.contentImage}
-                  source={require('../../../assets/Images/food4.jpg')}
+                  source={{uri: images[3].image_path.split(' ')[0].toString()}}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{uri: images[4].image_path.split(' ')[0].toString()}}
                 />
               </View>
             </Swiper>
