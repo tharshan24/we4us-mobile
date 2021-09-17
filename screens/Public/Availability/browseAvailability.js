@@ -33,10 +33,6 @@ function BrowseAvailability(props) {
   const [images, setImages] = useState();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [paymentMode, setPaymentMode] = useState();
-  const [location, setLocation] = useState('');
-  const [requesterLocation, setRequesterLocation] = useState('');
 
   useEffect(() => {
     getCurrentUser();
@@ -45,22 +41,6 @@ function BrowseAvailability(props) {
   useEffect(() => {
     return navigation.addListener('focus', () => {
       getConversations();
-    });
-  }, [userId]);
-
-  useEffect(() => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-      },
-      (error) => Alert.alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-    );
-    return navigation.addListener('focus', () => {
-      getDataSelectedLocation();
     });
   }, [userId]);
 
@@ -142,6 +122,7 @@ function BrowseAvailability(props) {
   };
 
   useEffect(() => {
+    // browseAvailability();
     return navigation.addListener('focus', () => {
       browseAvailability();
     });
@@ -171,19 +152,14 @@ function BrowseAvailability(props) {
     }
   };
 
-  const getDataSelectedLocation = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@selectedLocation');
-      if (jsonValue != null) {
-        setRequesterLocation(JSON.parse(jsonValue));
-        console.log(jsonValue);
-        await AsyncStorage.removeItem('selectedLocationRequest');
-      } else {
-        console.log('No Location Selected');
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  const sendData = () => {
+    const info = {
+      quantity: data.available_quantity,
+      availability_id: availabilityId,
+      latitude: data.latitude,
+      longitude: data.longitude,
+    };
+    navigation.navigate('RequestAvailability', {info});
   };
 
   return (
@@ -435,106 +411,10 @@ function BrowseAvailability(props) {
                 style={styles.btn}
                 activeOpacity={0.8}
                 onPress={() => {
-                  setModalVisible(!modalVisible);
+                  sendData();
                 }}>
                 <Text style={styles.btnTxt}>Request</Text>
               </TouchableOpacity>
-            </View>
-            <View style={{flex: 1}}>
-              <View>
-                <>
-                  <Modal isOpen={modalVisible} onClose={setModalVisible}>
-                    <Modal.Content>
-                      <Modal.CloseButton />
-                      <Modal.Header>
-                        <Text
-                          style={{
-                            fontSize: 25,
-                            fontFamily: 'Barlow-SemiBold',
-                            color: colorConstant.primaryColor,
-                          }}>
-                          Request from Creator
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            color: colorConstant.proGreyDark,
-                          }}>
-                          {data.available_quantity} Items are available, Give
-                          how many items you needed
-                        </Text>
-                        <Input
-                          onChangeText={(e) => console.log(e)}
-                          keyboardType="numeric"
-                          type="text"
-                          mt={4}
-                          placeholder="Give the Count"
-                        />
-                        <Input
-                          onChangeText={(e) => console.log(e)}
-                          type="text"
-                          multiline
-                          numberOfLines={4}
-                          mt={4}
-                          placeholder="Requester Message"
-                        />
-                        <VStack>
-                          <Select
-                            mt={4}
-                            selectedValue={paymentMode}
-                            placeholder="Select Payment Mode"
-                            onValueChange={(itemValue) =>
-                              setPaymentMode(itemValue)
-                            }>
-                            <Select.Item label="Self Delivery" value={0} />
-                            <Select.Item label="Free Driver" value={1} />
-                            <Select.Item label="Paid Driver" value={2} />
-                          </Select>
-                        </VStack>
-                        <Button
-                          style={{
-                            marginTop: 20,
-                            backgroundColor: colorConstant.primaryColor,
-                            marginRight: 20,
-                            width: 250,
-                          }}
-                          mode="contained"
-                          onPress={() =>
-                            navigation.navigate(
-                              'requestAvailabilityLocationMap',
-                              {location},
-                            )
-                          }>
-                          <Text>Select your Location</Text>
-                        </Button>
-                      </Modal.Body>
-                      <Modal.Footer style={{marginBottom: 10}}>
-                        <Button
-                          style={{
-                            backgroundColor: colorConstant.proGreen,
-                            marginRight: 20,
-                          }}
-                          mode="contained"
-                          onPress={() => {
-                            setModalVisible(!modalVisible);
-                          }}>
-                          <Text>SAVE</Text>
-                        </Button>
-                        <Button
-                          style={{backgroundColor: colorConstant.proRed}}
-                          mode="contained"
-                          onPress={() => {
-                            setModalVisible(!modalVisible);
-                          }}>
-                          <Text>CLOSE</Text>
-                        </Button>
-                      </Modal.Footer>
-                    </Modal.Content>
-                  </Modal>
-                </>
-              </View>
             </View>
           </View>
         )}

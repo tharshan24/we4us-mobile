@@ -113,7 +113,7 @@ const requestAvailabilityLocationMap = ({route}) => {
 
   const selectedCoordinates = () => {
     storeData(selectedLocation);
-    navigation.navigate('BrowseAvailability');
+    navigation.navigate('RequestAvailability');
   };
 
   const storeData = async (value) => {

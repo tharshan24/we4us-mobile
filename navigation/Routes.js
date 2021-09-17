@@ -139,6 +139,7 @@ import availabilityInputSetOneRest from '../screens/Restaruant/Availability Crea
 import availabilityInputSetTwoRest from '../screens/Restaruant/Availability Creation/availabilityInputSetTwo';
 import availabilityInputSetThreeRest from '../screens/Restaruant/Availability Creation/availabilityInputSetThree';
 import findLocationMapRest from '../screens/CareHome/Availability Creation/findLocationMap';
+import RequestAvailability from '../screens/Public/Availability/requestAvailability';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -1308,6 +1309,23 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Choose Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RequestAvailability"
+        component={RequestAvailability}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Request Availability',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

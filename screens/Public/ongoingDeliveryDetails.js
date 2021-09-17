@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -12,191 +12,303 @@ import colorConstant from '../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
 import {useNavigation} from '@react-navigation/native';
+import {Button} from 'react-native-paper';
+import axios from 'axios';
+import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
+import {Spinner} from 'native-base';
+import moment from 'moment';
 
 function OngoingDeliveryDetails(props) {
+  const {availability_id} = props.route.params;
+  const context = useContext(SocketContext);
   const navigation = useNavigation();
+  const [images, setImages] = useState();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // browseMyAvailability();
+    return navigation.addListener('focus', () => {
+      browseMyAvailability();
+    });
+  }, []);
+
+  const browseMyAvailability = async () => {
+    try {
+      await axios
+        .get(
+          constants.BASE_URL +
+            'availability/exploreAvailabilityById/' +
+            availability_id,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
+          },
+        )
+        .then(function (response) {
+          setImages(response.data.result.images);
+          setData(response.data.result.data[0]);
+          setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.headingContainer}>
-          <View style={styles.txtCon}>
-            <Text style={styles.headingTxt}>Wedding Lunch</Text>
-          </View>
-          <View style={styles.iconCon}>
-            <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-              <MaterialCommunityIcons
-                name="delete-outline"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.proRed,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate('RequestForDonation')}>
-              <MaterialCommunityIcons
-                name="account-group"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.proGreen,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            borderBottomColor: colorConstant.proGreen,
-            borderBottomWidth: 3,
-            marginLeft: 15,
-            marginRight: 15,
-            marginTop: 15,
-          }}
-        />
-        <View style={styles.contentContainer}>
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Type :</Text>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <View style={styles.mainContainer}>
+          <View style={styles.headingContainer}>
+            <View style={styles.txtCon}>
+              <Text style={styles.headingTxt}>Wedding Lunch</Text>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Vegetarian</Text>
+            <View style={styles.iconCon}>
+              <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
+                <MaterialCommunityIcons
+                  name="delete-outline"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.proRed,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('RequestForDonation')}>
+                <MaterialCommunityIcons
+                  name="account-group"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.proGreen,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-          {/*txt2*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Created by :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Theivendram Athavan</Text>
-            </View>
-          </View>
-          {/*txt3*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Cooked Around :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}> 29/05/2021 | 02:00 PM</Text>
-            </View>
-          </View>
-          {/*txt4*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Best before :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>29/05/2021 | 09:00 PM</Text>
-            </View>
-          </View>
-          {/*txt5*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Count :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>45</Text>
-            </View>
-          </View>
-          {/*txt6*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Location :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Inuvil, Jaffna</Text>
-            </View>
-          </View>
-          {/*txt7*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Event :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Wedding Function</Text>
-            </View>
-          </View>
-          {/*txt8*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Description :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>
-                Rice meal with Dhal , Brinjal , Beans , Potato and Panneer
-                Curries. Catering taken from MAHENDRANS.
-              </Text>
-            </View>
-          </View>
-          {/*txt9*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Delivery :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Self Delivery</Text>
-            </View>
-          </View>
-          {/*txt10*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Utensils :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>
-                Utensils : Separate Containers for Rice and each Curries. All
-                together 6 containers
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.imageContainer}>
-          <Swiper
-            showsPagination={false}
-            showsButtons={false}
+          <View
             style={{
-              height: Dimensions.get('window').height / 3,
-              borderRadius: 10,
-            }}>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food1.jpg')}
-              />
+              borderBottomColor: colorConstant.proGreen,
+              borderBottomWidth: 3,
+              marginLeft: 15,
+              marginRight: 15,
+              marginTop: 15,
+            }}
+          />
+          <View style={styles.contentContainer}>
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Availability Name:</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>jkbvdjv</Text>
+              </View>
             </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food2.jpg')}
-              />
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Type :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.availability_type === 1
+                    ? 'Vegetarian'
+                    : data.availability_type === 2
+                    ? 'Non - Vegetarian'
+                    : data.availability_type === 3
+                    ? 'Mixed'
+                    : null}
+                </Text>
+              </View>
             </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food3.jpg')}
-              />
+            {/*txt2*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Category :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.availability_type_name}
+                </Text>
+              </View>
             </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food4.jpg')}
-              />
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Created by :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.user_name}</Text>
+              </View>
             </View>
-          </Swiper>
+            {/*txt3*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Cooked Around :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {moment(data.cooked_time).format('DD-MM-YYYY   HH:mm A')}
+                </Text>
+              </View>
+            </View>
+            {/*txt4*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Best before :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {moment(data.best_before).format('DD-MM-YYYY   HH:mm A')}
+                </Text>
+              </View>
+            </View>
+            {/*txt5*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Count :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.actual_quantity}</Text>
+              </View>
+            </View>
+            {/*txt6*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Location :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Button
+                  mode="contained"
+                  onPress={() =>
+                    navigation.navigate('ViewOnMapAvailability', {
+                      longitude: data.longitude,
+                      latitude: data.latitude,
+                    })
+                  }
+                  style={{
+                    backgroundColor: colorConstant.proRed,
+                    width: 140,
+                    height: 30,
+                    padding: 0,
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={styles.resultsTxtBtn}>View on Map</Text>
+                </Button>
+              </View>
+            </View>
+            {/*txt7*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Event :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>Wedding Function</Text>
+              </View>
+            </View>
+            {/*txt8*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Description :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.description}</Text>
+              </View>
+            </View>
+            {/*txt9*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Delivery :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.creator_delivery_option === 0
+                    ? 'Self Delivery'
+                    : data.creator_delivery_option === 1
+                    ? 'Free Driver Delivery'
+                    : data.creator_delivery_option === 2
+                    ? 'Paid Driver Delivery'
+                    : null}
+                </Text>
+              </View>
+            </View>
+            {/*txt10*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Utensils :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.storage_description}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.imageContainer}>
+            <Swiper
+              showsPagination={false}
+              showsButtons={false}
+              style={{
+                height: Dimensions.get('window').height / 3,
+                borderRadius: 10,
+              }}>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[0].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[1].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[2].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[3].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[4].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+            </Swiper>
+          </View>
+          {/*<View style={styles.btnContainer}>*/}
+          {/*  <TouchableOpacity style={styles.btn} activeOpacity={0.8}>*/}
+          {/*    <Text style={styles.btnTxt}>Accept</Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</View>*/}
         </View>
-        {/*<View style={styles.btnContainer}>*/}
-        {/*  <TouchableOpacity style={styles.btn} activeOpacity={0.8}>*/}
-        {/*    <Text style={styles.btnTxt}>Accept</Text>*/}
-        {/*  </TouchableOpacity>*/}
-        {/*</View>*/}
-      </View>
+      )}
     </ScrollView>
   );
 }
