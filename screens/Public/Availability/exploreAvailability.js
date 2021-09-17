@@ -37,7 +37,7 @@ function ExploreAvailability({route}) {
           },
         })
         .then(function (response) {
-          console.log(response.data.result.row);
+          // console.log(response.data.result.row);
           setData(response.data.result.row);
           setLoading(false);
         });

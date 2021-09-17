@@ -63,6 +63,7 @@ import RequestAvailability from '../screens/Public/Availability/requestAvailabil
 import viewRequesterOnMap from '../screens/Public/viewRequestorOnMap';
 import AcceptedRequests from '../screens/Public/acceptedRequests';
 import requestedAvailabilityDetails from '../screens/Public/requestedAvailabilityDetails';
+import myRequestedAvailabilityLocationMap from '../screens/Public/myRequestedAvailabilityLocationMap';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -1369,6 +1370,23 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Requested Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="myRequestedAvailabilityLocationMap"
+        component={myRequestedAvailabilityLocationMap}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Location',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

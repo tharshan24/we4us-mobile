@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import colorConstant from '../../constants/colorConstant';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
@@ -20,7 +19,7 @@ import {Spinner} from 'native-base';
 import moment from 'moment';
 
 function requestedAvailabilityDetails(props) {
-  const {availability_id} = props.route.params;
+  const {session_id} = props.route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
   const [images, setImages] = useState();
@@ -28,7 +27,7 @@ function requestedAvailabilityDetails(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // browseMyAvailability();
+    console.log(session_id);
     return navigation.addListener('focus', () => {
       browseMyRequestedAvailability();
     });
@@ -39,8 +38,8 @@ function requestedAvailabilityDetails(props) {
       await axios
         .get(
           constants.BASE_URL +
-            'availability/exploreAvailabilityById/' +
-            availability_id,
+            'availability/exploreAvailabilityByMySession/' +
+            session_id,
           {
             headers: {
               Authorization: `Bearer ${context.token}`,
@@ -51,6 +50,26 @@ function requestedAvailabilityDetails(props) {
           setImages(response.data.result.images);
           setData(response.data.result.data[0]);
           setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const cancelSession = async () => {
+    try {
+      await axios
+        .get(
+          constants.BASE_URL + 'availability/cancelAvailSession/' + session_id,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
+          },
+        )
+        .then(function (response) {
+          // console.log(response.data);
+          navigation.pop(1);
         });
     } catch (e) {
       console.log(e);
@@ -68,11 +87,16 @@ function requestedAvailabilityDetails(props) {
               <Text style={styles.headingTxt}>{data.name}</Text>
             </View>
             <View style={styles.iconCon}>
-              <Button style={{backgroundColor: '#e84545'}}>
-                <Text style={{fontFamily: 'Barlow-SemiBold', color: '#ffffff'}}>
-                  Cancel
-                </Text>
-              </Button>
+              {data.session_status === 0 || data.session_status === 1 ? (
+                <Button
+                  onPress={() => cancelSession()}
+                  style={{backgroundColor: '#e84545'}}>
+                  <Text
+                    style={{fontFamily: 'Barlow-SemiBold', color: '#ffffff'}}>
+                    Cancel
+                  </Text>
+                </Button>
+              ) : null}
             </View>
           </View>
           <View
@@ -156,7 +180,7 @@ function requestedAvailabilityDetails(props) {
                 <Text style={styles.subHeadingTxt}>Count :</Text>
               </View>
               <View style={{flex: 1}}>
-                <Text style={styles.resultsTxt}>{data.actual_quantity}</Text>
+                <Text style={styles.resultsTxt}>{data.quantity}</Text>
               </View>
             </View>
             {/*txt6*/}
@@ -168,7 +192,7 @@ function requestedAvailabilityDetails(props) {
                 <Button
                   mode="contained"
                   onPress={() =>
-                    navigation.navigate('ViewOnMapAvailability', {
+                    navigation.navigate('myRequestedAvailabilityLocationMap', {
                       longitude: data.longitude,
                       latitude: data.latitude,
                     })
@@ -272,11 +296,21 @@ function requestedAvailabilityDetails(props) {
               </View>
             </Swiper>
           </View>
-          {/*<View style={styles.btnContainer}>*/}
-          {/*  <TouchableOpacity style={styles.btn} activeOpacity={0.8}>*/}
-          {/*    <Text style={styles.btnTxt}>Accept</Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*</View>*/}
+          {data.session_status === 1 &&
+          data.final_delivery_option === 0 &&
+          data.payment_by === 2 ? (
+            <View style={styles.btnContainer}>
+              <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+                <Text style={styles.btnTxt}>Start</Text>
+              </TouchableOpacity>
+            </View>
+          ) : data.session_status === 2 || data.session_status === 3 ? (
+            <View style={styles.btnContainer}>
+              <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+                <Text style={styles.btnTxt}>Track</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       )}
     </ScrollView>
@@ -359,7 +393,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorConstant.proGreen,
     padding: 10,
     width: Dimensions.get('window').width / 3,
-    borderRadius: 10,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },

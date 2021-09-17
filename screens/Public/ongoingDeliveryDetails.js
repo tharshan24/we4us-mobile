@@ -57,6 +57,27 @@ function OngoingDeliveryDetails(props) {
     }
   };
 
+  const cancelMyAvailability = async () => {
+    try {
+      await axios
+        .get(
+          constants.BASE_URL +
+            'availability/cancelAvailability/' +
+            availability_id,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
+          },
+        )
+        .then(function (response) {
+          console.log(response.data.result, 'ppppppppp');
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ScrollView>
       {loading ? (
@@ -68,7 +89,10 @@ function OngoingDeliveryDetails(props) {
               <Text style={styles.headingTxt}>{data.name}</Text>
             </View>
             <View style={styles.iconCon}>
-              <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
+              <TouchableOpacity
+                style={{marginRight: 20}}
+                onPress={() => cancelMyAvailability()}
+                activeOpacity={0.7}>
                 <MaterialCommunityIcons
                   name="delete-outline"
                   color="#ffffff"

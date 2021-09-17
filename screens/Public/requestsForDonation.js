@@ -48,7 +48,28 @@ function RequestForDonation({route}) {
           },
         )
         .then(function (response) {
-          setData(response.data.result.row, 'lllllll');
+          setData(response.data.result.row);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const rejectAvailabilities = async () => {
+    try {
+      await axios
+        .get(
+          constants.BASE_URL + 'availability/rejectAvailSession/' + data[0].id,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
+          },
+        )
+        .then(function (response) {
+          if (response.data.status_code === 0) {
+            navigation.pop(1);
+          }
         });
     } catch (e) {
       console.log(e);
@@ -199,7 +220,7 @@ function RequestForDonation({route}) {
                       <Button
                         mode="contained"
                         style={{
-                          backgroundColor: colorConstant.proRed,
+                          backgroundColor: colorConstant.proYellow,
                           color: '#ffffff',
                           width: 140,
                           alignItems: 'center',
@@ -216,18 +237,40 @@ function RequestForDonation({route}) {
                   </View>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button
-                    mode="contained"
+                  <View
                     style={{
-                      backgroundColor: colorConstant.primaryColor,
-                      marginBottom: 20,
-                    }}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}
-                    colorScheme="muted">
-                    <Text style={{fontSize: 17, color: '#ffffff'}}>CLOSE</Text>
-                  </Button>
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: 320,
+                      alignItems: 'center',
+                    }}>
+                    <Button
+                      mode="contained"
+                      style={{
+                        backgroundColor: colorConstant.proRed,
+                        marginBottom: 20,
+                      }}
+                      onPress={() => rejectAvailabilities()}
+                      colorScheme="muted">
+                      <Text style={{fontSize: 17, color: '#ffffff'}}>
+                        REJECT
+                      </Text>
+                    </Button>
+                    <Button
+                      mode="contained"
+                      style={{
+                        backgroundColor: colorConstant.primaryColor,
+                        marginBottom: 20,
+                      }}
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                      colorScheme="muted">
+                      <Text style={{fontSize: 17, color: '#ffffff'}}>
+                        CANCEL
+                      </Text>
+                    </Button>
+                  </View>
                 </Modal.Footer>
               </Modal.Content>
             </Modal>
