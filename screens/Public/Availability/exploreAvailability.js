@@ -37,6 +37,7 @@ function ExploreAvailability({route}) {
           },
         })
         .then(function (response) {
+          console.log(response.data.result.row);
           setData(response.data.result.row);
           setLoading(false);
         });
@@ -85,7 +86,7 @@ function ExploreAvailability({route}) {
                       `From:{values.user_name}`
                     </Text>
                     <Text style={styles.bodyText}>
-                      `Quantity: {values.availability_quantity}`
+                      Quantity: {values.available_quantity}
                     </Text>
                     <Text style={styles.bodyText}>
                       `Best Before: {values.best_before.split('T')[0]}`

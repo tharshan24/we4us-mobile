@@ -19,7 +19,7 @@ import SocketContext from '../../Context/SocketContext';
 import {Spinner} from 'native-base';
 import moment from 'moment';
 
-function OngoingDeliveryDetails(props) {
+function requestedAvailabilityDetails(props) {
   const {availability_id} = props.route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
@@ -30,11 +30,11 @@ function OngoingDeliveryDetails(props) {
   useEffect(() => {
     // browseMyAvailability();
     return navigation.addListener('focus', () => {
-      browseMyAvailability();
+      browseMyRequestedAvailability();
     });
   }, []);
 
-  const browseMyAvailability = async () => {
+  const browseMyRequestedAvailability = async () => {
     try {
       await axios
         .get(
@@ -68,36 +68,11 @@ function OngoingDeliveryDetails(props) {
               <Text style={styles.headingTxt}>{data.name}</Text>
             </View>
             <View style={styles.iconCon}>
-              <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-                <MaterialCommunityIcons
-                  name="delete-outline"
-                  color="#ffffff"
-                  size={30}
-                  style={{
-                    backgroundColor: colorConstant.proRed,
-                    borderRadius: 100,
-                    padding: 7,
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() =>
-                  navigation.navigate('RequestForDonation', {
-                    availability_id: availability_id,
-                  })
-                }>
-                <MaterialCommunityIcons
-                  name="account-group"
-                  color="#ffffff"
-                  size={30}
-                  style={{
-                    backgroundColor: colorConstant.proGreen,
-                    borderRadius: 100,
-                    padding: 7,
-                  }}
-                />
-              </TouchableOpacity>
+              <Button style={{backgroundColor: '#e84545'}}>
+                <Text style={{fontFamily: 'Barlow-SemiBold', color: '#ffffff'}}>
+                  Cancel
+                </Text>
+              </Button>
             </View>
           </View>
           <View
@@ -395,4 +370,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingDeliveryDetails;
+export default requestedAvailabilityDetails;

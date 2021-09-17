@@ -171,7 +171,7 @@ function BrowseAvailability(props) {
           <View style={styles.mainContainer}>
             <View style={styles.headingContainer}>
               <View style={styles.txtCon}>
-                <Text style={styles.headingTxt}>Wedding Lunch</Text>
+                <Text style={styles.headingTxt}>{data.name}</Text>
               </View>
               <View style={styles.iconCon}>
                 <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>

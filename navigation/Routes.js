@@ -58,6 +58,11 @@ import collectionPointsPublic from '../screens/Public/collectionPoints';
 import sellingPointsPublic from '../screens/Public/sellingPoints';
 import ViewOnMapAvailability from '../screens/Public/Availability/viewOnMapAvailability';
 import requestAvailabilityLocationMap from '../screens/Public/Availability/requestAvailabilityLocationMap';
+import RequestedAvailabilities from '../screens/Public/requestedAvailabilities';
+import RequestAvailability from '../screens/Public/Availability/requestAvailability';
+import viewRequesterOnMap from '../screens/Public/viewRequestorOnMap';
+import AcceptedRequests from '../screens/Public/acceptedRequests';
+import requestedAvailabilityDetails from '../screens/Public/requestedAvailabilityDetails';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -139,7 +144,6 @@ import availabilityInputSetOneRest from '../screens/Restaruant/Availability Crea
 import availabilityInputSetTwoRest from '../screens/Restaruant/Availability Creation/availabilityInputSetTwo';
 import availabilityInputSetThreeRest from '../screens/Restaruant/Availability Creation/availabilityInputSetThree';
 import findLocationMapRest from '../screens/CareHome/Availability Creation/findLocationMap';
-import RequestAvailability from '../screens/Public/Availability/requestAvailability';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -838,6 +842,11 @@ const ExploreStack = () => {
         component={collectionPointsPublic}
       />
       <Top.Screen name="selling  points" component={sellingPointsPublic} />
+      <Top.Screen
+        name="Requested Availabilities"
+        component={RequestedAvailabilities}
+      />
+      <Top.Screen name="Accepted Requests" component={AcceptedRequests} />
     </Top.Navigator>
   );
 };
@@ -1326,6 +1335,40 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Request Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="viewRequesterOnMap"
+        component={viewRequesterOnMap}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'View Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="requestedAvailabilityDetails"
+        component={requestedAvailabilityDetails}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Requested Availabilities',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

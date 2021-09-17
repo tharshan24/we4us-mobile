@@ -81,9 +81,11 @@ const RequestAvailability = ({route}) => {
       })
         .then(function (response) {
           if (response.data.status_code === 0) {
+            console.log();
             Alert.alert('Successfully Requested to the Creator');
             navigation.popToTop();
           } else {
+            console.log(response.data);
             Alert.alert('Error in Requesting Availability');
           }
         })

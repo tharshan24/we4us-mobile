@@ -65,7 +65,7 @@ function OngoingDeliveryDetails(props) {
         <View style={styles.mainContainer}>
           <View style={styles.headingContainer}>
             <View style={styles.txtCon}>
-              <Text style={styles.headingTxt}>Wedding Lunch</Text>
+              <Text style={styles.headingTxt}>{data.name}</Text>
             </View>
             <View style={styles.iconCon}>
               <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
@@ -82,7 +82,11 @@ function OngoingDeliveryDetails(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => navigation.navigate('RequestForDonation')}>
+                onPress={() =>
+                  navigation.navigate('RequestForDonation', {
+                    availability_id: availability_id,
+                  })
+                }>
                 <MaterialCommunityIcons
                   name="account-group"
                   color="#ffffff"
@@ -111,7 +115,7 @@ function OngoingDeliveryDetails(props) {
                 <Text style={styles.subHeadingTxt}>Availability Name:</Text>
               </View>
               <View style={{flex: 1}}>
-                <Text style={styles.resultsTxt}>jkbvdjv</Text>
+                <Text style={styles.resultsTxt}>{data.name}</Text>
               </View>
             </View>
             <View style={styles.txtContainer}>
@@ -120,11 +124,11 @@ function OngoingDeliveryDetails(props) {
               </View>
               <View style={{flex: 1}}>
                 <Text style={styles.resultsTxt}>
-                  {data.availability_type === 1
+                  {data.food_type === 0
                     ? 'Vegetarian'
-                    : data.availability_type === 2
+                    : data.food_type === 1
                     ? 'Non - Vegetarian'
-                    : data.availability_type === 3
+                    : data.food_type === 2
                     ? 'Mixed'
                     : null}
                 </Text>
@@ -203,15 +207,6 @@ function OngoingDeliveryDetails(props) {
                   }}>
                   <Text style={styles.resultsTxtBtn}>View on Map</Text>
                 </Button>
-              </View>
-            </View>
-            {/*txt7*/}
-            <View style={styles.txtContainer}>
-              <View style={{flex: 1}}>
-                <Text style={styles.subHeadingTxt}>Event :</Text>
-              </View>
-              <View style={{flex: 1}}>
-                <Text style={styles.resultsTxt}>Wedding Function</Text>
               </View>
             </View>
             {/*txt8*/}
