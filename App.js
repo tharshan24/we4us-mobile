@@ -29,7 +29,11 @@ export default function App() {
         const value = await AsyncStorage.getItem('user');
         const parsedValue = JSON.parse(value);
         if (parsedValue !== null) {
-          setValues({token: parsedValue.token, socket: socketConnection});
+          setValues({
+            token: parsedValue.token,
+            socket: socketConnection,
+            values: parsedValue.result,
+          });
           setLoading(false);
         } else {
           setLoading(false);

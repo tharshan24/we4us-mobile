@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import constants from '../../constants/constantsProject.';
 import SocketContext from '../../Context/SocketContext';
-import {Spinner} from 'native-base';
+import {Center, Heading, Spinner} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import colorConstant from '../../constants/colorConstant';
@@ -51,44 +51,59 @@ function RequestedAvailabilities(props) {
 
   return (
     <View>
-      <ScrollView style={{margin: 7}}>
-        {loading ? (
-          <Spinner />
-        ) : (
-          data.map((values) => (
-            <View key={values.session_id} style={styles.mainContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('requestedAvailabilityDetails', {
-                    session_id: values.session_id,
-                  });
-                }}>
-                <View style={styles.AvailabilityCon}>
-                  <View style={styles.ProfilePicCon}>
-                    <Image
-                      style={styles.ProfilePic}
-                      source={require('../../assets/Images/profilePic.jpg')}
-                    />
+      {data.length === 0 ? (
+        <Center>
+          <Heading
+            color="#BAC2C9"
+            alignSelf={{
+              base: 'center',
+              md: 'flex-start',
+            }}>
+            Nothing to Show
+          </Heading>
+        </Center>
+      ) : (
+        <ScrollView style={{margin: 7}}>
+          {loading ? (
+            <Spinner />
+          ) : (
+            data.map((values) => (
+              <View key={values.session_id} style={styles.mainContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('requestedAvailabilityDetails', {
+                      session_id: values.session_id,
+                    });
+                  }}>
+                  <View style={styles.AvailabilityCon}>
+                    <View style={styles.ProfilePicCon}>
+                      <Image
+                        style={styles.ProfilePic}
+                        source={require('../../assets/Images/profilePic.jpg')}
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.headingText}>{values.name}</Text>
+                      <Text style={styles.bodyText}>
+                        From:{values.user_name}
+                      </Text>
+                      <Text style={styles.bodyText}>
+                        Quantity: {values.quantity}
+                      </Text>
+                      <Text style={styles.bodyText}>
+                        Best Before:
+                        {moment(values.best_before).format(
+                          'DD-MM-YYYY | HH:mm A',
+                        )}
+                      </Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.headingText}>{values.name}</Text>
-                    <Text style={styles.bodyText}>From:{values.user_name}</Text>
-                    <Text style={styles.bodyText}>
-                      Quantity: {values.quantity}
-                    </Text>
-                    <Text style={styles.bodyText}>
-                      Best Before:
-                      {moment(values.best_before).format(
-                        'DD-MM-YYYY | HH:mm A',
-                      )}
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))
-        )}
-      </ScrollView>
+                </TouchableOpacity>
+              </View>
+            ))
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 }

@@ -48,6 +48,7 @@ function BrowseAvailability(props) {
     // console.log(conversations.length, 'ppppppppppppppppp');
     let flag = 0;
     conversations.map((val) => {
+      console.log(val, 'lllllllllllllllll');
       if (
         val.members[0] === userId.toString() &&
         val.members[1] === receiverId.toString()
