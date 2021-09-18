@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState,useContext} from 'react';
 import {
   Text,
   View,
@@ -10,32 +10,150 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../../constants/colorConstant';
-import {Select, VStack, NativeBaseProvider} from 'native-base';
+import {Select, VStack, NativeBaseProvider, Spinner} from 'native-base';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
+import axios from 'axios';
+import SocketContext from '../../../Context/SocketContext';
+import constants from '../../../constants/constantsProject.';
 
 const collectionpointInputSetOne = () => {
-  const navigation = useNavigation();
 
+
+  const navigation = useNavigation();
   const [title, setTitle] = React.useState('');
   const [member, setMember] = React.useState('');
   const [desc, setDesc] = React.useState('');
+  const [token, setToken] = React.useState();
+  const [userId, setUserId] = React.useState();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const context = useContext(SocketContext);
+  //const [selectedMember, setSelectedMember] = useState('');
 
-  const validateFields = () => {
-    navigation.navigate('collectionpointInputSetTwo');
-    // if (title === '') {
-    //   Alert.alert('Enter Title for your Donation');
-    // } else if (foodType === '') {
-    //   Alert.alert('Select your Donation Food Type');
-    // } else if (foodCater === '') {
-    //   Alert.alert('Select your Donation Food Category');
-    // } else if (desc === '') {
-    //   Alert.alert('Give a Small description for your Donation');
-    // } else {
-    //   navigation.navigate('availabilityInputSetTwo');
-    // }
+  const requestPermission = () => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
+    console.log('Permission Already Granted');
   };
 
+  const checkPermissions = () => {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const validateFields = () => {
+    // const inputSetOne = {
+    //   title: title,
+    //   foodType: foodType,
+    //   category: selectedFoodCater,
+    //   description: desc,
+    // };
+    // storeData(inputSetOne);
+    // navigation.navigate('availabilityInputSetTwo');
+    if (title === '') {
+      Alert.alert('Enter Title for your Collection Point');
+    } else if (member === '') {
+      Alert.alert('Select your Member');
+    } else if (desc === '') {
+      Alert.alert('Give a Small description for your Collection Point');
+    } else {
+      const inputSetOne = {
+        title: title,
+        assinged_to: selectedMember,
+        description: desc,
+      };
+      storeData(inputSetOne);
+      navigation.navigate('collectionpointInputSetTwo');
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('org');
+      const parsedValue = JSON.parse(jsonValue);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Done.');
+  };
+
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@inputSetOneColl', jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    requestPermission();
+    checkPermissions();
+  }, []);
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      getMemberData();
+    });
+  }, []);
+
+  const getMemberData = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'org/getMembers', {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          console.log(response.data);
+          setData(response.data.result.row);
+          setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+ // const changeMember = (user_name) => {
+   // setSelectedMember(user_name);
+  //};
+
+
   return (
-    <ScrollView>
+    <NativeBaseProvider>
+      <ScrollView>
+        
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textHeader}>
@@ -62,31 +180,36 @@ const collectionpointInputSetOne = () => {
             />
           </View>
         </View>
+       
         <View style={styles.contentContainerCater}>
           <View style={styles.foodCateTextCon}>
             <Text style={styles.foodCateText}>Assigned To</Text>
           </View>
           <View style={{flex: 3}}>
             <NativeBaseProvider>
-              <VStack>
-                <Select
-                  style={{
-                    fontSize: 20,
-                    backgroundColor: '#ffffff',
-                    borderWidth: 1,
-                    borderColor: colorConstant.primaryColor,
-                  }}
-                  width={Dimensions.get('screen').width / 1.1}
-                  selectedValue={member}
-                  placeholder="Select Member"
-                  onValueChange={(itemValue) => setMember(itemValue)}>
-                  <Select.Item label="Mithula Tharmarasa" value="mithula" />
-                  <Select.Item label="Mathura Muthulingam" value="mathura" />
-                  <Select.Item label="Balachandaran Piriyatharshan" value="piriyatharshan" />
-                  <Select.Item label="Theivendram Athavan" value="athavan" />
-                  <Select.Item label="Thishan Jude" value="thishan" />
-                </Select>
-              </VStack>
+            <VStack>
+                    <Select
+                      style={{
+                        fontSize: 20,
+                        backgroundColor: '#ffffff',
+                        borderWidth: 1,
+                        borderColor: colorConstant.primaryColor,
+                      }}
+                      width={Dimensions.get('screen').width / 1.1}
+                      selectedValue={data}
+                      placeholder="Select Member"
+                      onValueChange={(itemValue) =>
+                        setData(itemValue)
+                      }>
+                      {data.map((val) => (
+                        <Select.Item
+                          label={val.user_name}
+                          value={val.user_name}
+                          key={val.id}
+                        />
+                      ))}
+                    </Select>
+                  </VStack>
             </NativeBaseProvider>
           </View>
         </View>
@@ -127,7 +250,9 @@ const collectionpointInputSetOne = () => {
           </Button>
         </View>
       </View>
-    </ScrollView>
+      
+       </ScrollView>
+     </NativeBaseProvider>
   );
 };
 

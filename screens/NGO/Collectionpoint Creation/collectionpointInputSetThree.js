@@ -33,69 +33,44 @@ const availabilityInputSetThreeNgo = () => {
   const [district, setDistrict] = useState('');
   const [city, setCity] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(null);
   const [madeOn, setMadeOn] = useState(null);
   const [bestBefore, setBestBefore] = useState(null);
-  const [storageDesc, setStorageDesc] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [category, setCategory] = useState(null);
-  const [foodType, SetFoodType] = useState(null);
   const [description, setDescription] = useState(null);
   const [imageLoc, setImageLoc] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [fromLocation, setFromLocation] = useState();
-  const [deliveryOption, setDeliveryOption] = useState('');
   const [token, setToken] = React.useState();
   const [progress, setProgress] = useState(null);
+  const [member, setMember] = React.useState('');
 
-  const imagePicker = async () => {
+  
+  const getDataInputOne = async () => {
     try {
-      const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images],
-      });
-      if (results.length < 6 && imageLoc.length === 0) {
-        for (const res of results) {
-          setImageLoc((arr) => [...arr, res.uri]);
-        }
-      } else if (results.length < 5 && imageLoc.length === 1) {
-        for (const res of results) {
-          setImageLoc((arr) => [...arr, res.uri]);
-        }
-      } else if (results.length < 4 && imageLoc.length === 2) {
-        for (const res of results) {
-          setImageLoc((arr) => [...arr, res.uri]);
-        }
-      } else if (results.length < 3 && imageLoc.length === 3) {
-        for (const res of results) {
-          setImageLoc((arr) => [...arr, res.uri]);
-        }
-      } else if (results.length < 2 && imageLoc.length === 4) {
-        for (const res of results) {
-          setImageLoc((arr) => [...arr, res.uri]);
-        }
-      } else {
-        Alert.alert('You can Choose upto 5 Images only');
+      const jsonValue = await AsyncStorage.getItem('@inputSetOneColl');
+      const value = JSON.parse(jsonValue);
+      if (value !== null) {
+        console.log(value, 'first');
+        
+      //  setTitle(value.title);
+        setMember(value.assigned_to);
+        setDescription(value.description);
       }
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
+    } catch (e) {
+      console.log(e);
     }
-    return <Text>Success</Text>;
   };
-
-  const removeImage = (item) => {
-    const index = imageLoc.indexOf(item);
-    let tempArray;
-    if (imageLoc.length > -1) {
-      tempArray = imageLoc.filter((item, pos) => pos !== index);
-      setImageLoc(tempArray);
-    } else {
-      Alert.alert('No Images to Delete');
-    }
+  const getDataInputTwo = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@inputSetTwoColl');
+      const value = JSON.parse(jsonValue);
+      console.log(value, 'two');
+      if (value !== null) {
+        
+        setMadeOn(value.madeOn);
+        setBestBefore(value.bestBefore);
+      }
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -120,12 +95,12 @@ const availabilityInputSetThreeNgo = () => {
   }, []);
 
   const currentLocation = () => {
-    navigation.navigate('findLocationMapAvailability', {location});
+    navigation.navigate('CollectionpointTrackingMapNgo', {location});
   };
 
   const getUser = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('org');
+      const jsonValue = await AsyncStorage.getItem('user');
       const parsedValue = JSON.parse(jsonValue);
       if (parsedValue !== null) {
         setToken(parsedValue.token);
@@ -142,55 +117,38 @@ const availabilityInputSetThreeNgo = () => {
     } else if (selectedDistrict === '') {
       Alert.alert('Select your District');
     } else if (selectedCity === '') {
-      Alert.alert('Select your City');
-    } else if (deliveryOption === '') {
-      Alert.alert('Select Delivery Option');
-    } else if (imageLoc.length === 0) {
-      Alert.alert('Add Images of Donation. Maximum of 5 Images');
+      Alert.alert('Select your City');;
     } else {
       setLoading(true);
       const availabilityData = new FormData();
 
-      availabilityData.append('name', title);
-      availabilityData.append('food_type', foodType);
-      availabilityData.append('availability_type', category);
+      availabilityData.append('assigned_to', member);
       availabilityData.append('description', description);
-      availabilityData.append('total_quantity', quantity);
-      availabilityData.append('cooked_time', madeOn);
-      availabilityData.append('best_before', bestBefore);
-      availabilityData.append('storage_description', storageDesc);
+      availabilityData.append('start_time', madeOn);
+      availabilityData.append('end_time', bestBefore);
       availabilityData.append('latitude', fromLocation.latitude);
       availabilityData.append('longitude', fromLocation.longitude);
       availabilityData.append('city', selectedCity);
-      availabilityData.append('creator_delivery_option', deliveryOption);
-      availabilityData.append('image_status', 1);
-      imageLoc.map((image) => {
-        availabilityData.append('files', {
-          name: new Date() + 'availabilityImages',
-          uri: image,
-          type: 'image/jpeg',
-        });
-      });
       await axios({
-        url: constants.BASE_URL + 'availability/createAvailability',
+        url: constants.BASE_URL + 'org/createCollectionPoint',
         method: 'post',
         data: availabilityData,
         headers: {
-          Authorization: `UserData ${token}`,
+          Authorization: `OrganizationData ${token}`,
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
         },
       })
         .then(function (response) {
           console.log(response.data);
-          Alert.alert('Availability Created Successfully');
+          Alert.alert('Collection Point Created Successfully');
           navigation.popToTop();
           removeAllInputs();
           setLoading(false);
         })
         .catch(function (error) {
           console.log(error);
-          Alert.alert('Error in Creating Availabilities');
+          Alert.alert('Error in Creating Collection Points');
           setLoading(false);
         });
     }
@@ -198,52 +156,23 @@ const availabilityInputSetThreeNgo = () => {
 
   const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem('@imageLocationNgo');
+      const value = await AsyncStorage.getItem('@imageLocation');
       if (value !== null) {
         setImageLoc((ar) => [...ar, value]);
-        await AsyncStorage.removeItem('@imageLocationNgo');
+        await AsyncStorage.removeItem('@imageLocation');
       }
     } catch (e) {
       console.log(e, 'three');
     }
   };
 
-  const getDataInputOne = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetOneNgo');
-      const value = JSON.parse(jsonValue);
-      if (value !== null) {
-        console.log(value, 'first');
-        setTitle(value.title);
-        setCategory(value.category);
-        SetFoodType(value.foodType);
-        setDescription(value.description);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getDataInputTwo = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetTwoNgo');
-      const value = JSON.parse(jsonValue);
-      console.log(value, 'two');
-      if (value !== null) {
-        setQuantity(value.quantity);
-        setMadeOn(value.madeOn);
-        setBestBefore(value.bestBefore);
-        setStorageDesc(value.storageDesc);
-      }
-    } catch (e) {}
-  };
-
+  
   const getDataSelectedLocation = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@selectedLocationNgo');
+      const jsonValue = await AsyncStorage.getItem('@selectedLocationColl');
       if (jsonValue != null) {
         setFromLocation(JSON.parse(jsonValue));
-        await AsyncStorage.removeItem('@selectedLocationNgo');
+        await AsyncStorage.removeItem('@selectedLocationColl');
       } else {
         console.log('No Location Selected');
       }
@@ -254,10 +183,10 @@ const availabilityInputSetThreeNgo = () => {
 
   const removeAllInputs = async () => {
     const keys = [
-      '@imageLocationNgo',
-      '@inputSetTwoNgo',
-      '@inputSetOneNgo',
-      '@selectedLocationNgo',
+      '@imageLocation',
+      '@inputSetTwoColl',
+      '@inputSetOneColl',
+      '@selectedLocationColl',
     ];
     try {
       await AsyncStorage.multiRemove(keys);
@@ -270,7 +199,7 @@ const availabilityInputSetThreeNgo = () => {
 
   const cameraScreen = () => {
     if (imageLoc.length < 5) {
-      navigation.navigate('CameraScreenAvailability');
+      navigation.navigate('cameraScreen');
     } else {
       Alert.alert('Five Images can be Uploaded');
     }
@@ -320,7 +249,7 @@ const availabilityInputSetThreeNgo = () => {
           <View style={styles.mainContainer}>
             <View style={styles.headingContainer}>
               <Text style={styles.textHeader}>
-                {'Share Surplus food with the \nNeeded persons'}
+                {'During pandemic/disaters time \ncollect things \nHelp Needed persons'}
               </Text>
             </View>
             <View style={styles.contentContainerFrom}>
@@ -417,99 +346,11 @@ const availabilityInputSetThreeNgo = () => {
             </View>
             <View style={styles.contentContainerDelivery}>
               <View style={styles.deliveryTextCon}>
-                <Text style={styles.deliveryText}>Delivery</Text>
+                <Text style={styles.deliveryText}></Text>
               </View>
-              <View style={{flex: 3}}>
-                <NativeBaseProvider>
-                  <VStack>
-                    <Select
-                      style={{
-                        fontSize: 20,
-                        backgroundColor: '#ffffff',
-                        borderWidth: 1,
-                        borderColor: colorConstant.primaryColor,
-                      }}
-                      width={Dimensions.get('screen').width / 1.1}
-                      selectedValue={deliveryOption}
-                      placeholder="Select Delivery Option"
-                      onValueChange={(itemValue) =>
-                        setDeliveryOption(itemValue)
-                      }>
-                      <Select.Item label="Self Delivery" value="self" />
-                      <Select.Item label="Volunteer Driver" value="volunteer" />
-                      <Select.Item label="Paid Driver" value="paid" />
-                    </Select>
-                  </VStack>
-                </NativeBaseProvider>
-              </View>
-            </View>
-            <View style={styles.contentContainerImage}>
-              <View style={styles.ImageTextCon}>
-                <Text style={styles.ImageText}>Upload Image</Text>
-              </View>
-              <View style={styles.chosenImageContainer}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                  }}>
-                  <View style={{flex: 1, marginRight: 30}}>
-                    <Button
-                      mode="contained"
-                      style={{backgroundColor: colorConstant.primaryColor}}
-                      onPress={() => cameraScreen()}>
-                      Camera
-                    </Button>
-                  </View>
-                  <View style={{flex: 1}}>
-                    <Button
-                      mode="contained"
-                      style={{backgroundColor: colorConstant.primaryColor}}
-                      onPress={() => imagePicker()}>
-                      Choose File
-                    </Button>
-                  </View>
-                </View>
-                <View style={{flex: 5}}>
-                  <View style={styles.pickedImageContainer}>
-                    <View style={styles.imageContainer}>
-                      <Swiper
-                        showsPagination={false}
-                        showsButtons={false}
-                        index={0}
-                        loop={false}
-                        style={{
-                          height: Dimensions.get('window').height / 3,
-                          borderRadius: 10,
-                        }}>
-                        {imageLoc.map((item, i) => (
-                          <View style={styles.contentImageCon} key={i}>
-                            <Image
-                              style={styles.contentImage}
-                              source={{uri: item}}
-                            />
-                            <Button
-                              mode="contained"
-                              style={{
-                                position: 'absolute',
-                                backgroundColor: '#f53c3c',
-                              }}
-                              onPress={() => removeImage(item)}>
-                              <MaterialCommunityIcons
-                                name="delete-outline"
-                                color="#ffffff"
-                                size={25}
-                              />
-                            </Button>
-                          </View>
-                        ))}
-                      </Swiper>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.contentContainerSubmit}>
+              <View style={styles.contentContainerImage}>
+              
+             <View style={styles.contentContainerSubmit}>
               <Button
                 mode="contained"
                 onPress={() => {
@@ -527,6 +368,8 @@ const availabilityInputSetThreeNgo = () => {
                 </Text>
               </Button>
             </View>
+            </View>
+            </View> 
           </View>
         )}
       </ScrollView>

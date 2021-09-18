@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -11,197 +11,381 @@ import {
 import colorConstant from '../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
+import SocketContext from '../../Context/SocketContext';
+import constants from '../../constants/constantsProject.';
+import moment from 'moment';
+import {Spinner} from 'native-base';
+import {Button} from 'react-native-paper';
 
 function BrowseAvailabilityNgo(props) {
+  const {availabilityId} = props.route.params;
+  const context = useContext(SocketContext);
+  const navigation = useNavigation();
+  const [userId, setUserId] = useState('');
+  const [receiverId, setReceiverId] = useState(21);
+  const [conversations, setConversations] = useState([]);
+  const [images, setImages] = useState();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      getConversations();
+    });
+  }, [userId]);
+
+  const chatWindow = async () => {
+    // console.log(conversations.length, 'ppppppppppppppppp');
+    let flag = 0;
+    conversations.map((val) => {
+      if (
+        val.members[0] === userId.toString() &&
+        val.members[1] === receiverId.toString()
+      ) {
+        const senderReceiver = {
+          sender: val.members[0],
+          receiver: val.members[1],
+          conversationId: val._id,
+          userId: userId,
+        };
+        navigation.navigate('chatComponent', {senderReceiver});
+      } else if (userId === receiverId) {
+        const senderReceiver = {
+          sender: val.members[0],
+          receiver: val.members[1],
+          conversationId: val._id,
+          userId: userId,
+        };
+        navigation.navigate('chatComponent', {senderReceiver});
+      } else {
+        // console.log('varaatha');
+        flag = flag + 1;
+        // console.log(flag, 'mmmmmmmmmmmmm');
+      }
+    });
+
+    if (conversations.length === flag) {
+      await axios
+        .post('http://10.0.2.2:5000/conversation', {
+          senderId: userId.toString(),
+          receiverId: receiverId.toString(),
+        })
+        .then(function (response) {
+          const senderReceiver = {
+            sender: userId.toString(),
+            receiver: receiverId.toString(),
+            conversationId: response.data._id,
+            userId: userId,
+          };
+          navigation.navigate('chatComponent', {senderReceiver});
+          flag = 0;
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
+  };
+
+  const getCurrentUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      if (jsonValue !== null) {
+        const value = JSON.parse(jsonValue);
+        setUserId(value.result.id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getConversations = async () => {
+    try {
+      await axios
+        .get('http://10.0.2.2:5000/conversation/' + userId)
+        .then(function (response) {
+          // console.log(response.data);
+          setConversations(response.data);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      browseAvailability();
+    });
+  }, []);
+
+  const browseAvailability = async () => {
+    try {
+      await axios
+        .get(
+          constants.BASE_URL +
+            'availability/exploreAvailabilityById/' +
+            availabilityId,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
+          },
+        )
+        .then(function (response) {
+          setImages(response.data.result.images);
+          setData(response.data.result.data[0]);
+          setReceiverId(response.data.result.data[0].user_id);
+          setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.headingContainer}>
-          <View style={styles.txtCon}>
-            <Text style={styles.headingTxt}>{'Rotaract Club \n100th Anniversary'}</Text>
-          </View>
-          <View style={styles.iconCon}>
-            <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-              <MaterialCommunityIcons
-                name="phone"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.primaryColor,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
-              <MaterialCommunityIcons
-                name="message-reply-text"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.primaryColor,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            borderBottomColor: colorConstant.proGreen,
-            borderBottomWidth: 3,
-            marginLeft: 15,
-            marginRight: 15,
-            marginTop: 15,
-          }}
-        />
-        <View style={styles.contentContainer}>
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Type :</Text>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <View style={styles.mainContainer}>
+          <View style={styles.headingContainer}>
+            <View style={styles.txtCon}>
+              <Text style={styles.headingTxt}>Wedding Lunch</Text>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Vegetarian</Text>
+            <View style={styles.iconCon}>
+              <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
+                <MaterialCommunityIcons
+                  name="phone"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => chatWindow()}>
+                <MaterialCommunityIcons
+                  name="message-reply-text"
+                  color="#ffffff"
+                  size={30}
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    borderRadius: 100,
+                    padding: 7,
+                  }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-          {/*txt2*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Created by :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Rotaract Club</Text>
-            </View>
-          </View>
-          {/*txt*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Assigned to :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Mithula Tharmarasa</Text>
-            </View>
-          </View>
-          {/*txt3*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Cooked Around :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}> 29/05/2021 | 02:00 PM</Text>
-            </View>
-          </View>
-          {/*txt4*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Best before :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>29/05/2021 | 09:00 PM</Text>
-            </View>
-          </View>
-          {/*txt5*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Count :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>45</Text>
-            </View>
-          </View>
-          {/*txt6*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Location :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Valvettithurai, Jaffna</Text>
-            </View>
-          </View>
-          {/*txt7*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Event :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Wedding Function</Text>
-            </View>
-          </View>
-          {/*txt8*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Description :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>
-                Rice meal with Dhal , Brinjal , Beans , Potato and Panneer
-                Curries. Catering taken from MAHENDRANS.
-              </Text>
-            </View>
-          </View>
-          {/*txt9*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Delivery :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Self Delivery</Text>
-            </View>
-          </View>
-          {/*txt10*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Utensils :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>
-                Utensils : Separate Containers for Rice and each Curries. All
-                together 6 containers
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.imageContainer}>
-          <Swiper
-            showsPagination={false}
-            showsButtons={false}
+          <View
             style={{
-              height: Dimensions.get('window').height / 3,
-              borderRadius: 10,
-            }}>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food1.jpg')}
-              />
+              borderBottomColor: colorConstant.proGreen,
+              borderBottomWidth: 3,
+              marginLeft: 15,
+              marginRight: 15,
+              marginTop: 15,
+            }}
+          />
+          <View style={styles.contentContainer}>
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Availability Name:</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.name}</Text>
+              </View>
             </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food2.jpg')}
-              />
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Type :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.food_type === 0
+                    ? 'Vegetarian'
+                    : data.food_type === 1
+                    ? 'Non-Vegetarian'
+                    : data.food_type === 2
+                    ? 'Mixed'
+                    : null}
+                </Text>
+              </View>
             </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food3.jpg')}
-              />
+            {/*txt1*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Category :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.availability_type_name}
+                </Text>
+              </View>
             </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food4.jpg')}
-              />
+            {/*txt2*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Created by :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.user_name}</Text>
+              </View>
             </View>
-          </Swiper>
+            {/*txt3*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Cooked Around :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {moment(data.cooked_time).format('DD-MM-YYYY   HH:mm A')}
+                </Text>
+              </View>
+            </View>
+            {/*txt4*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Best before :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {moment(data.best_before).format('DD-MM-YYYY   HH:mm A')}
+                </Text>
+              </View>
+            </View>
+            {/*txt5*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Count :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.available_quantity}</Text>
+              </View>
+            </View>
+            {/*txt6*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Location :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Button
+                  mode="contained"
+                  onPress={() =>
+                    navigation.navigate('ViewOnMapAvailability', {
+                      longitude: data.longitude,
+                      latitude: data.latitude,
+                    })
+                  }
+                  style={{
+                    backgroundColor: colorConstant.proRed,
+                    width: 140,
+                    height: 30,
+                    padding: 0,
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={styles.resultsTxtBtn}>View on Map</Text>
+                </Button>
+              </View>
+            </View>
+            {/*txt7*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Description :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.description}
+                  {/*Rice meal with Dhal , Brinjal , Beans , Potato and Panneer*/}
+                  {/*Curries. Catering taken from MAHENDRANS.*/}
+                </Text>
+              </View>
+            </View>
+            {/*txt8*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Delivery :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.creator_delivery_option === 0
+                    ? 'Self Delivery'
+                    : data.creator_delivery_option === 1
+                    ? 'Free Driver Delivery'
+                    : data.creator_delivery_option === 2
+                    ? 'Paid Driver Delivery'
+                    : null}
+                </Text>
+              </View>
+            </View>
+            {/*txt9*/}
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Utensils :</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>
+                  {data.storage_description}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.imageContainer}>
+            <Swiper
+              showsPagination={false}
+              showsButtons={false}
+              style={{
+                height: Dimensions.get('window').height / 3,
+                borderRadius: 10,
+              }}>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{uri: images[0].image_path.split(' ')[0].toString()}}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{uri: images[1].image_path.split(' ')[0].toString()}}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{uri: images[2].image_path.split(' ')[0].toString()}}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{uri: images[3].image_path.split(' ')[0].toString()}}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{uri: images[4].image_path.split(' ')[0].toString()}}
+                />
+              </View>
+            </Swiper>
+          </View>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+              <Text style={styles.btnTxt}>Request</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-            <Text style={styles.btnTxt}>Accept</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
     </ScrollView>
   );
 }
@@ -264,6 +448,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#727E8E',
   },
+  resultsTxtBtn: {
+    fontFamily: 'Barlow-SemiBold',
+    fontSize: 13,
+    color: '#ffffff',
+  },
   contentImageCon: {
     height: Dimensions.get('window').height / 3,
     width: Dimensions.get('window').width,
@@ -282,7 +471,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorConstant.proGreen,
     padding: 10,
     width: Dimensions.get('window').width / 3,
-    borderRadius: 10,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },

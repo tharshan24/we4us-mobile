@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.1",
     "@material-ui/icons": "^4.11.2",
+    "@payhere/payhere-mobilesdk-reactnative": "1.2.1",
     "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-community/geolocation": "^2.0.2",
@@ -22,6 +23,7 @@
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
     "axios": "^0.21.1",
+    "lodash.filter": "^4.6.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.29.1",
     "native-base": "^3.0.3",
@@ -31,6 +33,7 @@
     "react-native-camera": "^4.0.3",
     "react-native-camera-hooks": "^0.5.1",
     "react-native-document-picker": "^5.2.0",
+    "react-native-elements": "^3.4.2",
     "react-native-fs": "^2.18.0",
     "react-native-geolocation-service": "^5.3.0-beta.1",
     "react-native-gesture-handler": "^1.10.3",
@@ -52,8 +55,7 @@
     "react-native-vector-icons": "^8.1.0",
     "socket.io-client": "^4.2.0",
     "styled-components": "^5.3.0",
-    "styled-system": "^5.1.5",
-    "@payhere/payhere-mobilesdk-reactnative": "1.2.1"
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

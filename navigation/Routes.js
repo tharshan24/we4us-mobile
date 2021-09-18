@@ -79,10 +79,12 @@ import ExploreRequestNgo from '../screens/NGO/exploreRequestNgo';
 import FilterResultsNgo from '../screens/NGO/filterResultsNgo';
 import collectionpointInputSetOne from '../screens/NGO/Collectionpoint Creation/collectionpointInputSetOne';
 import collectionpointInputSetTwo from '../screens/NGO/Collectionpoint Creation/collectionpointInputSetTwo';
+import collectionpointInputSetThree from '../screens/NGO/Collectionpoint Creation/collectionpointInputSetThree';
 import OngoingCollectionpointDetailsNgo from '../screens/NGO/ongoingCollectionpointDetailsNgo';
 import BrowseCollectionpointNgo from '../screens/NGO/browseCollectionpointNgo';
 import CollectionpointTrackingMapNgo from '../screens/NGO/Collectionpoint Creation/collectionpointTrackingMapNgo';
 import findLocationMapAvailability from '../screens/NGO/Availability Creation/findLocationMapAvailability';
+import CameraScreenAvailability from '../screens/NGO/Availability Creation/cameraScreenAvailability';
 import RequestCreationSetOneNgo from '../screens/NGO/Request Creation/RequestCreationSetOne';
 import RequestCreationSetTwoNgo from '../screens/NGO/Request Creation/RequestCreationSetTwo';
 import findLocationMapRequestNgo from '../screens/NGO/Request Creation/findLocationMapRequest';
@@ -397,6 +399,23 @@ const DashboardNgoStack = () => {
           },
         }}
       />
+        <Stack.Screen
+        name="collectionpointInputSetThree"
+        component={collectionpointInputSetThree}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Collection Point',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="RequestForDonationNgo"
         component={RequestForDonationNgo}
@@ -538,6 +557,23 @@ const DashboardNgoStack = () => {
       <Stack.Screen
         name="cameraScreenRequestNgo"
         component={cameraScreenRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Camera',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="cameraScreenAvailability"
+        component={CameraScreenAvailability}
         options={{
           headerTintColor: '#ffffff',
           title: 'Camera',

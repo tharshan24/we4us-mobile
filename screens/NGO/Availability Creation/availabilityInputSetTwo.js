@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -11,28 +11,25 @@ import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../../constants/colorConstant';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 
-const availabilityInputSetTwoNgo = () => {
+const availabilityInputSetTwoNgo = ({route}) => {
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = React.useState('');
-  const [date, setDate] = React.useState('DD');
-  const [month, setMonth] = React.useState('MM');
-  const [year, setYear] = React.useState('YYYY');
-  const [hour, setHour] = React.useState('HH');
-  const [minute, setMinute] = React.useState('MM');
-  const [seconds, setSeconds] = React.useState('SS');
   const [storageDesc, setStorageDesc] = React.useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDatePickerVisibleBestBefore, setDatePickerVisibilityBestBefore] =
     useState(false);
-  const [mode, setMode] = useState('');
-  const [dateBestBefore, setDateBestBefore] = React.useState('DD');
-  const [monthBestBefore, setMonthBestBefore] = React.useState('MM');
-  const [yearBestBefore, setYearBestBefore] = React.useState('YYYY');
-  const [hourBestBefore, setHourBestBefore] = React.useState('HH');
-  const [minuteBestBefore, setMinuteBestBefore] = React.useState('MM');
-  const [secondsBestBefore, setSecondsBestBefore] = React.useState('SS');
+  const [madeTime, setMadeTime] = useState('HH:MM:SS');
+  const [madeDate, setMadeDate] = useState('YYYY-MM-DD');
+  const [beforeDate, setBeforeDate] = useState('YYYY-MM-DD');
+  const [beforeTime, setBeforeTime] = useState('HH:MM:SS');
+  const [dataOne, setDataOne] = useState('');
+  const [condition, setCondition] = useState('');
+  const [assignMade, setAssignMade] = useState(null);
+  const [assignBest, setAssignBest] = useState(null);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -50,60 +47,94 @@ const availabilityInputSetTwoNgo = () => {
     setDatePickerVisibilityBestBefore(false);
   };
 
-  const handleConfirmCooked = (date) => {
-    console.log(date);
-    let picker = new Date(date);
-
-    let dateDate = picker.getDate();
-    let dateMonth = picker.getMonth() + 1;
-    let dateYear = picker.getFullYear();
-    let dateHour = picker.getHours();
-    let dateMinute = picker.getMinutes();
-    let dateSecond = picker.getSeconds();
-
-    setDate(dateDate);
-    setMonth(dateMonth);
-    setYear(dateYear);
-    setHour(dateHour);
-    setMinute(dateMinute);
-    setSeconds(dateSecond);
-
+  const handleConfirmCooked = (val) => {
+    if (dataOne.category === 1) {
+      setCondition(val);
+      const chooseTime = moment(val).format('HH:mm:00');
+      const assignMade = moment(val).format('YYYY-MM-DD HH:mm:00');
+      setMadeTime(chooseTime);
+      setAssignMade(assignMade);
+    } else {
+      const chooseDate = moment(val).format('YYYY-MM-DD');
+      const assignMade = moment(val).format('YYYY-MM-DD HH:mm:00');
+      setMadeDate(chooseDate);
+      setAssignMade(assignMade);
+    }
     hideDatePicker();
   };
 
-  const handleConfirmBestBefore = (dateBestBefore) => {
-    let picker = new Date(dateBestBefore);
-
-    let dateDate = picker.getDate();
-    let dateMonth = picker.getMonth() + 1;
-    let dateYear = picker.getFullYear();
-    let dateHour = picker.getHours();
-    let dateMinute = picker.getMinutes();
-    let dateSecond = picker.getSeconds();
-
-    setDateBestBefore(dateDate);
-    setMonthBestBefore(dateMonth);
-    setYearBestBefore(dateYear);
-    setHourBestBefore(dateHour);
-    setMinuteBestBefore(dateMinute);
-    setSecondsBestBefore(dateSecond);
-
+  const handleConfirmBestBefore = (BestBefore) => {
+    if (dataOne.category === 1) {
+      const chooseTime = moment(BestBefore).format('HH:mm:00');
+      const a = moment(condition);
+      const b = moment(BestBefore);
+      const duration = b.diff(a, 'minutes');
+      if (duration > 0 && duration <= 480) {
+        const assignBefore = moment(BestBefore).format('YYYY-MM-DD HH:mm:00');
+        setBeforeTime(chooseTime);
+        setAssignBest(assignBefore);
+      } else {
+        Alert.alert('You can Donate cooked food only 8 hours from Cooked time');
+      }
+    } else {
+      const chooseDate = moment(BestBefore).format('YYYY-MM-DD');
+      const assignBefore = moment(BestBefore).format('YYYY-MM-DD HH:mm:00');
+      setBeforeDate(chooseDate);
+      setAssignBest(assignBefore);
+    }
     hideDatePickerBestBefore();
   };
 
   const validateFieldsTwo = () => {
-    navigation.navigate('availabilityInputSetThree');
-    // if (quantity === '') {
-    //   Alert.alert('Enter Amount of your Donation');
-    // } else if (hour === 'HH') {
-    //   Alert.alert('Select Cooked / Manufactured Time');
-    // } else if (hourBestBefore === 'HH') {
-    //   Alert.alert('Select Expiry or Best Before Time');
-    // } else if (storageDesc === '') {
-    //   Alert.alert('Give a Short Description about the Utensils');
-    // } else {
-    //   navigation.navigate('availabilityInputSetThree');
-    // }
+    // navigation.navigate('availabilityInputSetThree');
+    if (quantity === '') {
+      Alert.alert('Enter Amount of your Donation');
+    } else if (dataOne.category === 1 && madeTime === 'HH:MM:SS') {
+      Alert.alert('Select Cooked Time');
+    } else if (dataOne.category !== 1 && madeDate === 'YYYY-MM-DD') {
+      Alert.alert('Select Manufactured Date');
+    } else if (dataOne.category !== 1 && beforeDate === 'YYYY-MM-DD') {
+      Alert.alert('Select Expiry Date');
+    } else if (dataOne.category === 1 && beforeTime === 'HH:MM:SS') {
+      Alert.alert('Select Expiry Time');
+    } else if (storageDesc === '') {
+      Alert.alert('Give a Short Description about the Utensils');
+    } else {
+      const inputSetTwo = {
+        quantity: quantity,
+        madeOn: assignMade,
+        bestBefore: assignBest,
+        storageDesc: storageDesc,
+      };
+      storeData(inputSetTwo);
+      navigation.navigate('availabilityInputSetThree');
+    }
+  };
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@inputSetTwoNgo', jsonValue);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getDataOne();
+  }, []);
+
+  const getDataOne = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@inputSetOneNgo');
+      const val = JSON.parse(value);
+      if (value !== null) {
+        console.log(val);
+        setDataOne(val);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -138,7 +169,7 @@ const availabilityInputSetTwoNgo = () => {
         <View style={styles.contentContainerCookedTime}>
           <View style={styles.cookedTimeTextCon}>
             <Text style={styles.cookedTimeText}>
-              Cooked / Manufactured Time
+              {dataOne.category === 1 ? 'Cooked Time' : 'Manufactured Date'}
             </Text>
           </View>
           <View
@@ -164,31 +195,34 @@ const availabilityInputSetTwoNgo = () => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                Choose Time
+                {dataOne.category === 1 ? 'Choose Time' : 'Choose Date'}
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
-              <Text
-                style={{
-                  fontFamily: 'Barlow-Bold',
-                  fontSize: 17,
-                  color: colorConstant.proGreen,
-                }}>
-                {date} / {month} / {year}
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 10,
-                  fontFamily: 'Barlow-Bold',
-                  fontSize: 17,
-                  color: colorConstant.proGreen,
-                }}>
-                {hour}:{minute}:{seconds}
-              </Text>
+              {dataOne.category === 1 ? (
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: 'Barlow-Bold',
+                    fontSize: 17,
+                    color: colorConstant.proGreen,
+                  }}>
+                  {madeTime}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    fontFamily: 'Barlow-Bold',
+                    fontSize: 17,
+                    color: colorConstant.proGreen,
+                  }}>
+                  {madeDate}
+                </Text>
+              )}
             </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
-              mode="time"
+              mode={dataOne.category === 1 ? 'time' : 'date'}
               onConfirm={handleConfirmCooked}
               onCancel={hideDatePicker}
             />
@@ -196,7 +230,9 @@ const availabilityInputSetTwoNgo = () => {
         </View>
         <View style={styles.contentContainerBestBefore}>
           <View style={styles.bestBeforeTextCon}>
-            <Text style={styles.bestBeforeText}>Best Before / Expiry Date</Text>
+            <Text style={styles.bestBeforeText}>
+              {dataOne.category === 1 ? 'Best before Time' : 'Expiry Date'}
+            </Text>
           </View>
           <View
             style={{
@@ -221,31 +257,34 @@ const availabilityInputSetTwoNgo = () => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                Choose Time
+                {dataOne.category === 1 ? 'Choose Time' : 'Choose Date'}
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
-              <Text
-                style={{
-                  fontFamily: 'Barlow-Bold',
-                  fontSize: 17,
-                  color: colorConstant.proRed,
-                }}>
-                {dateBestBefore} / {monthBestBefore} / {yearBestBefore}
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 10,
-                  fontFamily: 'Barlow-Bold',
-                  fontSize: 17,
-                  color: colorConstant.proRed,
-                }}>
-                {hourBestBefore}:{minuteBestBefore}:{secondsBestBefore}
-              </Text>
+              {dataOne.category === 1 ? (
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: 'Barlow-Bold',
+                    fontSize: 17,
+                    color: colorConstant.proRed,
+                  }}>
+                  {beforeTime}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    fontFamily: 'Barlow-Bold',
+                    fontSize: 17,
+                    color: colorConstant.proRed,
+                  }}>
+                  {beforeDate}
+                </Text>
+              )}
             </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisibleBestBefore}
-              mode="time"
+              mode={dataOne.category === 1 ? 'time' : 'date'}
               onConfirm={handleConfirmBestBefore}
               onCancel={hideDatePickerBestBefore}
             />

@@ -11,22 +11,43 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
 import colorConstant from '../../../constants/colorConstant';
-import {NativeBaseProvider, Select, VStack} from 'native-base';
+import {
+  CheckIcon,
+  NativeBaseProvider,
+  Select,
+  Spinner,
+  VStack,
+} from 'native-base';
 import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import axios from 'axios';
+import constants from '../../../constants/constantsProject.';
 
 const availabilityInputSetThree = () => {
   const navigation = useNavigation();
 
   const [location, setLocation] = useState('');
+  const [district, setDistrict] = useState('');
+  const [city, setCity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(null);
+  const [madeOn, setMadeOn] = useState(null);
+  const [bestBefore, setBestBefore] = useState(null);
+  const [storageDesc, setStorageDesc] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [foodType, SetFoodType] = useState(null);
+  const [description, setDescription] = useState(null);
   const [imageLoc, setImageLoc] = useState([]);
-  const [deliveryOption, setDeliveryOption] = useState('');
-  const [vehicle, setVehicle] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
   const [fromLocation, setFromLocation] = useState();
+  const [deliveryOption, setDeliveryOption] = useState('');
+  const [token, setToken] = React.useState();
+  const [progress, setProgress] = useState(null);
 
   const imagePicker = async () => {
     try {
@@ -90,9 +111,11 @@ const availabilityInputSetThree = () => {
     );
     getDataInputTwo();
     getDataInputOne();
+    getUser();
     return navigation.addListener('focus', () => {
       getData();
       getDataSelectedLocation();
+      getUser();
     });
   }, []);
 
@@ -100,19 +123,76 @@ const availabilityInputSetThree = () => {
     navigation.navigate('findLocationMapRest', {location});
   };
 
-  const validateFieldsTwo = () => {
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(jsonValue);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Done.');
+  };
+
+  const validateFieldsTwo = async () => {
     if (fromLocation === undefined) {
       Alert.alert('Select the From Location');
+    } else if (selectedDistrict === '') {
+      Alert.alert('Select your District');
+    } else if (selectedCity === '') {
+      Alert.alert('Select your City');
     } else if (deliveryOption === '') {
       Alert.alert('Select Delivery Option');
-    } else if (vehicle === '') {
-      Alert.alert('Select Delivery Vehicle');
     } else if (imageLoc.length === 0) {
       Alert.alert('Add Images of Donation. Maximum of 5 Images');
     } else {
-      Alert.alert('Submitted Successfully');
-      navigation.popToTop();
-      removeAllInputs();
+      setLoading(true);
+      const availabilityData = new FormData();
+
+      availabilityData.append('name', title);
+      availabilityData.append('food_type', foodType);
+      availabilityData.append('availability_type', category);
+      availabilityData.append('description', description);
+      availabilityData.append('total_quantity', quantity);
+      availabilityData.append('cooked_time', madeOn);
+      availabilityData.append('best_before', bestBefore);
+      availabilityData.append('storage_description', storageDesc);
+      availabilityData.append('latitude', fromLocation.latitude);
+      availabilityData.append('longitude', fromLocation.longitude);
+      availabilityData.append('city', selectedCity);
+      availabilityData.append('creator_delivery_option', deliveryOption);
+      availabilityData.append('image_status', 1);
+      imageLoc.map((image) => {
+        availabilityData.append('files', {
+          name: new Date() + 'availabilityImages',
+          uri: image,
+          type: 'image/jpeg',
+        });
+      });
+      await axios({
+        url: constants.BASE_URL + 'availability/createAvailability',
+        method: 'post',
+        data: availabilityData,
+        headers: {
+          Authorization: `UserData ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(function (response) {
+          console.log(response.data);
+          Alert.alert('Availability Created Successfully');
+          navigation.popToTop();
+          removeAllInputs();
+          setLoading(false);
+        })
+        .catch(function (error) {
+          console.log(error);
+          Alert.alert('Error in Creating Availabilities');
+          setLoading(false);
+        });
     }
   };
 
@@ -131,7 +211,14 @@ const availabilityInputSetThree = () => {
   const getDataInputOne = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@inputSetOne');
-      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+      const value = JSON.parse(jsonValue);
+      if (value !== null) {
+        console.log(value, 'first');
+        setTitle(value.title);
+        setCategory(value.category);
+        SetFoodType(value.foodType);
+        setDescription(value.description);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -140,7 +227,14 @@ const availabilityInputSetThree = () => {
   const getDataInputTwo = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
-      return jsonValue != null ? console.log(JSON.parse(jsonValue)) : null;
+      const value = JSON.parse(jsonValue);
+      console.log(value, 'two');
+      if (value !== null) {
+        setQuantity(value.quantity);
+        setMadeOn(value.madeOn);
+        setBestBefore(value.bestBefore);
+        setStorageDesc(value.storageDesc);
+      }
     } catch (e) {}
   };
 
@@ -149,6 +243,7 @@ const availabilityInputSetThree = () => {
       const jsonValue = await AsyncStorage.getItem('@selectedLocation');
       if (jsonValue != null) {
         setFromLocation(JSON.parse(jsonValue));
+        await AsyncStorage.removeItem('@selectedLocation');
       } else {
         console.log('No Location Selected');
       }
@@ -181,185 +276,266 @@ const availabilityInputSetThree = () => {
     }
   };
 
+  const loadDistrict = () => {
+    axios
+      .get(constants.BASE_URL + 'system/districts')
+      .then(function (response) {
+        setDistrict(response.data.result.rows);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const loadCities = (districtId) => {
+    axios
+      .get(constants.BASE_URL + `system/citiesByDistrict/${districtId}`)
+      .then(function (response) {
+        setCity(response.data.result.rows);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    loadDistrict();
+    return navigation.addListener('focus', () => {
+      loadDistrict();
+    });
+  }, []);
+
+  const changeDistrict = (districtId) => {
+    setSelectedDistrict(districtId);
+    loadCities(districtId);
+  };
+
   return (
-    <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.headingContainer}>
-          <Text style={styles.textHeader}>
-            {'Share Surplus food with the \nNeeded persons'}
-          </Text>
-        </View>
-        <View style={styles.contentContainerFrom}>
-          <View style={styles.fromTextCon}>
-            <Text style={styles.fromText}>From Address</Text>
-          </View>
-          <View style={styles.fromAddress}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+    <NativeBaseProvider>
+      <ScrollView>
+        {loading ? (
+          <Spinner color="blue.500" />
+        ) : (
+          <View style={styles.mainContainer}>
+            <View style={styles.headingContainer}>
+              <Text style={styles.textHeader}>
+                {'Share Surplus food with the \nNeeded persons'}
+              </Text>
+            </View>
+            <View style={styles.contentContainerFrom}>
+              <View style={styles.fromTextCon}>
+                <Text style={styles.fromText}>From Address</Text>
+              </View>
+              <View style={styles.fromAddress}>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Button
+                    mode="contained"
+                    onPress={() => currentLocation()}
+                    style={{
+                      height: 43,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: colorConstant.primaryColor,
+                      width: Dimensions.get('screen').width / 1.1,
+                    }}>
+                    <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>
+                      Choose from Map
+                    </Text>
+                  </Button>
+                </View>
+              </View>
+            </View>
+            <View style={styles.contentContainerDistrict}>
+              <View style={styles.vehicleTextCon}>
+                <Text style={styles.vehicleText}>District</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <VStack>
+                  <Select
+                    style={{
+                      fontSize: 20,
+                      backgroundColor: '#ffffff',
+                      borderWidth: 1,
+                      borderColor: colorConstant.primaryColor,
+                    }}
+                    width={Dimensions.get('screen').width / 1.1}
+                    selectedValue={selectedDistrict}
+                    placeholder="District"
+                    onValueChange={(itemValue) => changeDistrict(itemValue)}
+                    _selectedItem={{
+                      bg: 'cyan.600',
+                      endIcon: <CheckIcon size={15} />,
+                    }}>
+                    {district.map((distVal) => (
+                      <Select.Item
+                        label={distVal.name_en}
+                        value={distVal.id}
+                        key={distVal.id}
+                      />
+                    ))}
+                  </Select>
+                </VStack>
+              </View>
+            </View>
+            <View style={styles.contentContainerCity}>
+              <View style={styles.cityTextCon}>
+                <Text style={styles.cityText}>City</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <VStack>
+                  <Select
+                    style={{
+                      fontSize: 20,
+                      backgroundColor: '#ffffff',
+                      borderWidth: 1,
+                      borderColor: colorConstant.primaryColor,
+                    }}
+                    width={Dimensions.get('screen').width / 1.1}
+                    selectedValue={selectedCity}
+                    placeholder="City"
+                    onValueChange={(itemValue) => setSelectedCity(itemValue)}
+                    _selectedItem={{
+                      bg: 'cyan.600',
+                      endIcon: <CheckIcon size={15} />,
+                    }}>
+                    {city.map((cityVal) => (
+                      <Select.Item
+                        label={cityVal.name_en}
+                        value={cityVal.id}
+                        key={cityVal.id}
+                      />
+                    ))}
+                  </Select>
+                </VStack>
+              </View>
+            </View>
+            <View style={styles.contentContainerDelivery}>
+              <View style={styles.deliveryTextCon}>
+                <Text style={styles.deliveryText}>Delivery</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <NativeBaseProvider>
+                  <VStack>
+                    <Select
+                      style={{
+                        fontSize: 20,
+                        backgroundColor: '#ffffff',
+                        borderWidth: 1,
+                        borderColor: colorConstant.primaryColor,
+                      }}
+                      width={Dimensions.get('screen').width / 1.1}
+                      selectedValue={deliveryOption}
+                      placeholder="Select Delivery Option"
+                      onValueChange={(itemValue) =>
+                        setDeliveryOption(itemValue)
+                      }>
+                      <Select.Item label="Self Delivery" value="self" />
+                      <Select.Item label="Volunteer Driver" value="volunteer" />
+                      <Select.Item label="Paid Driver" value="paid" />
+                    </Select>
+                  </VStack>
+                </NativeBaseProvider>
+              </View>
+            </View>
+            <View style={styles.contentContainerImage}>
+              <View style={styles.ImageTextCon}>
+                <Text style={styles.ImageText}>Upload Image</Text>
+              </View>
+              <View style={styles.chosenImageContainer}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                  }}>
+                  <View style={{flex: 1, marginRight: 30}}>
+                    <Button
+                      mode="contained"
+                      style={{backgroundColor: colorConstant.primaryColor}}
+                      onPress={() => cameraScreen()}>
+                      Camera
+                    </Button>
+                  </View>
+                  <View style={{flex: 1}}>
+                    <Button
+                      mode="contained"
+                      style={{backgroundColor: colorConstant.primaryColor}}
+                      onPress={() => imagePicker()}>
+                      Choose File
+                    </Button>
+                  </View>
+                </View>
+                <View style={{flex: 5}}>
+                  <View style={styles.pickedImageContainer}>
+                    <View style={styles.imageContainer}>
+                      <Swiper
+                        showsPagination={false}
+                        showsButtons={false}
+                        index={0}
+                        loop={false}
+                        style={{
+                          height: Dimensions.get('window').height / 3,
+                          borderRadius: 10,
+                        }}>
+                        {imageLoc.map((item, i) => (
+                          <View style={styles.contentImageCon} key={i}>
+                            <Image
+                              style={styles.contentImage}
+                              source={{uri: item}}
+                            />
+                            <Button
+                              mode="contained"
+                              style={{
+                                position: 'absolute',
+                                backgroundColor: '#f53c3c',
+                              }}
+                              onPress={() => removeImage(item)}>
+                              <MaterialCommunityIcons
+                                name="delete-outline"
+                                color="#ffffff"
+                                size={25}
+                              />
+                            </Button>
+                          </View>
+                        ))}
+                      </Swiper>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.contentContainerSubmit}>
               <Button
                 mode="contained"
-                onPress={() => currentLocation()}
+                onPress={() => {
+                  validateFieldsTwo();
+                }}
                 style={{
-                  height: 43,
-                  alignItems: 'center',
+                  width: 120,
+                  height: 45,
                   justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: colorConstant.primaryColor,
-                  width: Dimensions.get('screen').width / 1.1,
                 }}>
-                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 17}}>
-                  Choose from Map
+                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+                  Submit
                 </Text>
               </Button>
             </View>
           </View>
-        </View>
-        <View style={styles.contentContainerDelivery}>
-          <View style={styles.deliveryTextCon}>
-            <Text style={styles.deliveryText}>Delivery</Text>
-          </View>
-          <View style={{flex: 3}}>
-            <NativeBaseProvider>
-              <VStack>
-                <Select
-                  style={{
-                    fontSize: 20,
-                    backgroundColor: '#ffffff',
-                    borderWidth: 1,
-                    borderColor: colorConstant.primaryColor,
-                  }}
-                  width={Dimensions.get('screen').width / 1.1}
-                  selectedValue={deliveryOption}
-                  placeholder="Select Delivery Option"
-                  onValueChange={(itemValue) => setDeliveryOption(itemValue)}>
-                  <Select.Item label="Self Delivery" value="self" />
-                  <Select.Item label="Volunteer Driver" value="volunteer" />
-                  <Select.Item label="Paid Driver" value="paid" />
-                </Select>
-              </VStack>
-            </NativeBaseProvider>
-          </View>
-        </View>
-        <View style={styles.contentContainerVehicle}>
-          <View style={styles.vehicleTextCon}>
-            <Text style={styles.vehicleText}>Needed Vehicle</Text>
-          </View>
-          <View style={{flex: 3}}>
-            <NativeBaseProvider>
-              <VStack>
-                <Select
-                  style={{
-                    fontSize: 20,
-                    backgroundColor: '#ffffff',
-                    borderWidth: 1,
-                    borderColor: colorConstant.primaryColor,
-                  }}
-                  width={Dimensions.get('screen').width / 1.1}
-                  selectedValue={vehicle}
-                  placeholder="Select Needed Vehicle"
-                  onValueChange={(itemValue) => setVehicle(itemValue)}>
-                  <Select.Item label="MotorBike" value="mb" />
-                  <Select.Item label="Three Wheeler" value="tw" />
-                  <Select.Item label="Truck" value="tr" />
-                </Select>
-              </VStack>
-            </NativeBaseProvider>
-          </View>
-        </View>
-        <View style={styles.contentContainerImage}>
-          <View style={styles.ImageTextCon}>
-            <Text style={styles.ImageText}>Upload Image</Text>
-          </View>
-          <View style={styles.chosenImageContainer}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-              }}>
-              <View style={{flex: 1, marginRight: 30}}>
-                <Button
-                  mode="contained"
-                  style={{backgroundColor: colorConstant.primaryColor}}
-                  onPress={() => cameraScreen()}>
-                  Camera
-                </Button>
-              </View>
-              <View style={{flex: 1}}>
-                <Button
-                  mode="contained"
-                  style={{backgroundColor: colorConstant.primaryColor}}
-                  onPress={() => imagePicker()}>
-                  Choose File
-                </Button>
-              </View>
-            </View>
-            <View style={{flex: 5}}>
-              <View style={styles.pickedImageContainer}>
-                <View style={styles.imageContainer}>
-                  <Swiper
-                    showsPagination={false}
-                    showsButtons={false}
-                    index={0}
-                    loop={false}
-                    style={{
-                      height: Dimensions.get('window').height / 3,
-                      borderRadius: 10,
-                    }}>
-                    {imageLoc.map((item, i) => (
-                      <View style={styles.contentImageCon} key={i}>
-                        <Image
-                          style={styles.contentImage}
-                          source={{uri: item}}
-                        />
-                        <Button
-                          mode="contained"
-                          style={{
-                            position: 'absolute',
-                            backgroundColor: '#f53c3c',
-                          }}
-                          onPress={() => removeImage(item)}>
-                          <MaterialCommunityIcons
-                            name="delete-outline"
-                            color="#ffffff"
-                            size={25}
-                          />
-                        </Button>
-                      </View>
-                    ))}
-                  </Swiper>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.contentContainerSubmit}>
-          <Button
-            mode="contained"
-            onPress={() => {
-              validateFieldsTwo();
-            }}
-            style={{
-              width: 120,
-              height: 45,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: colorConstant.primaryColor,
-            }}>
-            <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
-              Submit
-            </Text>
-          </Button>
-        </View>
-      </View>
-    </ScrollView>
+        )}
+      </ScrollView>
+    </NativeBaseProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  //main Container
+  //main Containe
   mainContainer: {
     height: Dimensions.get('screen').height,
     flexDirection: 'column',
@@ -416,7 +592,7 @@ const styles = StyleSheet.create({
     color: colorConstant.primaryColor,
   },
   //cater
-  contentContainerVehicle: {
+  contentContainerDistrict: {
     flex: 0.2,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -476,6 +652,20 @@ const styles = StyleSheet.create({
   contentImage: {
     height: Dimensions.get('window').height / 3,
     width: Dimensions.get('window').width,
+  },
+  contentContainerCity: {
+    flex: 0.2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: Dimensions.get('screen').width / 1.1,
+  },
+  cityTextCon: {
+    flex: 1.5,
+  },
+  cityText: {
+    fontFamily: 'Barlow-SemiBold',
+    fontSize: 20,
+    color: colorConstant.primaryColor,
   },
 });
 

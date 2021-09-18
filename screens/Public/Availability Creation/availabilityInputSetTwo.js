@@ -129,7 +129,7 @@ const availabilityInputSetTwo = ({route}) => {
       const value = await AsyncStorage.getItem('@inputSetOne');
       const val = JSON.parse(value);
       if (value !== null) {
-        console.log(value);
+        console.log(val);
         setDataOne(val);
       }
     } catch (e) {

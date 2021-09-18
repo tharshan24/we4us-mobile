@@ -104,6 +104,10 @@ const OrganizationRegister = (props) => {
         setLoading(false);
       })
       .catch(function (error) {
+
+
+
+        
         console.log(error);
       });
   };
