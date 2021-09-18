@@ -10,12 +10,12 @@ import forgotPassword from '../screens/Common/forgotPassword';
 import colorConstant from '../constants/colorConstant';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ExploreAvailability from '../screens/Public/Availability/exploreAvailability';
-import ExploreRequest from '../screens/Public/exploreRequest';
+import ExploreRequest from '../screens/Public/Request/exploreRequest';
 import AddAvailabilityRequest from '../screens/Public/addAvailabilityRequest';
 import DashboardPublic from '../screens/Public/dashboardPublic';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HistoryDonation from '../screens/Public/historyDonation';
-import HistoryRequest from '../screens/Public/historyRequest';
+import HistoryRequest from '../screens/Public/Request/historyRequest';
 import SettingsPublic from '../screens/Public/settingsPublic';
 import OngoingDonation from '../screens/Public/ongoingDonation';
 import OngoingRequest from '../screens/Public/ongoingRequest';
@@ -60,10 +60,12 @@ import ViewOnMapAvailability from '../screens/Public/Availability/viewOnMapAvail
 import requestAvailabilityLocationMap from '../screens/Public/Availability/requestAvailabilityLocationMap';
 import RequestedAvailabilities from '../screens/Public/requestedAvailabilities';
 import RequestAvailability from '../screens/Public/Availability/requestAvailability';
-import viewRequesterOnMap from '../screens/Public/viewRequestorOnMap';
+import viewRequesterOnMap from '../screens/Public/Request/viewRequestorOnMap';
 import AcceptedRequests from '../screens/Public/acceptedRequests';
 import requestedAvailabilityDetails from '../screens/Public/requestedAvailabilityDetails';
 import myRequestedAvailabilityLocationMap from '../screens/Public/myRequestedAvailabilityLocationMap';
+import browseRequest from '../screens/Public/Request/browseRequests';
+import ViewOnMapRequest from '../screens/Public/Request/viewOnMapRequest';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -1384,6 +1386,40 @@ const DashboardPublicStack = () => {
       <Stack.Screen
         name="myRequestedAvailabilityLocationMap"
         component={myRequestedAvailabilityLocationMap}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="browseRequest"
+        component={browseRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Requests',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ViewOnMapRequest"
+        component={ViewOnMapRequest}
         options={{
           headerTintColor: '#ffffff',
           title: 'Location',

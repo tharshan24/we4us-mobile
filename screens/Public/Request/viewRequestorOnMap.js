@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Alert} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import Geolocation from 'react-native-geolocation-service';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 

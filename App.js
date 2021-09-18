@@ -14,12 +14,9 @@ import SocketContext from './Context/SocketContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Spinner} from 'native-base';
 import {NativeBaseProvider} from 'native-base/src/core/NativeBaseProvider';
-import axios from 'axios';
-import constants from './constants/constantsProject.';
 
 export default function App() {
-  const [values, setValues] = useState({socket: '', token: ''});
-  const [userId, setUserId] = useState();
+  const [values, setValues] = useState({socket: '', token: '', values: ''});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

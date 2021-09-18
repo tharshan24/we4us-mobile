@@ -5,7 +5,6 @@ import {
   ScrollView,
   Text,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import colorConstant from '../../constants/colorConstant';
@@ -21,7 +20,6 @@ function RequestForDonation({route}) {
   const {availability_id} = route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
-  const [btnState, setBtnState] = useState(true);
   const [data, setData] = useState([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
