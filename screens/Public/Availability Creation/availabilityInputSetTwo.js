@@ -16,7 +16,6 @@ import moment from 'moment';
 
 const availabilityInputSetTwo = ({route}) => {
   const navigation = useNavigation();
-
   const [quantity, setQuantity] = React.useState('');
   const [storageDesc, setStorageDesc] = React.useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);

@@ -17,7 +17,7 @@ const AddItemsRequest = ({navigation}) => {
 
   const initialState = {
     name: '',
-    count: '',
+    quantity: '',
   };
   const [formValues, setFormValues] = useState([initialState]);
 
@@ -28,7 +28,7 @@ const AddItemsRequest = ({navigation}) => {
   };
 
   let addFormFields = () => {
-    setFormValues([...formValues, {name: '', count: ''}]);
+    setFormValues([...formValues, {name: '', quantity: ''}]);
   };
 
   let removeFormFields = (i) => {
@@ -76,17 +76,26 @@ const AddItemsRequest = ({navigation}) => {
   };
 
   const submitFields = () => {
+    // console.log(formValues);
     formValues.map((val, index) => {
       if (val.name === '') {
-        Alert.alert('Add Atleast one Item for Request');
-      } else if (val.count === '') {
+        Alert.alert('Add Item for Request');
+      } else if (val.quantity === '') {
         Alert.alert('Add the required amount of item needed');
       } else if (index === formValues.length - 1) {
-        Alert.alert('Request Submitted Successfully');
         requestItems(formValues);
-        navigation.pop(1);
+        navigation.pop();
       }
     });
+  };
+
+  const removeValue = async () => {
+    try {
+      await AsyncStorage.removeItem('@requestedItems');
+      console.log('success');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -114,7 +123,7 @@ const AddItemsRequest = ({navigation}) => {
               <TextInput
                 mode="outlined"
                 label="Qn"
-                value={element.count}
+                value={element.quantity}
                 keyboardType="number-pad"
                 selectionColor={colorConstant.primaryColor}
                 outlineColor={colorConstant.primaryColor}
@@ -124,7 +133,7 @@ const AddItemsRequest = ({navigation}) => {
                   fontSize: 20,
                   backgroundColor: '#ffffff',
                 }}
-                onChangeText={(e) => handleChange(index, 'count', e)}
+                onChangeText={(e) => handleChange(index, 'quantity', e)}
               />
             </View>
             {index ? (
@@ -152,7 +161,6 @@ const AddItemsRequest = ({navigation}) => {
             ) : null}
           </View>
         ))}
-
         <View
           style={{
             flex: 1,
@@ -190,6 +198,32 @@ const AddItemsRequest = ({navigation}) => {
             </Text>
           </Button>
         </View>
+        {formValues.length === 1 ? (
+          <View
+            style={{
+              marginTop: 20,
+              alignItems: 'flex-end',
+              width: Dimensions.get('screen').width / 1.1,
+            }}>
+            <Button
+              mode="contained"
+              onPress={() => {
+                setFormValues([initialState]);
+                removeValue();
+              }}
+              style={{
+                height: 40,
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                width: Dimensions.get('screen').width / 2.5,
+                backgroundColor: colorConstant.primaryColor,
+              }}>
+              <Text style={{fontFamily: 'Barlow-SemiBold', fontSize: 15}}>
+                CLEAR INPUT
+              </Text>
+            </Button>
+          </View>
+        ) : null}
       </View>
     </ScrollView>
   );

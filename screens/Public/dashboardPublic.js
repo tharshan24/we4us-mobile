@@ -12,6 +12,7 @@ import {
   Image,
 } from 'react-native';
 import {Switch, HStack, Center, NativeBaseProvider, Spinner} from 'native-base';
+import {Modal, Input} from 'native-base';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import constants from '../../constants/constantsProject.';
@@ -32,8 +33,11 @@ const DashboardPublic = (props) => {
   const [permission, setPermission] = useState(null);
   const [accNo, setAccNo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
+    // console.log(context.values.id, 'pppppppppppppp');
     getUser();
     getDriverStatus();
     return navigation.addListener('focus', () => {
@@ -44,6 +48,7 @@ const DashboardPublic = (props) => {
   useEffect(() => {
     requestPermission();
     checkPermissions();
+    viewProfile();
   }, [permission]);
 
   const requestPermission = () => {
@@ -188,7 +193,26 @@ const DashboardPublic = (props) => {
     setIsEnabled((previousState) => !previousState);
   };
 
-  return (
+  const viewProfile = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'public/viewProfile/' + context.values.id, {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          setData(response.data.result);
+          setLoadingProfile(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return loadingProfile ? (
+    <Spinner />
+  ) : (
     <SafeAreaView style={styles.Container}>
       <StatusBar backgroundColor={colorConstant.primaryColor} />
       <View style={styles.HeaderContainer}>
@@ -202,13 +226,13 @@ const DashboardPublic = (props) => {
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> Theivendram Athavan </Text>
+          <Text style={styles.UserName}> {data[0].user_name} </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 8}}>
-              <Text style={styles.Email}>thavanthya@gmail.com </Text>
+              <Text style={styles.Email}>{data[0].email} </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -216,7 +240,7 @@ const DashboardPublic = (props) => {
               <MaterialCommunityIcons name="phone" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 3}}>
-              <Text style={styles.Mobile}> +94 77 946 2554 </Text>
+              <Text style={styles.Mobile}> +94 {data[0].mobile_number} </Text>
             </View>
           </View>
         </View>

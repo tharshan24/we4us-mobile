@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from 'react-native';
 import colorConstant from '../../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -23,18 +24,19 @@ import {Button, TextInput} from 'react-native-paper';
 import {NativeBaseProvider} from 'native-base/src/core/NativeBaseProvider';
 import Geolocation from 'react-native-geolocation-service';
 
-function BrowseAvailability(props) {
-  const {availabilityId} = props.route.params;
+function browseRequest(props) {
+  const {request_id} = props.route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
   const [receiverId, setReceiverId] = useState(21);
   const [conversations, setConversations] = useState([]);
-  const [images, setImages] = useState();
+  const [items, setItems] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log(request_id);
     getCurrentUser();
   }, []);
 
@@ -45,10 +47,8 @@ function BrowseAvailability(props) {
   }, [userId]);
 
   const chatWindow = async () => {
-    // console.log(conversations.length, 'ppppppppppppppppp');
     let flag = 0;
     conversations.map((val) => {
-      console.log(val, 'lllllllllllllllll');
       if (
         val.members[0] === userId.toString() &&
         val.members[1] === receiverId.toString()
@@ -74,7 +74,6 @@ function BrowseAvailability(props) {
         // console.log(flag, 'mmmmmmmmmmmmm');
       }
     });
-
     if (conversations.length === flag) {
       await axios
         .post('http://10.0.2.2:5000/conversation', {
@@ -123,29 +122,23 @@ function BrowseAvailability(props) {
   };
 
   useEffect(() => {
-    // browseAvailability();
     return navigation.addListener('focus', () => {
-      browseAvailability();
+      browseRequests();
     });
   }, []);
 
-  const browseAvailability = async () => {
+  const browseRequests = async () => {
     try {
       await axios
-        .get(
-          constants.BASE_URL +
-            'availability/exploreAvailabilityById/' +
-            availabilityId,
-          {
-            headers: {
-              Authorization: `Bearer ${context.token}`,
-            },
+        .get(constants.BASE_URL + 'request/exploreRequestById/' + request_id, {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
           },
-        )
+        })
         .then(function (response) {
-          setImages(response.data.result.images);
           setData(response.data.result.data[0]);
           setReceiverId(response.data.result.data[0].user_id);
+          setItems(response.data.result.items);
           setLoading(false);
         });
     } catch (e) {
@@ -155,8 +148,8 @@ function BrowseAvailability(props) {
 
   const sendData = () => {
     const info = {
-      quantity: data.available_quantity,
-      availability_id: availabilityId,
+      quantity: data.needed_quantity,
+      request_id: request_id,
       latitude: data.latitude,
       longitude: data.longitude,
     };
@@ -215,7 +208,7 @@ function BrowseAvailability(props) {
             <View style={styles.contentContainer}>
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Availability Name:</Text>
+                  <Text style={styles.subHeadingTxt}>Request Name:</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <Text style={styles.resultsTxt}>{data.name}</Text>
@@ -227,24 +220,7 @@ function BrowseAvailability(props) {
                 </View>
                 <View style={{flex: 1}}>
                   <Text style={styles.resultsTxt}>
-                    {data.food_type === 0
-                      ? 'Vegetarian'
-                      : data.food_type === 1
-                      ? 'Non-Vegetarian'
-                      : data.food_type === 2
-                      ? 'Mixed'
-                      : null}
-                  </Text>
-                </View>
-              </View>
-              {/*txt1*/}
-              <View style={styles.txtContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Category :</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>
-                    {data.availability_type_name}
+                    {data.request_type_name}
                   </Text>
                 </View>
               </View>
@@ -260,34 +236,21 @@ function BrowseAvailability(props) {
               {/*txt3*/}
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Cooked Around :</Text>
+                  <Text style={styles.subHeadingTxt}>Needed Before</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <Text style={styles.resultsTxt}>
-                    {moment(data.cooked_time).format('DD-MM-YYYY   HH:mm A')}
-                  </Text>
-                </View>
-              </View>
-              {/*txt4*/}
-              <View style={styles.txtContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Best before :</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>
-                    {moment(data.best_before).format('DD-MM-YYYY   HH:mm A')}
+                    {moment(data.need_before).format('DD-MM-YYYY   HH:mm A')}
                   </Text>
                 </View>
               </View>
               {/*txt5*/}
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Count :</Text>
+                  <Text style={styles.subHeadingTxt}>Address :</Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>
-                    {data.available_quantity}
-                  </Text>
+                  <Text style={styles.resultsTxt}>{data.location}</Text>
                 </View>
               </View>
               {/*txt6*/}
@@ -299,7 +262,7 @@ function BrowseAvailability(props) {
                   <Button
                     mode="contained"
                     onPress={() =>
-                      navigation.navigate('ViewOnMapAvailability', {
+                      navigation.navigate('ViewOnMapRequest', {
                         longitude: data.longitude,
                         latitude: data.latitude,
                       })
@@ -328,84 +291,50 @@ function BrowseAvailability(props) {
                   </Text>
                 </View>
               </View>
-              {/*txt8*/}
-              <View style={styles.txtContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Delivery :</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>
-                    {data.creator_delivery_option === 0
-                      ? 'Self Delivery'
-                      : data.creator_delivery_option === 1
-                      ? 'Free Driver Delivery'
-                      : data.creator_delivery_option === 2
-                      ? 'Paid Driver Delivery'
-                      : null}
-                  </Text>
-                </View>
-              </View>
               {/*txt9*/}
-              <View style={styles.txtContainer}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                }}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Utensils :</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>
-                    {data.storage_description}
+                  <Text
+                    style={{
+                      fontFamily: 'Barlow-SemiBold',
+                      fontSize: 20,
+                      color: '#727E8E',
+                    }}>
+                    Items :
                   </Text>
                 </View>
+                {items.map((values) => (
+                  <View
+                    key={values.id}
+                    style={{flex: 1, marginTop: 5, marginLeft: 10}}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{flex: 1}}>
+                        <Text
+                          style={{
+                            fontFamily: 'Barlow-SemiBold',
+                            fontSize: 20,
+                            color: '#727E8E',
+                          }}>
+                          {values.name}
+                        </Text>
+                      </View>
+                      <View style={{flex: 1}}>
+                        <Text
+                          style={{
+                            fontFamily: 'Barlow-SemiBold',
+                            fontSize: 20,
+                            color: colorConstant.primaryColor,
+                          }}>
+                          {values.needed_quantity}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ))}
               </View>
-            </View>
-            <View style={styles.imageContainer}>
-              <Swiper
-                showsPagination={false}
-                showsButtons={false}
-                style={{
-                  height: Dimensions.get('window').height / 3,
-                  borderRadius: 10,
-                }}>
-                <View style={styles.contentImageCon}>
-                  <Image
-                    style={styles.contentImage}
-                    source={{
-                      uri: images[0].image_path.split(' ')[0].toString(),
-                    }}
-                  />
-                </View>
-                <View style={styles.contentImageCon}>
-                  <Image
-                    style={styles.contentImage}
-                    source={{
-                      uri: images[1].image_path.split(' ')[0].toString(),
-                    }}
-                  />
-                </View>
-                <View style={styles.contentImageCon}>
-                  <Image
-                    style={styles.contentImage}
-                    source={{
-                      uri: images[2].image_path.split(' ')[0].toString(),
-                    }}
-                  />
-                </View>
-                <View style={styles.contentImageCon}>
-                  <Image
-                    style={styles.contentImage}
-                    source={{
-                      uri: images[3].image_path.split(' ')[0].toString(),
-                    }}
-                  />
-                </View>
-                <View style={styles.contentImageCon}>
-                  <Image
-                    style={styles.contentImage}
-                    source={{
-                      uri: images[4].image_path.split(' ')[0].toString(),
-                    }}
-                  />
-                </View>
-              </Swiper>
             </View>
             <View style={styles.btnContainer}>
               <TouchableOpacity
@@ -414,7 +343,7 @@ function BrowseAvailability(props) {
                 onPress={() => {
                   sendData();
                 }}>
-                <Text style={styles.btnTxt}>Request</Text>
+                <Text style={styles.btnTxt}>Donate</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -470,7 +399,7 @@ const styles = StyleSheet.create({
   },
   subHeadingTxt: {
     fontFamily: 'Barlow-SemiBold',
-    fontSize: 16,
+    fontSize: 17,
     color: '#727E8E',
   },
   txtContainer: {
@@ -479,7 +408,7 @@ const styles = StyleSheet.create({
   },
   resultsTxt: {
     fontFamily: 'Barlow-SemiBold',
-    fontSize: 16,
+    fontSize: 17,
     color: '#727E8E',
   },
   resultsTxtBtn: {
@@ -497,7 +426,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
   },
   btnContainer: {
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 20,
     alignItems: 'center',
   },
@@ -516,4 +445,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrowseAvailability;
+export default browseRequest;

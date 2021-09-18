@@ -1,4 +1,5 @@
 export const GOOGLE_API_KEY = 'AIzaSyATKAVaqoKwPaQ7rSmmDeinybSt3SBz0S4';
+
 export const BASE_URL = 'https://we4us.herokuapp.com/';
 //export const BASE_URL = 'http://10.0.2.2:8000/';
 

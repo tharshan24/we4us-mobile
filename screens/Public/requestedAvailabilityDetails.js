@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import colorConstant from '../../constants/colorConstant';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
@@ -19,8 +18,8 @@ import SocketContext from '../../Context/SocketContext';
 import {Spinner} from 'native-base';
 import moment from 'moment';
 
-function OngoingDeliveryDetails(props) {
-  const {availability_id} = props.route.params;
+function requestedAvailabilityDetails(props) {
+  const {session_id} = props.route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
   const [images, setImages] = useState();
@@ -28,19 +27,19 @@ function OngoingDeliveryDetails(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // browseMyAvailability();
+    console.log(session_id);
     return navigation.addListener('focus', () => {
-      browseMyAvailability();
+      browseMyRequestedAvailability();
     });
   }, []);
 
-  const browseMyAvailability = async () => {
+  const browseMyRequestedAvailability = async () => {
     try {
       await axios
         .get(
           constants.BASE_URL +
-            'availability/exploreAvailabilityById/' +
-            availability_id,
+            'availability/exploreAvailabilityByMySession/' +
+            session_id,
           {
             headers: {
               Authorization: `Bearer ${context.token}`,
@@ -57,13 +56,11 @@ function OngoingDeliveryDetails(props) {
     }
   };
 
-  const cancelMyAvailability = async () => {
+  const cancelSession = async () => {
     try {
       await axios
         .get(
-          constants.BASE_URL +
-            'availability/cancelAvailability/' +
-            availability_id,
+          constants.BASE_URL + 'availability/cancelAvailSession/' + session_id,
           {
             headers: {
               Authorization: `Bearer ${context.token}`,
@@ -71,7 +68,8 @@ function OngoingDeliveryDetails(props) {
           },
         )
         .then(function (response) {
-          console.log(response.data.result, 'ppppppppp');
+          // console.log(response.data);
+          navigation.pop(1);
         });
     } catch (e) {
       console.log(e);
@@ -89,39 +87,16 @@ function OngoingDeliveryDetails(props) {
               <Text style={styles.headingTxt}>{data.name}</Text>
             </View>
             <View style={styles.iconCon}>
-              <TouchableOpacity
-                style={{marginRight: 20}}
-                onPress={() => cancelMyAvailability()}
-                activeOpacity={0.7}>
-                <MaterialCommunityIcons
-                  name="delete-outline"
-                  color="#ffffff"
-                  size={30}
-                  style={{
-                    backgroundColor: colorConstant.proRed,
-                    borderRadius: 100,
-                    padding: 7,
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() =>
-                  navigation.navigate('RequestForDonation', {
-                    availability_id: availability_id,
-                  })
-                }>
-                <MaterialCommunityIcons
-                  name="account-group"
-                  color="#ffffff"
-                  size={30}
-                  style={{
-                    backgroundColor: colorConstant.proGreen,
-                    borderRadius: 100,
-                    padding: 7,
-                  }}
-                />
-              </TouchableOpacity>
+              {data.session_status === 0 || data.session_status === 1 ? (
+                <Button
+                  onPress={() => cancelSession()}
+                  style={{backgroundColor: '#e84545'}}>
+                  <Text
+                    style={{fontFamily: 'Barlow-SemiBold', color: '#ffffff'}}>
+                    Cancel
+                  </Text>
+                </Button>
+              ) : null}
             </View>
           </View>
           <View
@@ -205,7 +180,7 @@ function OngoingDeliveryDetails(props) {
                 <Text style={styles.subHeadingTxt}>Count :</Text>
               </View>
               <View style={{flex: 1}}>
-                <Text style={styles.resultsTxt}>{data.actual_quantity}</Text>
+                <Text style={styles.resultsTxt}>{data.quantity}</Text>
               </View>
             </View>
             {/*txt6*/}
@@ -217,7 +192,7 @@ function OngoingDeliveryDetails(props) {
                 <Button
                   mode="contained"
                   onPress={() =>
-                    navigation.navigate('ViewOnMapAvailability', {
+                    navigation.navigate('myRequestedAvailabilityLocationMap', {
                       longitude: data.longitude,
                       latitude: data.latitude,
                     })
@@ -321,11 +296,21 @@ function OngoingDeliveryDetails(props) {
               </View>
             </Swiper>
           </View>
-          {/*<View style={styles.btnContainer}>*/}
-          {/*  <TouchableOpacity style={styles.btn} activeOpacity={0.8}>*/}
-          {/*    <Text style={styles.btnTxt}>Accept</Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*</View>*/}
+          {data.session_status === 1 &&
+          data.final_delivery_option === 0 &&
+          data.payment_by === 2 ? (
+            <View style={styles.btnContainer}>
+              <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+                <Text style={styles.btnTxt}>Start</Text>
+              </TouchableOpacity>
+            </View>
+          ) : data.session_status === 2 || data.session_status === 3 ? (
+            <View style={styles.btnContainer}>
+              <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+                <Text style={styles.btnTxt}>Track</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       )}
     </ScrollView>
@@ -408,7 +393,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorConstant.proGreen,
     padding: 10,
     width: Dimensions.get('window').width / 3,
-    borderRadius: 10,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -419,4 +404,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingDeliveryDetails;
+export default requestedAvailabilityDetails;

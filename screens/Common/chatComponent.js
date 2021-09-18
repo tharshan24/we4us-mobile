@@ -7,7 +7,7 @@ import axios from 'axios';
 import SocketContext from '../../Context/SocketContext';
 
 const ChatComponent = ({route}) => {
-  const socket = useContext(SocketContext);
+  const context = useContext(SocketContext);
   const {senderReceiver} = route.params;
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState([]);
@@ -17,7 +17,7 @@ const ChatComponent = ({route}) => {
   }, []);
 
   useEffect(() => {
-    socket.on('getMessage', (data) => {
+    context.socket.on('getMessage', (data) => {
       setArrivalMessage({
         _id: data.msgId,
         user: {
@@ -34,7 +34,7 @@ const ChatComponent = ({route}) => {
   }, [arrivalMessage]);
 
   useEffect(() => {
-    socket.emit('addUser', senderReceiver.userId);
+    context.socket.emit('addUser', senderReceiver.userId);
   }, [senderReceiver.userId]);
 
   const renderBubble = (props) => {
@@ -106,16 +106,10 @@ const ChatComponent = ({route}) => {
       <InputToolbar
         {...values}
         containerStyle={{
-          // marginLeft: 15,
-          // marginRight: 15,
-          // marginBottom: 10,
-          // borderWidth: 0.5,
           elevation: 0,
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
           marginTop: 10,
-          // borderColor: 'grey',
-          // borderRadius: 25,
         }}
       />
     );
@@ -141,7 +135,7 @@ const ChatComponent = ({route}) => {
     );
 
     if (senderReceiver.userId !== parseInt(senderReceiver.receiver)) {
-      socket.emit('sendMessage', {
+      context.socket.emit('sendMessage', {
         msgId: text[0]._id,
         senderId: senderReceiver.userId,
         receiverId: parseInt(senderReceiver.receiver),
@@ -149,7 +143,7 @@ const ChatComponent = ({route}) => {
         conversationId: senderReceiver.conversationId,
       });
     } else {
-      socket.emit('sendMessage', {
+      context.socket.emit('sendMessage', {
         msgId: text[0]._id,
         senderId: senderReceiver.userId,
         receiverId: parseInt(senderReceiver.sender),
