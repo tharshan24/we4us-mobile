@@ -17,8 +17,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import HistoryDonation from '../screens/Public/historyDonation';
 import HistoryRequest from '../screens/Public/Request/historyRequest';
 import SettingsPublic from '../screens/Public/settingsPublic';
-import OngoingDonation from '../screens/Public/ongoingDonation';
-import OngoingRequest from '../screens/Public/ongoingRequest';
+import OngoingDonation from '../screens/Public/onGoingDonations/ongoingDonation';
+import OngoingRequest from '../screens/Public/onGoingRequests/ongoingRequest';
 import EditProfile from '../screens/Public/editProfile';
 import ChangePassword from '../screens/Common/changePassword';
 import DriverSettings from '../screens/Public/Driver/driverSettings';
@@ -34,8 +34,8 @@ import SettingsOrganization from '../screens/NGO/settingsOrganization';
 import BrowseAvailability from '../screens/Public/Availability/browseAvailability';
 import FilterResults from '../screens/Public/filterResults';
 import DonationTrackingMap from '../screens/Public/donationTrackingMap';
-import OngoingDeliveryDetails from '../screens/Public/ongoingDeliveryDetails';
-import RequestForDonation from '../screens/Public/requestsForDonation';
+import OngoingDeliveryDetails from '../screens/Public/onGoingDonations/ongoingDeliveryDetails';
+import RequestForDonation from '../screens/Public/onGoingDonations/requestsForDonation';
 import availabilityInputSetOne from '../screens/Public/Availability Creation/availabilityInputSetOne';
 import availabilityInputSetTwo from '../screens/Public/Availability Creation/availabilityInputSetTwo';
 import availabilityInputSetThree from '../screens/Public/Availability Creation/availabilityInputSetThree';
@@ -54,18 +54,27 @@ import cameraScreenRequest from '../screens/Public/Request Creation/cameraScreen
 import ChatComponent from '../screens/Common/chatComponent';
 import Conversations from '../screens/Public/Conversations';
 import CommonCheck from '../screens/Public/commonCheck';
-import collectionPointsPublic from '../screens/Public/collectionPoints';
+import collectionPointsPublic from '../screens/Public/ViewCollectionPoints/exploreCollectionPointsPublic';
 import sellingPointsPublic from '../screens/Public/sellingPoints';
 import ViewOnMapAvailability from '../screens/Public/Availability/viewOnMapAvailability';
 import requestAvailabilityLocationMap from '../screens/Public/Availability/requestAvailabilityLocationMap';
 import RequestedAvailabilities from '../screens/Public/requestedAvailabilities';
 import RequestAvailability from '../screens/Public/Availability/requestAvailability';
-import viewRequesterOnMap from '../screens/Public/Request/viewRequestorOnMap';
-import AcceptedRequests from '../screens/Public/acceptedRequests';
+import viewRequesterOnMap from '../screens/Public/onGoingDonations/viewRequestorOnMap';
+import AcceptedRequests from '../screens/Public/Request/acceptedRequests';
 import requestedAvailabilityDetails from '../screens/Public/requestedAvailabilityDetails';
 import myRequestedAvailabilityLocationMap from '../screens/Public/myRequestedAvailabilityLocationMap';
 import browseRequest from '../screens/Public/Request/browseRequests';
 import ViewOnMapRequest from '../screens/Public/Request/viewOnMapRequest';
+import DonateForRequest from '../screens/Public/Request/donateForRequest';
+import DonationForRequestsDetails from '../screens/Public/Request/donationForRequestsDetails';
+import BrowseCollectionPointsPublic from '../screens/Public/ViewCollectionPoints/browseCollectionPointsPublic';
+import ongoingRequestDetails from '../screens/Public/onGoingRequests/ongoingRequestDetails';
+import viewOnMapMyRequest from '../screens/Public/onGoingRequests/viewOnMapMyRequest';
+import donationForMyRequests from '../screens/Public/onGoingRequests/donationForMyRequests';
+import ViewOnMapCollectionPoints from '../screens/Public/ViewCollectionPoints/viewOnMapCollectionPoints';
+import DeliveryDetailsAvailabilities from '../screens/Public/onGoingDonations/deliveryDetailsAvailabilities';
+
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -408,7 +417,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="collectionpointInputSetThree"
         component={collectionpointInputSetThree}
         options={{
@@ -917,7 +926,78 @@ const DashboardPublicStack = () => {
           },
         }}
       />
-      <Stack.Screen name="OngoingRequest" component={OngoingRequest} />
+      <Stack.Screen
+        name="OngoingRequest"
+        component={OngoingRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Progress',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ongoingRequestDetails"
+        component={ongoingRequestDetails}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="viewOnMapMyRequest"
+        component={viewOnMapMyRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="donationForMyRequests"
+        component={donationForMyRequests}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Donations',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
@@ -1014,7 +1094,25 @@ const DashboardPublicStack = () => {
         component={RequestForDonation}
         options={{
           headerTintColor: '#ffffff',
-          title: 'Requests',
+          title: 'Requests for Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DeliveryDetailsAvailabilities"
+        component={DeliveryDetailsAvailabilities}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Delivery Details',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
@@ -1459,6 +1557,74 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DonateForRequest"
+        component={DonateForRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Donate',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DonationForRequestsDetails"
+        component={DonationForRequestsDetails}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="BrowseCollectionPointsPublic"
+        component={BrowseCollectionPointsPublic}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Collection Point Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ViewOnMapCollectionPoints"
+        component={ViewOnMapCollectionPoints}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'View on Map',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,

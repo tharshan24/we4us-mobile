@@ -93,6 +93,7 @@ const DashboardPublic = (props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('user');
       const parsedValue = JSON.parse(jsonValue);
+      console.log(parsedValue.result.id);
       if (parsedValue !== null) {
         setToken(parsedValue.token);
         setUserId(parsedValue.result.id);
@@ -287,7 +288,8 @@ const DashboardPublic = (props) => {
                     width: 100,
                     justifyContent: 'center',
                   }}
-                  onPress={() => navigation.navigate('History-Donation')}>
+                  // onPress={() => navigation.navigate('History-Donation')}>
+                  onPress={() => navigation.navigate('DonationTrackingMap')}>
                   <Text style={styles.BtnTxt}>History</Text>
                 </Button>
                 <Button

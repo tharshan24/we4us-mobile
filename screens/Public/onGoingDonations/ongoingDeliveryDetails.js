@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
 import axios from 'axios';
-import constants from '../../constants/constantsProject.';
-import SocketContext from '../../Context/SocketContext';
+import constants from '../../../constants/constantsProject.';
+import SocketContext from '../../../Context/SocketContext';
 import {Spinner} from 'native-base';
 import moment from 'moment';
 
@@ -202,10 +202,26 @@ function OngoingDeliveryDetails(props) {
             {/*txt5*/}
             <View style={styles.txtContainer}>
               <View style={{flex: 1}}>
-                <Text style={styles.subHeadingTxt}>Count :</Text>
+                <Text style={styles.subHeadingTxt}>Created Quantity:</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.total_quantity}</Text>
+              </View>
+            </View>
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Actual Quantity:</Text>
               </View>
               <View style={{flex: 1}}>
                 <Text style={styles.resultsTxt}>{data.actual_quantity}</Text>
+              </View>
+            </View>
+            <View style={styles.txtContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.subHeadingTxt}>Available Quantity:</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.resultsTxt}>{data.available_quantity}</Text>
               </View>
             </View>
             {/*txt6*/}

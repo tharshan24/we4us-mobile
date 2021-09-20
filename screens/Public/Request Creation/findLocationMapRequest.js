@@ -146,7 +146,10 @@ const findLocationMapRequest = ({route}) => {
         <GooglePlacesAutocomplete
           ref={ref}
           placeholder="Search"
-          query={{key: GOOGLE_API_KEY, language: 'en'}}
+          query={{
+            key: 'AIzaSyBeTMqfMRsOIEDZs8nTaBBv1lI1W9KTADE',
+            language: 'en',
+          }}
           debounce={400}
           styles={{
             container: {

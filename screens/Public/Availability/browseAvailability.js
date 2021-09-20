@@ -28,7 +28,7 @@ function BrowseAvailability(props) {
   const context = useContext(SocketContext);
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
-  const [receiverId, setReceiverId] = useState(21);
+  const [receiverId, setReceiverId] = useState();
   const [conversations, setConversations] = useState([]);
   const [images, setImages] = useState();
   const [data, setData] = useState([]);
@@ -39,6 +39,7 @@ function BrowseAvailability(props) {
   }, []);
 
   useEffect(() => {
+    getConversations();
     return navigation.addListener('focus', () => {
       getConversations();
     });
@@ -59,6 +60,7 @@ function BrowseAvailability(props) {
           conversationId: val._id,
           userId: userId,
         };
+        console.log('kkkkkkk');
         navigation.navigate('chatComponent', {senderReceiver});
       } else if (userId === receiverId) {
         const senderReceiver = {
@@ -68,16 +70,28 @@ function BrowseAvailability(props) {
           userId: userId,
         };
         navigation.navigate('chatComponent', {senderReceiver});
+      } else if (
+        val.members[1] === userId.toString() &&
+        val.members[0] === receiverId.toString()
+      ) {
+        const senderReceiver = {
+          sender: val.members[1],
+          receiver: val.members[0],
+          conversationId: val._id,
+          userId: userId,
+        };
+        console.log('kkkkkkk');
+        navigation.navigate('chatComponent', {senderReceiver});
       } else {
         // console.log('varaatha');
         flag = flag + 1;
         // console.log(flag, 'mmmmmmmmmmmmm');
       }
     });
-
+    console.log(conversations.length);
     if (conversations.length === flag) {
       await axios
-        .post('http://10.0.2.2:5000/conversation', {
+        .post('http://10.0.2.2:8000/conversation', {
           senderId: userId.toString(),
           receiverId: receiverId.toString(),
         })
@@ -112,9 +126,9 @@ function BrowseAvailability(props) {
   const getConversations = async () => {
     try {
       await axios
-        .get('http://10.0.2.2:5000/conversation/' + userId)
+        .get('http://10.0.2.2:8000/conversation/' + userId)
         .then(function (response) {
-          // console.log(response.data);
+          console.log(response.data, 'kkkkkkkkkk');
           setConversations(response.data);
         });
     } catch (e) {
@@ -146,6 +160,7 @@ function BrowseAvailability(props) {
           setImages(response.data.result.images);
           setData(response.data.result.data[0]);
           setReceiverId(response.data.result.data[0].user_id);
+          console.log(response.data.result.data[0].user_id);
           setLoading(false);
         });
     } catch (e) {
