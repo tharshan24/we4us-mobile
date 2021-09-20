@@ -14,9 +14,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
-const availabilityInputSetTwoNgo = ({route}) => {
+const availabilityInputSetTwo = ({route}) => {
   const navigation = useNavigation();
-
   const [quantity, setQuantity] = React.useState('');
   const [storageDesc, setStorageDesc] = React.useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -432,4 +431,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default availabilityInputSetTwoNgo;
+export default availabilityInputSetTwo;

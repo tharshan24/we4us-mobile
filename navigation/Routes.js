@@ -100,6 +100,9 @@ import findLocationMapRequestNgo from '../screens/NGO/Request Creation/findLocat
 import AddItemsRequestNgo from '../screens/NGO/Request Creation/addItemsRequest';
 import cameraScreenRequestNgo from '../screens/NGO/Request Creation/cameraScreenRequest';
 import AddMember from '../screens/NGO/addMember';
+import BrowseRequestNgo from '../screens/NGO/browseRequestsNgo';
+import ViewOnMapAvailabilityNgo from '../screens/NGO/viewOnMapAvailability';
+import ExploreCollectionpoint from '../screens/NGO/exploreCollectionpoint';
 //home
 import DashboardHome from '../screens/CareHome/dashboardHome';
 import HistoryDonationHome from '../screens/CareHome/historyDonationHome';
@@ -117,11 +120,13 @@ import RequestCreationSetOneHome from '../screens/CareHome/Request Creation/Requ
 import findLocationMapHome from '../screens/CareHome/Availability Creation/findLocationMap';
 import findLocationMapRequestHome from '../screens/CareHome/Request Creation/findLocationMapRequest';
 import NotificationsHome from '../screens/CareHome/notificationsHome';
-import RequestCreationSetTwoHome from '../screens/CareHome/Request Creation/RequestCreationSetTwo';
+import RequestCreationSetTwoHo from '../screens/CareHome/Request Creation/RequestCreationSetTwo';
 import BrowseAvailabilityHome from '../screens/CareHome/browseAvailabilityHome';
 import ExploreAvailabilityHome from '../screens/CareHome/exploreAvailabilityHome';
 import ExploreRequestHome from '../screens/CareHome/exploreRequestHome';
 import FilterResultsHome from '../screens/CareHome/filterResultsHome';
+import CameraScreenAvailabilityHome from '../screens/CareHome/Availability Creation/cameraScreenAvailability';
+import AddItemsRequestHome from '../screens/CareHome/Request Creation/addItemsRequest';
 //shop
 import DashboardShops from '../screens/Shops/dashboardShops';
 import HistorySellingpoint from '../screens/Shops/Selling Point/historySellingpoint';
@@ -130,25 +135,32 @@ import OngoingSellingpointDetails from '../screens/Shops/Selling Point/ongoingSe
 import CreateActionShop from '../screens/Shops/createActionShop';
 import sellingpointInputSetOne from '../screens/Shops/Selling Point Creation/sellingpointInputSetOne';
 import sellingpointInputSetTwo from '../screens/Shops/Selling Point Creation/sellingpointInputSetTwo';
+import sellingpointInputSetThree from '../screens/Shops/Selling Point Creation/sellingpointInputSetThree';
 import findLocationMapSellingpoint from '../screens/Shops/Selling Point Creation/findLocationMapSellingpoint';
 import cameraScreenSellingPoint from '../screens/Shops/Selling Point Creation/cameraScreenSellingpoint';
 import NotificationsShop from '../screens/Shops/notificationsShop';
 import ExploreRequestShop from '../screens/Shops/exploreRequestShop';
-import ExploreSellingpoint from '../screens/Shops/exploreSellingpoint';
 import FilterResultsShop from '../screens/Shops/filterResultsShop';
 import SettingsOrganizationShop from '../screens/Shops/settingsOrganization';
+import BrowseRequestsShop from '../screens/Shops/browseRequestsShop';
 //Restaurant
 import DashboardRestaruant from '../screens/Restaruant/dashboardRestaurant';
 import HistoryDonationRest from '../screens/Restaruant/Donation/historyDonationRest';
-import OngoingDonationRest from '../screens/Restaruant/Donation/ongoingDonation';
-import OngoingDeliveryDetailsRest from '../screens/Restaruant/Donation/ongoingDeliveryDetails';
+import OngoingDonationRest from '../screens/Restaruant/ongoingDonation';
+import OngoingDeliveryDetailsRest from '../screens/Restaruant/ongoingDeliveryDetails';
 import RequestForDonationRest from '../screens/Restaruant/Donation/requestsForDonation';
 import DonationTrackingMapRest from '../screens/Restaruant/Donation/donationTrackingMap';
 import CreateActionRest from '../screens/Restaruant/createAction';
 import availabilityInputSetOneRest from '../screens/Restaruant/Availability Creation/availabilityInputSetOne';
 import availabilityInputSetTwoRest from '../screens/Restaruant/Availability Creation/availabilityInputSetTwo';
 import availabilityInputSetThreeRest from '../screens/Restaruant/Availability Creation/availabilityInputSetThree';
-import findLocationMapRest from '../screens/CareHome/Availability Creation/findLocationMap';
+import findLocationMapRest from '../screens/Restaruant/Availability Creation/findLocationMap';
+import CameraScreenAvailabilityRest from '../screens/Restaruant/Availability Creation/cameraScreenAvailability';
+import browseRequestRest from '../screens/Restaruant/Request/browseRequests';
+import ExploreRequestRest from '../screens/Restaruant/Request/exploreRequest';
+import viewRequesterOnMapRest from '../screens/Restaruant/Request/viewRequestorOnMap';
+
+
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -180,6 +192,24 @@ const DashboardNgoStack = () => {
       <Stack.Screen
         name="OngoingDeliveryDetailsNgo"
         component={OngoingDeliveryDetailsNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="ViewOnMapAvailabilityNgo"
+        component={ViewOnMapAvailabilityNgo}
         options={{
           headerTintColor: '#ffffff',
           title: 'Details',
@@ -273,6 +303,24 @@ const DashboardNgoStack = () => {
       <Stack.Screen
         name="BrowseAvailabilityNgo"
         component={BrowseAvailabilityNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="BrowseRequestNgo"
+        component={BrowseRequestNgo}
         options={{
           headerTintColor: '#ffffff',
           title: 'Availabilities',
@@ -547,7 +595,7 @@ const DashboardNgoStack = () => {
         }}
       />
       <Stack.Screen
-        name="findLocationMapRequest"
+        name="findLocationMapRequestNgo"
         component={findLocationMapRequestNgo}
         options={{
           headerTintColor: '#ffffff',
@@ -581,7 +629,7 @@ const DashboardNgoStack = () => {
         }}
       />
       <Stack.Screen
-        name="cameraScreenAvailability"
+        name="CameraScreenAvailability"
         component={CameraScreenAvailability}
         options={{
           headerTintColor: '#ffffff',
@@ -735,7 +783,7 @@ const ExploreNgoStack = () => {
       }}>
       <Top.Screen name="Availability" component={ExploreAvailabilityNgo} />
       <Top.Screen name="Request" component={ExploreRequestNgo} />
-      <Top.Screen name="Collection Point" component={ExploreRequestNgo} />
+      <Top.Screen name="Collection Point" component={ExploreCollectionpoint} />
     </Top.Navigator>
   );
 };
@@ -1649,6 +1697,41 @@ const DashboardHomeStack = () => {
           },
         }}
       />
+      
+      <Stack.Screen
+        name="AddItemsRequestHome"
+        component={AddItemsRequestHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Add Items',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CameraScreenAvailabilityHome"
+        component={CameraScreenAvailabilityHome}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Camera',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="findLocationMapHome"
         component={findLocationMapHome}
@@ -1667,7 +1750,7 @@ const DashboardHomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="CreateRequestHome"
+        name="RequestCreationSetOneHome"
         component={RequestCreationSetOneHome}
         options={{
           headerTintColor: '#ffffff',
@@ -1684,8 +1767,8 @@ const DashboardHomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="RequestCreationSetTwoHome"
-        component={RequestCreationSetTwoHome}
+        name="RequestCreationSetTwoHo"
+        component={RequestCreationSetTwoHo}
         options={{
           headerTintColor: '#ffffff',
           title: 'Create Request',
@@ -1701,7 +1784,7 @@ const DashboardHomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="findLocationMapRequest"
+        name="findLocationMapRequestHome"
         component={findLocationMapRequestHome}
         options={{
           headerTintColor: '#ffffff',
@@ -1860,6 +1943,24 @@ const DashboardShopStack = () => {
           },
         }}
       />
+        <Stack.Screen
+        name="BrowseRequestsShop"
+        component={BrowseRequestsShop}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
@@ -1918,6 +2019,23 @@ const DashboardShopStack = () => {
       <Stack.Screen
         name="sellingpointInputSetTwo"
         component={sellingpointInputSetTwo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Create Selling Point',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="sellingpointInputSetThree"
+        component={sellingpointInputSetThree}
         options={{
           headerTintColor: '#ffffff',
           title: 'Create Selling Point',
@@ -2066,7 +2184,6 @@ const ExploreShopStack = () => {
         labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
         style: {backgroundColor: colorConstant.primaryColor},
       }}>
-      <Top.Screen name="Selling Point" component={ExploreSellingpoint} />
       <Top.Screen name="Request" component={ExploreRequestShop} />
     </Top.Navigator>
   );
@@ -2130,6 +2247,57 @@ const DashboardRestaurantStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Request',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="browseRequestRest"
+        component={browseRequestRest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Requests',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="viewRequesterOnMapRest"
+        component={viewRequesterOnMapRest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'View Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CameraScreenAvailabilityRest"
+        component={CameraScreenAvailabilityRest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Camera',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
@@ -2280,6 +2448,36 @@ const DashboardRestaruantTap = () => {
           ),
         }}
       />
+       <Tab.Screen
+        name="Notification"
+        component={Notifications}
+        options={{
+          tabBarLabel: 'Notification',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="bell-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsOrganization}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="cog-outline"
+              color={color}
+              size={26}
+              style={({alignItems: 'center'}, {flexDirection: 'column'})}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -2296,8 +2494,8 @@ const ExploreRestaruantStack = () => {
         labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
         style: {backgroundColor: colorConstant.primaryColor},
       }}>
-      <Top.Screen name="Selling Point" component={ExploreSellingpoint} />
-      <Top.Screen name="Request" component={ExploreRequestShop} />
+      
+      <Top.Screen name="Request" component={ExploreRequestRest} />
     </Top.Navigator>
   );
 };

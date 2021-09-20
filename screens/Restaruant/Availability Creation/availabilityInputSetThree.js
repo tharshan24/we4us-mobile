@@ -198,10 +198,10 @@ const availabilityInputSetThree = () => {
 
   const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem('@imageLocation');
+      const value = await AsyncStorage.getItem('@imageLocationRest');
       if (value !== null) {
         setImageLoc((ar) => [...ar, value]);
-        await AsyncStorage.removeItem('@imageLocation');
+        await AsyncStorage.removeItem('@imageLocationRest');
       }
     } catch (e) {
       console.log(e, 'three');
@@ -210,7 +210,7 @@ const availabilityInputSetThree = () => {
 
   const getDataInputOne = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetOne');
+      const jsonValue = await AsyncStorage.getItem('@inputSetOneRest');
       const value = JSON.parse(jsonValue);
       if (value !== null) {
         console.log(value, 'first');
@@ -226,7 +226,7 @@ const availabilityInputSetThree = () => {
 
   const getDataInputTwo = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
+      const jsonValue = await AsyncStorage.getItem('@inputSetTwoRest');
       const value = JSON.parse(jsonValue);
       console.log(value, 'two');
       if (value !== null) {
@@ -240,10 +240,10 @@ const availabilityInputSetThree = () => {
 
   const getDataSelectedLocation = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@selectedLocation');
+      const jsonValue = await AsyncStorage.getItem('@selectedLocationRest');
       if (jsonValue != null) {
         setFromLocation(JSON.parse(jsonValue));
-        await AsyncStorage.removeItem('@selectedLocation');
+        await AsyncStorage.removeItem('@selectedLocationRest');
       } else {
         console.log('No Location Selected');
       }
@@ -254,10 +254,10 @@ const availabilityInputSetThree = () => {
 
   const removeAllInputs = async () => {
     const keys = [
-      '@imageLocation',
-      '@inputSetTwo',
-      '@inputSetOne',
-      '@selectedLocation',
+      '@imageLocationRest',
+      '@inputSetTwoRest',
+      '@inputSetOneRest',
+      '@selectedLocationRest',
     ];
     try {
       await AsyncStorage.multiRemove(keys);
@@ -270,7 +270,7 @@ const availabilityInputSetThree = () => {
 
   const cameraScreen = () => {
     if (imageLoc.length < 5) {
-      navigation.navigate('cameraScreen');
+      navigation.navigate('CameraScreenAvailabilityRest');
     } else {
       Alert.alert('Five Images can be Uploaded');
     }

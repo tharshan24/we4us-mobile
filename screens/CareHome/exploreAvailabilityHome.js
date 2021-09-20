@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,48 +11,92 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
+import axios from 'axios';
+import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
+import {Spinner} from 'native-base';
 
 function ExploreAvailabilityHome({route}) {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const context = useContext(SocketContext);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      getAvailabilityData();
+    });
+  }, []);
+
+  const getAvailabilityData = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'availability/exploreAvailability', {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          // console.log(response.data.result.row);
+          setData(response.data.result.row);
+          setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
-      <View style={styles.filterContainer}>
-        <TouchableOpacity
-          style={styles.filterBtnContainer}
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate('FilterResultsHome')}>
-          <Text style={styles.filterTxt}>Filter</Text>
-          <MaterialCommunityIcons
-            name="filter-variant"
-            color="#3F51B5"
-            size={30}
-          />
-        </TouchableOpacity>
-      </View>
+      {/*<View style={styles.filterContainer}>*/}
+      {/*  <TouchableOpacity*/}
+      {/*    style={styles.filterBtnContainer}*/}
+      {/*    activeOpacity={0.7}*/}
+      {/*    onPress={() => navigation.navigate('FilterResults')}>*/}
+      {/*    <Text style={styles.filterTxt}>Filter</Text>*/}
+      {/*    <MaterialCommunityIcons*/}
+      {/*      name="filter-variant"*/}
+      {/*      color="#3F51B5"*/}
+      {/*      size={30}*/}
+      {/*    />*/}
+      {/*  </TouchableOpacity>*/}
+      {/*</View>*/}
       <ScrollView style={{margin: 7}}>
-        <View style={styles.mainContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('BrowseAvailabilityHome')}>
-            <View style={styles.AvailabilityCon}>
-              <View style={styles.ProfilePicCon}>
-                <Image
-                  style={styles.ProfilePic}
-                  source={require('../../assets/Images/carehome.jpg')}
-                />
-              </View>
-              <View>
-                <Text style={styles.headingText}>
-                  Care home 100th Anniversary
-                </Text>
-                <Text style={styles.bodyText}>
-                  From:Nagai Luxury elder care
-                </Text>
-                <Text style={styles.bodyText}>Quantity: 20</Text>
-                <Text style={styles.bodyText}>Best Before: 30/05/2021</Text>
-              </View>
+        {loading ? (
+          <Spinner />
+        ) : (
+          data.map((values) => (
+            <View key={values.id} style={styles.mainContainer}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('BrowseAvailabilityNgo', {
+                    availabilityId: values.id,
+                  })
+                }>
+                <View style={styles.AvailabilityCon}>
+                  <View style={styles.ProfilePicCon}>
+                    <Image
+                      style={styles.ProfilePic}
+                      source={require('../../assets/Images/logo.png')}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.headingText}>{values.name}</Text>
+                    <Text style={styles.bodyText}>
+                      `From:{values.user_name}`
+                    </Text>
+                    <Text style={styles.bodyText}>
+                      Quantity: {values.available_quantity}
+                    </Text>
+                    <Text style={styles.bodyText}>
+                      `Best Before: {values.best_before.split('T')[0]}`
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
+          ))
+        )}
       </ScrollView>
     </>
   );

@@ -5,6 +5,7 @@ import {
   PermissionsAndroid,
   SafeAreaView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
@@ -12,10 +13,11 @@ import {useCamera} from 'react-native-camera-hooks';
 import {Button} from 'react-native-paper';
 import RNFS from 'react-native-fs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const cameraScreenRequestNgo = () => {
+const CameraScreenAvailability = () => {
   const navigation = useNavigation();
 
   const [{cameraRef, autoFocus, autoFocusPoint}, {takePicture}] = useCamera();
@@ -55,7 +57,6 @@ const cameraScreenRequestNgo = () => {
       const filePath = data.uri;
       const checkDir = RNFS.ExternalStorageDirectoryPath + '/DCIM/Camera/We4Us';
       let exists = await RNFS.exists(checkDir);
-
       if (exists) {
         let name = new Date();
         const fileName =
@@ -100,16 +101,16 @@ const cameraScreenRequestNgo = () => {
   };
 
   const sendCapturedImage = () => {
-    navigation.navigate('RequestCreationSetTwoNgo');
+    navigation.navigate('availabilityInputSetThreeRest');
     // const val = JSON.stringify(imageUri);
     storeData(imageUri).then((r) => console.log(r, 'store'));
   };
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('@requestCreationImageNgo', value);
+      await AsyncStorage.setItem('@imageLocationRest', value);
     } catch (e) {
-      console.log(e);
+      console.log(e, 'camera');
     }
   };
 
@@ -175,7 +176,7 @@ const cameraScreenRequestNgo = () => {
   );
 };
 
-export default cameraScreenRequestNgo;
+export default CameraScreenAvailability;
 
 const styles = StyleSheet.create({
   captureBtn: {

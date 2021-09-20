@@ -9,21 +9,26 @@ import {
   TouchableOpacity,
   TextInput,
   InteractionManager,
-
+StatusBar,
+Alert 
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import constants from '../../constants/constantsProject.';
 import axios from 'axios';
 import SocketContext from '../../Context/SocketContext';
 import colorConstant from '../../constants/colorConstant';
+import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Addmember = () => {
+const Addmember = ({route}) => {
+  const navigation = useNavigation();
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const context = useContext(SocketContext);
 const [id,setId] = useState();
-const [user_id,setUserid] = useState(); 
+const [userId,setUserid] = useState(0); 
+const [data, setData] = useState(0);
  
 
   const getMemberData = async () => {
@@ -39,9 +44,8 @@ const [user_id,setUserid] = useState();
           console.log(response.data);
           setFilteredDataSource(response.data.result.row);
           setMasterDataSource(response.data.result.row);
-          setLoading(false);
-          setId(response.data.result.row.id);
-          console.log(id);
+         setData(response.data.authData.user.id);
+         // console.log(id);
         });
     } catch (e) {
       console.log(e);
@@ -81,21 +85,34 @@ const [user_id,setUserid] = useState();
       />
     );
   };
-
+ // useEffect(() => {
+   // setId();
+  //});
   const getItem = (item) => {
-
-   setUserid(item.id);
-   console.log(user_id);
+setUserid(item.id);
+    Alert.alert(   "Add Member",
+    (userId+" "+item.first_name+"  "+item.last_name),
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      { text: "Add", onPress: () =>{
+        validateFieldsTwo();
+      } }
+    ]);
   };
+ // useEffect(() => {
+   // getDataOne();
+  //}, []);
 
-  const validateFieldsTwo = async () => {
-    
-      
-      const memberData = new FormData();
-
-      memberData.append('user_id', user_id);
-      memberData.append('organization_id', id);
   
+  const validateFieldsTwo = async () => {
+    const memberData={
+      'user_id':userId,
+      'organization_id':data
+    }
       await axios({
         url: constants.BASE_URL + 'org/addMembers',
         method: 'post',
@@ -103,14 +120,13 @@ const [user_id,setUserid] = useState();
         headers: {
           Authorization:`UserData ${context.token}`,
           Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
         },
       })
         .then(function (response) {
           console.log(response.data);
           alert('Add member Successfully');
           navigation.popToTop();
-          removeAllInputs();
+         
           
         })
         .catch(function (error) {
@@ -123,6 +139,7 @@ const [user_id,setUserid] = useState();
 
   return (
     <SafeAreaView style={{flex: 1}}>
+      
       <View style={styles.container}>
         <TextInput
           style={styles.textInputStyle}
@@ -131,19 +148,19 @@ const [user_id,setUserid] = useState();
           underlineColorAndroid="transparent"
           placeholder="Search Here"
         />
-        <TouchableOpacity onPress={() => {
-                  validateFieldsTwo();
-                }}>
+        
+        <TouchableOpacity>
           <Text>
         <FlatList
           data={filteredDataSource}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={ItemSeparatorView}
           renderItem={ItemView}
+        
         />
         </Text>
         </TouchableOpacity>
-              </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -162,6 +179,19 @@ const styles = StyleSheet.create({
     margin: 5,
     borderColor: '#009688',
     backgroundColor: '#FFFFFF',
+  },
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
   },
 });
 

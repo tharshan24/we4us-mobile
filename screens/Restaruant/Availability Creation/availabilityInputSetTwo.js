@@ -126,7 +126,7 @@ const availabilityInputSetTwo = ({route}) => {
 
   const getDataOne = async () => {
     try {
-      const value = await AsyncStorage.getItem('@inputSetOne');
+      const value = await AsyncStorage.getItem('@inputSetOneRest');
       const val = JSON.parse(value);
       if (value !== null) {
         console.log(value);

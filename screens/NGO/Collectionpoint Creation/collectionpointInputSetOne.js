@@ -13,7 +13,6 @@ import colorConstant from '../../../constants/colorConstant';
 import {Select, VStack, NativeBaseProvider, Spinner} from 'native-base';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import moment from 'moment';
 import axios from 'axios';
 import SocketContext from '../../../Context/SocketContext';
 import constants from '../../../constants/constantsProject.';
@@ -23,14 +22,14 @@ const collectionpointInputSetOne = () => {
 
   const navigation = useNavigation();
   const [title, setTitle] = React.useState('');
-  const [member, setMember] = React.useState('');
+ // const [member, setMember] = React.useState('');
   const [desc, setDesc] = React.useState('');
   const [token, setToken] = React.useState();
-  const [userId, setUserId] = React.useState();
+ // const [userId, setUserId] = React.useState();
   const [data, setData] = useState([]);
-  const [loading, setLoading] = React.useState(true);
+ // const [loading, setLoading] = React.useState(true);
   const context = useContext(SocketContext);
-  //const [selectedMember, setSelectedMember] = useState('');
+  const [selectedMember, setSelectedMember] = useState();
 
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
@@ -68,30 +67,25 @@ const collectionpointInputSetOne = () => {
   };
 
   const validateFields = () => {
-    // const inputSetOne = {
-    //   title: title,
-    //   foodType: foodType,
-    //   category: selectedFoodCater,
-    //   description: desc,
-    // };
-    // storeData(inputSetOne);
-    // navigation.navigate('availabilityInputSetTwo');
+    
     if (title === '') {
       Alert.alert('Enter Title for your Collection Point');
-    } else if (member === '') {
-      Alert.alert('Select your Member');
     } else if (desc === '') {
       Alert.alert('Give a Small description for your Collection Point');
     } else {
       const inputSetOne = {
         title: title,
-        assinged_to: selectedMember,
+        member: selectedMember,
         description: desc,
       };
       storeData(inputSetOne);
       navigation.navigate('collectionpointInputSetTwo');
     }
   };
+  useEffect(() => {
+    getUser();
+   
+  });
 
   const getUser = async () => {
     try {
@@ -103,7 +97,7 @@ const collectionpointInputSetOne = () => {
     } catch (e) {
       console.log(e);
     }
-    console.log('Done.');
+   // console.log('Done.');
   };
 
 
@@ -121,39 +115,36 @@ const collectionpointInputSetOne = () => {
     checkPermissions();
   }, []);
 
-  useEffect(() => {
-    return navigation.addListener('focus', () => {
-      getMemberData();
-    });
+  useEffect(() => {     
+     getMemberData();
+   
   }, []);
 
   const getMemberData = async () => {
     try {
       await axios
-        .get(constants.BASE_URL + 'org/getMembers', {
+        .get(constants.BASE_URL + 'org/getAllMembers/', {
           headers: {
-            Authorization: `Bearer ${context.token}`,
+            Authorization: `UserData ${context.token}`
+            ,
           },
         })
         .then(function (response) {
           console.log(response.data);
-          setData(response.data.result.row);
-          setLoading(false);
+          setData(response.data.result.data);
+         // setMasterDataSource(response.data.result.row);
+         
+         // console.log(id);
         });
     } catch (e) {
       console.log(e);
     }
   };
 
- // const changeMember = (user_name) => {
-   // setSelectedMember(user_name);
-  //};
-
 
   return (
     <NativeBaseProvider>
       <ScrollView>
-        
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textHeader}>
@@ -196,16 +187,16 @@ const collectionpointInputSetOne = () => {
                         borderColor: colorConstant.primaryColor,
                       }}
                       width={Dimensions.get('screen').width / 1.1}
-                      selectedValue={data}
+                      selectedValue={selectedMember}
                       placeholder="Select Member"
                       onValueChange={(itemValue) =>
-                        setData(itemValue)
+                        setSelectedMember(itemValue)
                       }>
                       {data.map((val) => (
                         <Select.Item
-                          label={val.user_name}
-                          value={val.user_name}
-                          key={val.id}
+                        label={val.first_name+"   "+val.last_name}
+                        value={val.user_id}
+                        key={val.user_id}
                         />
                       ))}
                     </Select>
@@ -250,7 +241,6 @@ const collectionpointInputSetOne = () => {
           </Button>
         </View>
       </View>
-      
        </ScrollView>
      </NativeBaseProvider>
   );

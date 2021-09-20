@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -10,33 +10,73 @@ import {
 } from 'react-native';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
+import {Spinner} from 'native-base';
 
-function OngoingDonation(props) {
+function OngoingDonationNgo(props) {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const context = useContext(SocketContext);
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      getAvailabilityData();
+    });
+  }, []);
+
+  const getAvailabilityData = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'availability/exploreMyAvailability', {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          setData(response.data.result.row);
+          setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <ScrollView style={{margin: 7}}>
-      <View style={styles.mainContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('OngoingDeliveryDetailsNgo');
-          }}>
-          <View style={styles.AvailabilityCon}>
-            <View style={styles.ProfilePicCon}>
-              <Image
-                style={styles.ProfilePic}
-                source={require('../../assets/Images/logo.png')}
-              />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <View style={styles.mainContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('OngoingDeliveryDetailsNgo', {
+                availability_id: data[0].id,
+              });
+            }}>
+            <View style={styles.AvailabilityCon}>
+              <View style={styles.ProfilePicCon}>
+                <Image
+                  style={styles.ProfilePic}
+                  source={require('../../assets/Images/logo.png')}
+                />
+              </View>
+              <View>
+                <Text style={styles.headingText}>{data[0].name}</Text>
+                <Text style={styles.bodyText}>From:{data[0].user_name}</Text>
+                <Text style={styles.bodyText}>
+                  Quantity: {data[0].available_quantity}
+                </Text>
+                <Text style={styles.bodyText}>
+                  Best Before: {data[0].best_before.split('T')[0]}
+                </Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.headingText}>Rotaract Club 100th Anniversary</Text>
-              <Text style={styles.bodyText}>From:Rotract Club</Text>
-              <Text style={styles.bodyText}>Quantity: 20</Text>
-              <Text style={styles.bodyText}>Best Before: 30/05/2021</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -80,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingDonation;
+export default OngoingDonationNgo;

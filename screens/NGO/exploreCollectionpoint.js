@@ -20,7 +20,7 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ExploreRequestNgo(props) {
+function ExploreCollectionpoint(props) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const context = useContext(SocketContext);
@@ -35,7 +35,7 @@ function ExploreRequestNgo(props) {
   const getRequests = async () => {
     try {
       await axios
-        .get(constants.BASE_URL + 'request/exploreRequest', {
+        .get(constants.BASE_URL + 'org/getCollectionPoints', {
           headers: {
             Authorization: `Bearer ${context.token}`,
           },
@@ -71,7 +71,7 @@ function ExploreRequestNgo(props) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('BrowseRequestNgo', {
-                  request_id: values.request_id,
+                  ngo_id: values.ngo_id,
                 })
               }>
               <View style={styles.AvailabilityCon}>
@@ -83,12 +83,8 @@ function ExploreRequestNgo(props) {
                 </View>
                 <View>
                   <Text style={styles.headingText}>{values.name}</Text>
-                  <Text style={styles.bodyText}>From:{values.user_name}</Text>
                   <Text style={styles.bodyText}>
-                    Type:{values.request_type_name}
-                  </Text>
-                  <Text style={styles.bodyText}>
-                    Best Before:{values.need_before.split('T')[0]}
+                    Start Time:{values.star_time.split('T')[0]}
                   </Text>
                 </View>
               </View>
@@ -171,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreRequestNgo;
+export default ExploreCollectionpoint;

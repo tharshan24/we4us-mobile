@@ -107,7 +107,7 @@ function OngoingDeliveryDetails(props) {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() =>
-                  navigation.navigate('RequestForDonationHome', {
+                  navigation.navigate('RequestForDonation', {
                     availability_id: availability_id,
                   })
                 }>
@@ -217,7 +217,7 @@ function OngoingDeliveryDetails(props) {
                 <Button
                   mode="contained"
                   onPress={() =>
-                    navigation.navigate('ViewOnMapAvailabilityHome', {
+                    navigation.navigate('ViewOnMapAvailability', {
                       longitude: data.longitude,
                       latitude: data.latitude,
                     })
@@ -287,10 +287,40 @@ function OngoingDeliveryDetails(props) {
                   }}
                 />
               </View>
-             
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[1].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[2].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[3].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
+              <View style={styles.contentImageCon}>
+                <Image
+                  style={styles.contentImage}
+                  source={{
+                    uri: images[4].image_path.split(' ')[0].toString(),
+                  }}
+                />
+              </View>
             </Swiper>
           </View>
-              
           {/*<View style={styles.btnContainer}>*/}
           {/*  <TouchableOpacity style={styles.btn} activeOpacity={0.8}>*/}
           {/*    <Text style={styles.btnTxt}>Accept</Text>*/}

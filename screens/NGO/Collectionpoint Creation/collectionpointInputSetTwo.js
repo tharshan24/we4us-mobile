@@ -14,7 +14,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
-const availabilityInputSetTwoNgo = ({route}) => {
+const collectionpointInputSetTwoNgo = ({route}) => {
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = React.useState('');
@@ -49,24 +49,18 @@ const availabilityInputSetTwoNgo = ({route}) => {
 
   const handleConfirmCooked = (val) => {
    
-      setCondition(val);
-      const chooseTime = moment(val).format('HH:mm:00');
-      const assignMade = moment(val).format('YYYY-MM-DD HH:mm:00');
-      setMadeTime(chooseTime);
-      setAssignMade(assignMade);
-    
+    setAssignMade(moment(val).format('YYYY:MM:DD HH:mm:00'));
+    setMadeDate(moment(val).format('YYYY:MM:DD'));
+    setMadeTime(moment(val).format('HH:mm:ss A'));
     hideDatePicker();
   };
 
   const handleConfirmBestBefore = (BestBefore) => {
   
-      const chooseTime = moment(BestBefore).format('HH:mm:00');
-      const a = moment(condition);
-      const b = moment(BestBefore);
-        const assignBefore = moment(BestBefore).format('YYYY-MM-DD HH:mm:00');
-        setBeforeTime(chooseTime);
-        setAssignBest(assignBefore);
-    hideDatePickerBestBefore();
+    setAssignBest(moment(BestBefore).format('YYYY:MM:DD HH:mm:00'));
+    setBeforeDate(moment(BestBefore).format('YYYY:MM:DD'));
+    setBeforeTime(moment(BestBefore).format('HH:mm:ss A'));
+    hideDatePicker();
   };
 
   const validateFieldsTwo = () => {
@@ -120,19 +114,16 @@ const availabilityInputSetTwoNgo = ({route}) => {
                 {'During pandemic/disaters time \ncollect things \nHelp Needed persons'}
               </Text>
             </View>
-        <View style={styles.contentContainerCookedTime}>
+            <View style={styles.contentContainerCookedTime}>
           <View style={styles.cookedTimeTextCon}>
-            <Text style={styles.cookedTimeText}>
-              {'Start Time' }
-            </Text>
+            <Text style={styles.cookedTimeText}>Start time</Text>
           </View>
           <View
             style={{
-              flex: 0.6,
+              flex: 4,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-start',
-              // backgroundColor: 'red',
             }}>
             <Button
               mode="contained"
@@ -149,41 +140,46 @@ const availabilityInputSetTwoNgo = ({route}) => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                {'Choose Time'}
+                Choose
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    marginLeft: 10,
-                    fontFamily: 'Barlow-Bold',
-                    fontSize: 17,
-                    color: colorConstant.proGreen,
-                  }}>
-                  {madeTime}
-                </Text>
+              <Text
+                style={{
+                  fontFamily: 'Barlow-Bold',
+                  fontSize: 17,
+                  color: colorConstant.proGreen,
+                }}>
+                {madeDate}
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 10,
+                  fontFamily: 'Barlow-Bold',
+                  fontSize: 17,
+                  color: colorConstant.proGreen,
+                }}>
+                {madeTime}
+              </Text>
             </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
-              mode={'time'}
+              mode={'datetime'}
               onConfirm={handleConfirmCooked}
               onCancel={hideDatePicker}
             />
           </View>
         </View>
-        <View style={styles.contentContainerBestBefore}>
-          <View style={styles.bestBeforeTextCon}>
-            <Text style={styles.bestBeforeText}>
-              {'End Time' }
-            </Text>
+        <View style={styles.contentContainerCookedTime}>
+          <View style={styles.cookedTimeTextCon}>
+            <Text style={styles.cookedTimeText}>End time</Text>
           </View>
           <View
             style={{
-              flex: 0.6,
+              flex: 4,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-start',
-              // backgroundColor: 'red',
             }}>
             <Button
               mode="contained"
@@ -200,26 +196,33 @@ const availabilityInputSetTwoNgo = ({route}) => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                {'Choose Time' }
+                Choose
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    marginLeft: 10,
-                    fontFamily: 'Barlow-Bold',
-                    fontSize: 17,
-                    color: colorConstant.proRed,
-                  }}>
-                  {beforeTime}
-                </Text>
-             
+              <Text
+                style={{
+                  fontFamily: 'Barlow-Bold',
+                  fontSize: 17,
+                  color: colorConstant.proGreen,
+                }}>
+                {beforeTime}
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 10,
+                  fontFamily: 'Barlow-Bold',
+                  fontSize: 17,
+                  color: colorConstant.proGreen,
+                }}>
+                {beforeDate}
+              </Text>
             </View>
             <DateTimePickerModal
-              isVisible={isDatePickerVisibleBestBefore}
-              mode={'time' }
-              onConfirm={handleConfirmBestBefore}
-              onCancel={hideDatePickerBestBefore}
+            isVisible={isDatePickerVisibleBestBefore}
+            mode={'datetime'}
+            onConfirm={handleConfirmBestBefore}
+            onCancel={hideDatePickerBestBefore}
             />
           </View>
         </View>
@@ -402,4 +405,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default availabilityInputSetTwoNgo;
+export default collectionpointInputSetTwoNgo;

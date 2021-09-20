@@ -119,7 +119,7 @@ const findLocationMapRequestNgo = ({route}) => {
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@selectedLocationRequest', jsonValue);
+      await AsyncStorage.setItem('@selectedLocationRequestNgo', jsonValue);
     } catch (e) {}
   };
 

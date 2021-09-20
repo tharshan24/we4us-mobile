@@ -17,7 +17,7 @@ import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const cameraScreen = () => {
+const CameraScreenAvailability = () => {
   const navigation = useNavigation();
 
   const [{cameraRef, autoFocus, autoFocusPoint}, {takePicture}] = useCamera();
@@ -176,7 +176,7 @@ const cameraScreen = () => {
   );
 };
 
-export default cameraScreen;
+export default CameraScreenAvailability;
 
 const styles = StyleSheet.create({
   captureBtn: {

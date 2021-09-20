@@ -110,7 +110,7 @@ const availabilityInputSetOne = () => {
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@inputSetOne', jsonValue);
+      await AsyncStorage.setItem('@inputSetOneRest', jsonValue);
     } catch (e) {
       console.log(e);
     }

@@ -113,13 +113,13 @@ const findLocationMap = ({route}) => {
 
   const selectedCoordinates = () => {
     storeData(selectedLocation);
-    navigation.navigate('availabilityInputSetThree');
+    navigation.navigate('availabilityInputSetThreeRest');
   };
 
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@selectedLocation', jsonValue);
+      await AsyncStorage.setItem('@selectedLocationRest', jsonValue);
     } catch (e) {}
   };
 

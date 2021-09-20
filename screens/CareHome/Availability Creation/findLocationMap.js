@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-const findLocationMap = ({route}) => {
+const findLocationMapAvailabilityHome = ({route}) => {
   const {location} = route.params;
   const ref = useRef();
 
@@ -113,13 +113,13 @@ const findLocationMap = ({route}) => {
 
   const selectedCoordinates = () => {
     storeData(selectedLocation);
-    navigation.navigate('availabilityInputSetThree');
+    navigation.navigate('availabilityInputSetThreeHome');
   };
 
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@selectedLocation', jsonValue);
+      await AsyncStorage.setItem('@selectedLocationHome', jsonValue);
     } catch (e) {}
   };
 
@@ -216,7 +216,7 @@ const findLocationMap = ({route}) => {
   );
 };
 
-export default findLocationMap;
+export default findLocationMapAvailabilityHome;
 
 const styles = StyleSheet.create({
   mainContainerFindLocation: {

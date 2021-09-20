@@ -25,6 +25,9 @@ import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import constants from '../../../constants/constantsProject.';
+import { SettingsOutlined } from '@material-ui/icons';
+import moment from 'moment';
+
 
 const availabilityInputSetThreeNgo = () => {
   const navigation = useNavigation();
@@ -42,8 +45,8 @@ const availabilityInputSetThreeNgo = () => {
   const [fromLocation, setFromLocation] = useState();
   const [token, setToken] = React.useState();
   const [progress, setProgress] = useState(null);
-  const [member, setMember] = React.useState('');
-
+  const [member, setMember] = React.useState();
+  const [title, setTitle] = React.useState('');
   
   const getDataInputOne = async () => {
     try {
@@ -52,8 +55,9 @@ const availabilityInputSetThreeNgo = () => {
       if (value !== null) {
         console.log(value, 'first');
         
-      //  setTitle(value.title);
-        setMember(value.assigned_to);
+        setTitle(value.title);
+        setMember(value.member);
+        console.log(title, 'Member');
         setDescription(value.description);
       }
     } catch (e) {
@@ -94,6 +98,11 @@ const availabilityInputSetThreeNgo = () => {
     });
   }, []);
 
+
+  
+
+
+
   const currentLocation = () => {
     navigation.navigate('CollectionpointTrackingMapNgo', {location});
   };
@@ -120,15 +129,16 @@ const availabilityInputSetThreeNgo = () => {
       Alert.alert('Select your City');;
     } else {
       setLoading(true);
-      const availabilityData = new FormData();
-
-      availabilityData.append('assigned_to', member);
-      availabilityData.append('description', description);
-      availabilityData.append('start_time', madeOn);
-      availabilityData.append('end_time', bestBefore);
-      availabilityData.append('latitude', fromLocation.latitude);
-      availabilityData.append('longitude', fromLocation.longitude);
-      availabilityData.append('city', selectedCity);
+       const availabilityData = {
+      'name':title,
+      'assigned_to':member,
+      'description':description,
+      'start_time':madeOn,
+      'end_time':bestBefore,
+      'latitude': fromLocation.latitude,
+      'longitude': fromLocation.longitude,
+      'city': selectedCity}
+    
       await axios({
         url: constants.BASE_URL + 'org/createCollectionPoint',
         method: 'post',
@@ -138,6 +148,7 @@ const availabilityInputSetThreeNgo = () => {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
         },
+        
       })
         .then(function (response) {
           console.log(response.data);

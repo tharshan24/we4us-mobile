@@ -125,7 +125,7 @@ const availabilityInputSetThreeNgo = () => {
 
   const getUser = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('org');
+      const jsonValue = await AsyncStorage.getItem('user');
       const parsedValue = JSON.parse(jsonValue);
       if (parsedValue !== null) {
         setToken(parsedValue.token);

@@ -62,7 +62,7 @@ function CreateActionNgo(props) {
           </Text>
           <View style={styles.btnContainerReq}>
             <Button
-              onPress={() => navigation.navigate('CreateRequestNgo')}
+              onPress={() => navigation.navigate('RequestCreationSetOneHome')}
               color={colorConstant.primaryColor}
               style={{
                 borderRadius: 5,

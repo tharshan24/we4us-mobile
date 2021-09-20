@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -14,21 +14,22 @@ import {Select, VStack, NativeBaseProvider} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import axios from 'axios';
+import constants from '../../../constants/constantsProject.';
+import SocketContext from '../../../Context/SocketContext';
+import moment from 'moment';
 
-const RequestCreationSetOne = () => {
+const RequestCreationSetOneHome = () => {
   const navigation = useNavigation();
+  const context = useContext(SocketContext);
   const [title, setTitle] = React.useState('');
+  const [date, setDate] = React.useState('YYYY:MM:DD');
+  const [time, setTime] = React.useState('HH:MM:SS');
   const [requestType, setRequestType] = React.useState('');
   const [desc, setDesc] = React.useState('');
-  const [date, setDate] = React.useState('DD');
-  const [month, setMonth] = React.useState('MM');
-  const [year, setYear] = React.useState('YYYY');
-  const [hour, setHour] = React.useState('HH');
-  const [minute, setMinute] = React.useState('MM');
-  const [seconds, setSeconds] = React.useState('SS');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [neededBeforeTime, setNeededBeforeTime] = useState(null);
-  const [neededBeforeDate, setNeededBeforeDate] = useState(null);
+  const [neededBefore, setNeededBefore] = useState(null);
+  const [reqTypes, setReqTypes] = useState([]);
 
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
@@ -66,6 +67,7 @@ const RequestCreationSetOne = () => {
   };
 
   useEffect(() => {
+    getRequestTypes();
     requestPermission();
     checkPermissions();
   }, []);
@@ -78,56 +80,54 @@ const RequestCreationSetOne = () => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirmCooked = (val) => {
-    let picker = new Date(val);
-
-    let dateDate = picker.getDate();
-    let dateMonth = picker.getMonth() + 1;
-    let dateYear = picker.getFullYear();
-    let dateHour = picker.getHours();
-    let dateMinute = picker.getMinutes();
-    let dateSecond = picker.getSeconds();
-
-    setDate(dateDate);
-    setMonth(dateMonth);
-    setYear(dateYear);
-    setHour(dateHour);
-    setMinute(dateMinute);
-    setSeconds(dateSecond);
-
-    setNeededBeforeDate(dateDate + '/' + dateMonth + '/' + dateYear);
-    setNeededBeforeTime(dateHour + ':' + dateMinute + ':' + dateSecond);
-
+  const handleNeededBefore = (val) => {
+    setNeededBefore(moment(val).format('YYYY:MM:DD HH:mm:00'));
+    setDate(moment(val).format('YYYY:MM:DD'));
+    setTime(moment(val).format('HH:mm:ss A'));
     hideDatePicker();
   };
 
   const validateFields = () => {
-    navigation.navigate('RequestCreationSetTwo');
-    // if (title === '') {
-    //   Alert.alert('Enter Title for your Request');
-    // } else if (requestType === '') {
-    //   Alert.alert('Select your Request Type');
-    // } else if (date === 'DD') {
-    //   Alert.alert('Select when you need the Request');
-    // } else if (desc === '') {
-    //   Alert.alert('Give a Small description about the Request');
-    // } else {
-    //   const requestInputSetOne = {
-    //     title: title,
-    //     requestType: requestType,
-    //     neededBeforeDate: neededBeforeDate,
-    //     neededBeforeTime: neededBeforeTime,
-    //     description: desc,
-    //   };
-    //   storeData(requestInputSetOne);
-    //   navigation.navigate('RequestCreationSetTwo');
-    // }
+    if (title === '') {
+      Alert.alert('Enter Title for your Request');
+    } else if (requestType === '') {
+      Alert.alert('Select your Request Type');
+    } else if (date === 'YYYY:MM:DD') {
+      Alert.alert('Select when you need the Request');
+    } else if (desc === '') {
+      Alert.alert('Give a Small description about the Request');
+    } else {
+      const requestInputSetOne = {
+        title: title,
+        requestType: requestType,
+        neededBefore: neededBefore,
+        description: desc,
+      };
+      storeData(requestInputSetOne);
+      navigation.navigate('RequestCreationSetTwoHo');
+    }
   };
 
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@requestInputSetOne', jsonValue);
+      await AsyncStorage.setItem('@requestInputSetOneHome', jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getRequestTypes = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'system/getRequestType', {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          setReqTypes(response.data.result.rows);
+        });
     } catch (e) {
       console.log(e);
     }
@@ -179,8 +179,13 @@ const RequestCreationSetOne = () => {
                   selectedValue={requestType}
                   placeholder="Select Request Type"
                   onValueChange={(itemValue) => setRequestType(itemValue)}>
-                  <Select.Item label="Disaster" value="dis" />
-                  <Select.Item label="Pandemic" value="pan" />
+                  {reqTypes.map((values) => (
+                    <Select.Item
+                      label={values.name}
+                      value={values.id}
+                      key={values.id}
+                    />
+                  ))}
                 </Select>
               </VStack>
             </NativeBaseProvider>
@@ -212,7 +217,7 @@ const RequestCreationSetOne = () => {
                   fontSize: 15,
                   color: '#ffffff',
                 }}>
-                Choose Time
+                Choose
               </Text>
             </Button>
             <View style={{flexDirection: 'row'}}>
@@ -222,7 +227,7 @@ const RequestCreationSetOne = () => {
                   fontSize: 17,
                   color: colorConstant.proGreen,
                 }}>
-                {date} / {month} / {year}
+                {date}
               </Text>
               <Text
                 style={{
@@ -231,13 +236,13 @@ const RequestCreationSetOne = () => {
                   fontSize: 17,
                   color: colorConstant.proGreen,
                 }}>
-                {hour}:{minute}:{seconds}
+                {time}
               </Text>
             </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="datetime"
-              onConfirm={handleConfirmCooked}
+              onConfirm={handleNeededBefore}
               onCancel={hideDatePicker}
             />
           </View>
@@ -381,4 +386,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RequestCreationSetOne;
+export default RequestCreationSetOneHome;

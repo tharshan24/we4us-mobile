@@ -1,18 +1,33 @@
 import React, {useEffect} from 'react';
-import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Button, TextInput} from 'react-native-paper';
 import colorConstant from '../../../constants/colorConstant';
-import {Select, VStack, NativeBaseProvider} from 'native-base';
+import {Select, VStack, NativeBaseProvider, Spinner} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import moment from 'moment';
+import axios from 'axios';
+import constants from '../../../constants/constantsProject.';
 
-const availabilityInputSetOne = () => {
+const availabilityInputSetOneHome = () => {
   const navigation = useNavigation();
   const [title, setTitle] = React.useState('');
   const [foodType, setFoodType] = React.useState('');
   const [foodCater, setFoodCater] = React.useState('');
+  const [selectedFoodCater, setSelectedFoodCater] = React.useState(0);
   const [desc, setDesc] = React.useState('');
+  const [now, setNow] = React.useState();
+  const [loading, setLoading] = React.useState(true);
+  const [token, setToken] = React.useState();
+  const [userId, setUserId] = React.useState();
 
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
@@ -50,17 +65,71 @@ const availabilityInputSetOne = () => {
   };
 
   const validateFields = () => {
-    navigation.navigate('availabilityInputSetTwoHome');
- 
+    // const inputSetOne = {
+    //   title: title,
+    //   foodType: foodType,
+    //   category: selectedFoodCater,
+    //   description: desc,
+    // };
+    // storeData(inputSetOne);
+    // navigation.navigate('availabilityInputSetTwo');
+    if (title === '') {
+      Alert.alert('Enter Title for your Donation');
+    } else if (foodType === '') {
+      Alert.alert('Select your Donation Food Type');
+    } else if (foodCater === '') {
+      Alert.alert('Select your Donation Food Category');
+    } else if (desc === '') {
+      Alert.alert('Give a Small description for your Donation');
+    } else {
+      const inputSetOne = {
+        title: title,
+        foodType: foodType,
+        category: selectedFoodCater,
+        description: desc,
+      };
+      storeData(inputSetOne);
+      navigation.navigate('availabilityInputSetTwoHome');
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(jsonValue);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+        setUserId(parsedValue.result.id);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Done.');
   };
 
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@inputSetOne', jsonValue);
+      await AsyncStorage.setItem('@inputSetOneHome', jsonValue);
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const loadAvailabilityTypes = async () => {
+    await axios
+      .get(constants.BASE_URL + 'system/getAvailabilityType', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        setFoodCater(response.data.result.rows);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -68,126 +137,180 @@ const availabilityInputSetOne = () => {
     checkPermissions();
   }, []);
 
+  useEffect(() => {
+    loadAvailabilityTypes();
+    // return navigation.addListener('focus', () => {
+    //   loadAvailabilityTypes();
+    // });
+  }, [token]);
+
+  useEffect(() => {
+    getUser();
+    const now = moment().format('HH');
+    setNow(now);
+    return navigation.addListener('focus', () => {
+      const now = moment().format('HH');
+      setNow(now);
+    });
+  }, []);
+
   return (
-    <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.headingContainer}>
-          <Text style={styles.textHeader}>
-            {'Share Surplus food with the \nNeeded persons'}
-          </Text>
-        </View>
-        <View style={styles.contentContainerName}>
-          <View style={styles.nameTextCon}>
-            <Text style={styles.nameText}>Title</Text>
-          </View>
-          <View style={styles.textInputContent}>
-            <TextInput
-              mode="outlined"
-              label="Title"
-              selectionColor={colorConstant.primaryColor}
-              outlineColor={colorConstant.primaryColor}
-              underlineColor={colorConstant.primaryColor}
-              value={title}
-              style={{
-                fontSize: 20,
-                backgroundColor: '#ffffff',
-              }}
-              onChangeText={(text) => setTitle(text)}
-            />
-          </View>
-        </View>
-        <View style={styles.contentContainerType}>
-          <View style={styles.foodTypeTextCon}>
-            <Text style={styles.foodTypeText}>Food Type</Text>
-          </View>
-          <View style={{flex: 3}}>
-            <NativeBaseProvider>
-              <VStack>
-                <Select
+    <NativeBaseProvider>
+      <ScrollView>
+        {loading ? (
+          <Spinner color="blue.500" />
+        ) : (
+          <View style={styles.mainContainer}>
+            <View style={styles.headingContainer}>
+              <Text style={styles.textHeader}>
+                {'Share Surplus food with the \nNeeded persons'}
+              </Text>
+            </View>
+            <View style={styles.contentContainerName}>
+              <View style={styles.nameTextCon}>
+                <Text style={styles.nameText}>Title</Text>
+              </View>
+              <View style={styles.textInputContent}>
+                <TextInput
+                  mode="outlined"
+                  label="Title"
+                  selectionColor={colorConstant.primaryColor}
+                  outlineColor={colorConstant.primaryColor}
+                  underlineColor={colorConstant.primaryColor}
+                  value={title}
                   style={{
                     fontSize: 20,
                     backgroundColor: '#ffffff',
-                    borderWidth: 1,
-                    borderColor: colorConstant.primaryColor,
                   }}
-                  width={Dimensions.get('screen').width / 1.1}
-                  selectedValue={foodType}
-                  placeholder="Select Food Type"
-                  onValueChange={(itemValue) => setFoodType(itemValue)}>
-                  <Select.Item label="Vegetarian" value="veg" />
-                  <Select.Item label="Non-Vegetarian" value="nonveg" />
-                  <Select.Item label="Mixed" value="mix" />
-                </Select>
-              </VStack>
-            </NativeBaseProvider>
-          </View>
-        </View>
-        <View style={styles.contentContainerCater}>
-          <View style={styles.foodCateTextCon}>
-            <Text style={styles.foodCateText}>Food Category</Text>
-          </View>
-          <View style={{flex: 3}}>
-            <NativeBaseProvider>
-              <VStack>
-                <Select
+                  onChangeText={(text) => setTitle(text)}
+                />
+              </View>
+            </View>
+            <View style={styles.contentContainerType}>
+              <View style={styles.foodTypeTextCon}>
+                <Text style={styles.foodTypeText}>Food Type</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <NativeBaseProvider>
+                  <VStack>
+                    <Select
+                      style={{
+                        fontSize: 20,
+                        backgroundColor: '#ffffff',
+                        borderWidth: 1,
+                        borderColor: colorConstant.primaryColor,
+                      }}
+                      width={Dimensions.get('screen').width / 1.1}
+                      selectedValue={foodType}
+                      placeholder="Select Food Type"
+                      onValueChange={(itemValue) => setFoodType(itemValue)}>
+                      <Select.Item label="Vegetarian" value="veg" />
+                      <Select.Item label="Non-Vegetarian" value="nonveg" />
+                      <Select.Item label="Mixed" value="mix" />
+                    </Select>
+                  </VStack>
+                </NativeBaseProvider>
+              </View>
+            </View>
+            <View style={styles.contentContainerCater}>
+              <View style={styles.foodCateTextCon}>
+                <Text style={styles.foodCateText}>Food Category</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <NativeBaseProvider>
+                  <VStack>
+                    <Select
+                      style={{
+                        fontSize: 20,
+                        backgroundColor: '#ffffff',
+                        borderWidth: 1,
+                        borderColor: colorConstant.primaryColor,
+                      }}
+                      width={Dimensions.get('screen').width / 1.1}
+                      selectedValue={selectedFoodCater}
+                      placeholder="Select Food Category"
+                      onValueChange={(itemValue) =>
+                        setSelectedFoodCater(itemValue)
+                      }>
+                      {foodCater.map((val) => (
+                        <Select.Item
+                          label={val.name}
+                          value={val.id}
+                          key={val.id}
+                        />
+                      ))}
+                    </Select>
+                  </VStack>
+                </NativeBaseProvider>
+              </View>
+            </View>
+            <View style={styles.contentContainerDes}>
+              <View style={styles.descriptionTextCon}>
+                <Text style={styles.descriptionText}>Description</Text>
+              </View>
+              <View style={styles.textInputDes}>
+                <TextInput
+                  mode="outlined"
+                  label="Describe your Donation"
+                  selectionColor={colorConstant.primaryColor}
+                  outlineColor={colorConstant.primaryColor}
+                  underlineColor={colorConstant.primaryColor}
+                  value={desc}
+                  multiline={true}
+                  numberOfLines={10}
                   style={{
                     fontSize: 20,
                     backgroundColor: '#ffffff',
-                    borderWidth: 1,
-                    borderColor: colorConstant.primaryColor,
                   }}
-                  width={Dimensions.get('screen').width / 1.1}
-                  selectedValue={foodCater}
-                  placeholder="Select Food Category"
-                  onValueChange={(itemValue) => setFoodCater(itemValue)}>
-                  <Select.Item label="Packed Foods" value="pack" />
-                  <Select.Item label="Cooked Foods" value="cooked" />
-                  <Select.Item label="Dry Foods" value="dry" />
-                  <Select.Item label="Drinks" value="drink" />
-                  <Select.Item label="Diary" value="diary" />
-                </Select>
-              </VStack>
-            </NativeBaseProvider>
+                  onChangeText={(text) => setDesc(text)}
+                />
+              </View>
+            </View>
+            {now >= 23 && selectedFoodCater === 1 ? (
+              <View style={styles.contentContainerBtn}>
+                <Button
+                  mode="contained"
+                  onPress={() => {
+                    Alert.alert(
+                      'You can not Donate Cooked food after 11PM Local Time',
+                    );
+                    console.log(now);
+                    console.log(selectedFoodCater);
+                  }}
+                  style={{
+                    width: 120,
+                    height: 45,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#fc6e6e',
+                  }}>
+                  <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+                    Next
+                  </Text>
+                </Button>
+              </View>
+            ) : (
+              <View style={styles.contentContainerBtn}>
+                <Button
+                  mode="contained"
+                  onPress={() => validateFields()}
+                  style={{
+                    width: 120,
+                    height: 45,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: colorConstant.primaryColor,
+                  }}>
+                  <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>
+                    Next
+                  </Text>
+                </Button>
+              </View>
+            )}
           </View>
-        </View>
-        <View style={styles.contentContainerDes}>
-          <View style={styles.descriptionTextCon}>
-            <Text style={styles.descriptionText}>Description</Text>
-          </View>
-          <View style={styles.textInputDes}>
-            <TextInput
-              mode="outlined"
-              label="Describe your Donation"
-              selectionColor={colorConstant.primaryColor}
-              outlineColor={colorConstant.primaryColor}
-              underlineColor={colorConstant.primaryColor}
-              value={desc}
-              multiline={true}
-              numberOfLines={10}
-              style={{
-                fontSize: 20,
-                backgroundColor: '#ffffff',
-              }}
-              onChangeText={(text) => setDesc(text)}
-            />
-          </View>
-        </View>
-        <View style={styles.contentContainerBtn}>
-          <Button
-            mode="contained"
-            onPress={() => validateFields()}
-            style={{
-              width: 120,
-              height: 45,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: colorConstant.primaryColor,
-            }}>
-            <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>Next</Text>
-          </Button>
-        </View>
-      </View>
-    </ScrollView>
+        )}
+      </ScrollView>
+    </NativeBaseProvider>
   );
 };
 
@@ -288,4 +411,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default availabilityInputSetOne;
+export default availabilityInputSetOneHome;

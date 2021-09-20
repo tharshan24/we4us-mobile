@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import {
   View,
@@ -12,15 +12,15 @@ import {
   RefreshControl,
 } from 'react-native';
 import axios from 'axios';
-import constants from '../../constants/constantsProject.';
-import SocketContext from '../../Context/SocketContext';
+import constants from '../../../constants/constantsProject.';
+import SocketContext from '../../../Context/SocketContext';
 import {Spinner} from 'native-base';
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ExploreRequestNgo(props) {
+function ExploreRequest(props) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const context = useContext(SocketContext);
@@ -70,7 +70,7 @@ function ExploreRequestNgo(props) {
           <View key={values.request_type} style={styles.mainContainer}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('BrowseRequestNgo', {
+                navigation.navigate('browseRequestRest', {
                   request_id: values.request_id,
                 })
               }>
@@ -78,7 +78,7 @@ function ExploreRequestNgo(props) {
                 <View style={styles.ProfilePicCon}>
                   <Image
                     style={styles.ProfilePic}
-                    source={require('../../assets/Images/logo.png')}
+                    source={require('../../../assets/Images/rest.png')}
                   />
                 </View>
                 <View>
@@ -171,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreRequestNgo;
+export default ExploreRequest;

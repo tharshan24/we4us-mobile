@@ -37,7 +37,7 @@ function ExploreAvailabilityNgo({route}) {
           },
         })
         .then(function (response) {
-          console.log(response.data);
+          // console.log(response.data.result.row);
           setData(response.data.result.row);
           setLoading(false);
         });
@@ -48,6 +48,19 @@ function ExploreAvailabilityNgo({route}) {
 
   return (
     <>
+      {/*<View style={styles.filterContainer}>*/}
+      {/*  <TouchableOpacity*/}
+      {/*    style={styles.filterBtnContainer}*/}
+      {/*    activeOpacity={0.7}*/}
+      {/*    onPress={() => navigation.navigate('FilterResults')}>*/}
+      {/*    <Text style={styles.filterTxt}>Filter</Text>*/}
+      {/*    <MaterialCommunityIcons*/}
+      {/*      name="filter-variant"*/}
+      {/*      color="#3F51B5"*/}
+      {/*      size={30}*/}
+      {/*    />*/}
+      {/*  </TouchableOpacity>*/}
+      {/*</View>*/}
       <ScrollView style={{margin: 7}}>
         {loading ? (
           <Spinner />
@@ -73,7 +86,7 @@ function ExploreAvailabilityNgo({route}) {
                       `From:{values.user_name}`
                     </Text>
                     <Text style={styles.bodyText}>
-                      `Quantity: {values.availability_quantity}`
+                      Quantity: {values.available_quantity}
                     </Text>
                     <Text style={styles.bodyText}>
                       `Best Before: {values.best_before.split('T')[0]}`

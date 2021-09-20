@@ -15,7 +15,7 @@ import constants from '../../constants/constantsProject.';
 import SocketContext from '../../Context/SocketContext';
 import {Spinner} from 'native-base';
 
-function OngoingDonationHome(props) {
+function OngoingDonationRest(props) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -49,33 +49,35 @@ function OngoingDonationHome(props) {
       {loading ? (
         <Spinner />
       ) : (
+        data.map((values) => (
         <View style={styles.mainContainer}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('OngoingDeliveryDetailsHome', {
-                availability_id: data[0].id,
+              navigation.navigate('OngoingDeliveryDetailsRest', {
+                availability_id: values.id,
               });
             }}>
             <View style={styles.AvailabilityCon}>
               <View style={styles.ProfilePicCon}>
                 <Image
                   style={styles.ProfilePic}
-                  source={require('../../assets/Images/carehome.jpg')}
+                  source={require('../../assets/Images/rest.png')}
                 />
               </View>
               <View>
-                <Text style={styles.headingText}>{data[0].name}</Text>
-                <Text style={styles.bodyText}>From:{data[0].user_name}</Text>
+                <Text style={styles.headingText}>{values.name}</Text>
+                <Text style={styles.bodyText}>From:{values.user_name}</Text>
                 <Text style={styles.bodyText}>
-                  Quantity: {data[0].available_quantity}
+                  Quantity: {values.available_quantity}
                 </Text>
                 <Text style={styles.bodyText}>
-                  Best Before: {data[0].best_before.split('T')[0]}
+                  Best Before: {values.best_before.split('T')[0]}
                 </Text>
               </View>
             </View>
           </TouchableOpacity>
         </View>
+        ))
       )}
     </ScrollView>
   );
@@ -120,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingDonationHome;
+export default OngoingDonationRest;
