@@ -8,7 +8,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  RefreshControl,
 } from 'react-native';
 import colorConstant from '../../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,77 +23,18 @@ import {Button, TextInput} from 'react-native-paper';
 import {NativeBaseProvider} from 'native-base/src/core/NativeBaseProvider';
 import Geolocation from 'react-native-geolocation-service';
 
-function browseRequest(props) {
-  const {request_id} = props.route.params;
+function BrowseCollectionPointsPublic(props) {
+  const {collection_id} = props.route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
-  const [receiverId, setReceiverId] = useState(21);
-  const [conversations, setConversations] = useState([]);
-  const [items, setItems] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(request_id, 'req_id');
+    console.log(collection_id);
     getCurrentUser();
   }, []);
-
-  useEffect(() => {
-    return navigation.addListener('focus', () => {
-      getConversations();
-    });
-  }, [userId]);
-
-  const chatWindow = async () => {
-    let flag = 0;
-    conversations.map((val) => {
-      if (
-        val.members[0] === userId.toString() &&
-        val.members[1] === receiverId.toString()
-      ) {
-        const senderReceiver = {
-          sender: val.members[0],
-          receiver: val.members[1],
-          conversationId: val._id,
-          userId: userId,
-        };
-        navigation.navigate('chatComponent', {senderReceiver});
-      } else if (userId === receiverId) {
-        const senderReceiver = {
-          sender: val.members[0],
-          receiver: val.members[1],
-          conversationId: val._id,
-          userId: userId,
-        };
-        navigation.navigate('chatComponent', {senderReceiver});
-      } else {
-        // console.log('varaatha');
-        flag = flag + 1;
-        // console.log(flag, 'mmmmmmmmmmmmm');
-      }
-    });
-    if (conversations.length === flag) {
-      await axios
-        .post('http://10.0.2.2:5000/conversation', {
-          senderId: userId.toString(),
-          receiverId: receiverId.toString(),
-        })
-        .then(function (response) {
-          const senderReceiver = {
-            sender: userId.toString(),
-            receiver: receiverId.toString(),
-            conversationId: response.data._id,
-            userId: userId,
-          };
-          navigation.navigate('chatComponent', {senderReceiver});
-          flag = 0;
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-    }
-  };
 
   const getCurrentUser = async () => {
     try {
@@ -108,52 +48,32 @@ function browseRequest(props) {
     }
   };
 
-  const getConversations = async () => {
-    try {
-      await axios
-        .get('http://10.0.2.2:5000/conversation/' + userId)
-        .then(function (response) {
-          // console.log(response.data);
-          setConversations(response.data);
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
+    // browseAvailability();
     return navigation.addListener('focus', () => {
-      browseRequests();
+      browseCollectionPoints();
     });
   }, []);
 
-  const browseRequests = async () => {
+  const browseCollectionPoints = async () => {
     try {
       await axios
-        .get(constants.BASE_URL + 'request/exploreRequestById/' + request_id, {
-          headers: {
-            Authorization: `Bearer ${context.token}`,
+        .get(
+          constants.BASE_URL + 'org/getCollectionPointsById/' + collection_id,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
           },
-        })
+        )
         .then(function (response) {
+          console.log(response.data.result.data[0], 'llllllll');
           setData(response.data.result.data[0]);
-          setReceiverId(response.data.result.data[0].user_id);
-          setItems(response.data.result.items);
           setLoading(false);
         });
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const sendData = () => {
-    const info = {
-      items: items,
-      request_id: request_id,
-      latitude: data.latitude,
-      longitude: data.longitude,
-    };
-    navigation.navigate('DonateForRequest', {info: info});
   };
 
   return (
@@ -166,34 +86,6 @@ function browseRequest(props) {
             <View style={styles.headingContainer}>
               <View style={styles.txtCon}>
                 <Text style={styles.headingTxt}>{data.name}</Text>
-              </View>
-              <View style={styles.iconCon}>
-                <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-                  <MaterialCommunityIcons
-                    name="phone"
-                    color="#ffffff"
-                    size={30}
-                    style={{
-                      backgroundColor: colorConstant.primaryColor,
-                      borderRadius: 100,
-                      padding: 7,
-                    }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => chatWindow()}>
-                  <MaterialCommunityIcons
-                    name="message-reply-text"
-                    color="#ffffff"
-                    size={30}
-                    style={{
-                      backgroundColor: colorConstant.primaryColor,
-                      borderRadius: 100,
-                      padding: 7,
-                    }}
-                  />
-                </TouchableOpacity>
               </View>
             </View>
             <View
@@ -208,23 +100,12 @@ function browseRequest(props) {
             <View style={styles.contentContainer}>
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Request Name:</Text>
+                  <Text style={styles.subHeadingTxt}>Title :</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <Text style={styles.resultsTxt}>{data.name}</Text>
                 </View>
               </View>
-              <View style={styles.txtContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Type :</Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>
-                    {data.request_type_name}
-                  </Text>
-                </View>
-              </View>
-              {/*txt2*/}
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
                   <Text style={styles.subHeadingTxt}>Created by :</Text>
@@ -236,21 +117,23 @@ function browseRequest(props) {
               {/*txt3*/}
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Needed Before</Text>
+                  <Text style={styles.subHeadingTxt}>Start on :</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <Text style={styles.resultsTxt}>
-                    {moment(data.need_before).format('DD-MM-YYYY   HH:mm A')}
+                    {moment(data.start_time).format('DD-MM-YYYY   HH:mm A')}
                   </Text>
                 </View>
               </View>
-              {/*txt5*/}
+              {/*txt4*/}
               <View style={styles.txtContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.subHeadingTxt}>Address :</Text>
+                  <Text style={styles.subHeadingTxt}>End on :</Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <Text style={styles.resultsTxt}>{data.location}</Text>
+                  <Text style={styles.resultsTxt}>
+                    {moment(data.end_time).format('DD-MM-YYYY   HH:mm A')}
+                  </Text>
                 </View>
               </View>
               {/*txt6*/}
@@ -262,7 +145,7 @@ function browseRequest(props) {
                   <Button
                     mode="contained"
                     onPress={() =>
-                      navigation.navigate('ViewOnMapRequest', {
+                      navigation.navigate('ViewOnMapCollectionPoints', {
                         longitude: data.longitude,
                         latitude: data.latitude,
                       })
@@ -291,60 +174,6 @@ function browseRequest(props) {
                   </Text>
                 </View>
               </View>
-              {/*txt9*/}
-              <View
-                style={{
-                  flexDirection: 'column',
-                }}>
-                <View style={{flex: 1}}>
-                  <Text
-                    style={{
-                      fontFamily: 'Barlow-SemiBold',
-                      fontSize: 20,
-                      color: '#727E8E',
-                    }}>
-                    Items :
-                  </Text>
-                </View>
-                {items.map((values) => (
-                  <View
-                    key={values.id}
-                    style={{flex: 1, marginTop: 5, marginLeft: 10}}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View style={{flex: 1}}>
-                        <Text
-                          style={{
-                            fontFamily: 'Barlow-SemiBold',
-                            fontSize: 20,
-                            color: '#727E8E',
-                          }}>
-                          {values.name}
-                        </Text>
-                      </View>
-                      <View style={{flex: 1}}>
-                        <Text
-                          style={{
-                            fontFamily: 'Barlow-SemiBold',
-                            fontSize: 20,
-                            color: colorConstant.primaryColor,
-                          }}>
-                          {values.needed_quantity}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            </View>
-            <View style={styles.btnContainer}>
-              <TouchableOpacity
-                style={styles.btn}
-                activeOpacity={0.8}
-                onPress={() => {
-                  sendData();
-                }}>
-                <Text style={styles.btnTxt}>Donate</Text>
-              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -399,7 +228,7 @@ const styles = StyleSheet.create({
   },
   subHeadingTxt: {
     fontFamily: 'Barlow-SemiBold',
-    fontSize: 17,
+    fontSize: 16,
     color: '#727E8E',
   },
   txtContainer: {
@@ -408,7 +237,7 @@ const styles = StyleSheet.create({
   },
   resultsTxt: {
     fontFamily: 'Barlow-SemiBold',
-    fontSize: 17,
+    fontSize: 16,
     color: '#727E8E',
   },
   resultsTxtBtn: {
@@ -426,7 +255,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
   },
   btnContainer: {
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 20,
     alignItems: 'center',
   },
@@ -445,4 +274,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default browseRequest;
+export default BrowseCollectionPointsPublic;

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -20,7 +20,7 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ExploreRequest(props) {
+function collectionPoints({route}) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const context = useContext(SocketContext);
@@ -28,19 +28,22 @@ function ExploreRequest(props) {
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
-      getRequests();
+      getCollectionPoints();
     });
   }, []);
 
-  const getRequests = async () => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const getCollectionPoints = async () => {
     try {
       await axios
-        .get(constants.BASE_URL + 'request/exploreRequest', {
+        .get(constants.BASE_URL + 'org/getCollectionPoints', {
           headers: {
             Authorization: `Bearer ${context.token}`,
           },
         })
         .then(function (response) {
+          // console.log(response.data.result.row);
           setData(response.data.result.row);
           setLoading(false);
         });
@@ -49,11 +52,9 @@ function ExploreRequest(props) {
     }
   };
 
-  const [refreshing, setRefreshing] = React.useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getRequests();
+    getCollectionPoints();
     wait(3000).then(() => setRefreshing(false));
   }, []);
 
@@ -67,11 +68,11 @@ function ExploreRequest(props) {
         <Spinner />
       ) : (
         data.map((values) => (
-          <View key={values.request_type} style={styles.mainContainer}>
+          <View key={values.id} style={styles.mainContainer}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('browseRequest', {
-                  request_id: values.request_id,
+                navigation.navigate('BrowseCollectionPointsPublic', {
+                  collection_id: values.id,
                 })
               }>
               <View style={styles.AvailabilityCon}>
@@ -85,10 +86,10 @@ function ExploreRequest(props) {
                   <Text style={styles.headingText}>{values.name}</Text>
                   <Text style={styles.bodyText}>From:{values.user_name}</Text>
                   <Text style={styles.bodyText}>
-                    Type:{values.request_type_name}
+                    Start on: {values.start_time}
                   </Text>
                   <Text style={styles.bodyText}>
-                    Best Before:{values.need_before.split('T')[0]}
+                    End on: {values.end_time.split('T')[0]}
                   </Text>
                 </View>
               </View>
@@ -171,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreRequest;
+export default collectionPoints;

@@ -26,7 +26,7 @@ function DonationTrackingMap(props) {
   const mapView = React.useRef();
 
   const mainFromLocation = {
-    streetName: 'Vanniyasingam Road',
+    streetName: 'Vanniyasingam',
     gps: {
       longitude: 80.01702189445497,
       latitude: 9.711674411735867,
@@ -193,7 +193,7 @@ function DonationTrackingMap(props) {
           destination={toLocation}
           strokeColor={colorConstant.proGreyDark}
           strokeWidth={4}
-          apikey={GOOGLE_API_KEY}
+          apikey={'AIzaSyBeTMqfMRsOIEDZs8nTaBBv1lI1W9KTADE'}
           showsUserLocation={true}
           optimizeWaypoints={true}
           onReady={(result) => {

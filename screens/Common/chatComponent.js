@@ -118,7 +118,7 @@ const ChatComponent = ({route}) => {
   const getMessages = async () => {
     try {
       await axios
-        .get('http://10.0.2.2:5000/messages/' + senderReceiver.conversationId)
+        .get('http://10.0.2.2:8000/messages/' + senderReceiver.conversationId)
         .then(function (response) {
           response.data.map((val) => {
             setMessages((prev) => [...prev, val]);

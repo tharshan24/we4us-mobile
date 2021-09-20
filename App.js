@@ -20,7 +20,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const socketConnection = io('http://10.0.2.2:5500');
+    const socketConnection = io('http://10.0.2.2:8000');
     const getUser = async () => {
       try {
         const value = await AsyncStorage.getItem('user');

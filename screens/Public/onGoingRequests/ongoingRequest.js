@@ -7,19 +7,32 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from 'react-native';
-import colorConstant from '../../constants/colorConstant';
+import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import constants from '../../constants/constantsProject.';
-import SocketContext from '../../Context/SocketContext';
+import constants from '../../../constants/constantsProject.';
+import SocketContext from '../../../Context/SocketContext';
 import {Spinner} from 'native-base';
 
-function OngoingDonation(props) {
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
+function OngoingRequest(props) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const context = useContext(SocketContext);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getAvailabilityData();
+    wait(3000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
@@ -30,7 +43,7 @@ function OngoingDonation(props) {
   const getAvailabilityData = async () => {
     try {
       await axios
-        .get(constants.BASE_URL + 'availability/exploreMyAvailability', {
+        .get(constants.BASE_URL + 'request/exploreMyRequest', {
           headers: {
             Authorization: `Bearer ${context.token}`,
           },
@@ -45,41 +58,48 @@ function OngoingDonation(props) {
   };
 
   return (
-    <ScrollView style={{margin: 7}}>
+    <ScrollView
+      style={{margin: 7}}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       {loading ? (
         <Spinner />
       ) : (
-        <View style={styles.mainContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('OngoingDeliveryDetails', {
-                availability_id: data[0].id,
-              });
-            }}>
-            <View style={styles.AvailabilityCon}>
-              <View style={styles.ProfilePicCon}>
-                <Image
-                  style={styles.ProfilePic}
-                  source={require('../../assets/Images/profilePic.jpg')}
-                />
+        data.map((data) => (
+          <View key={data.id} style={styles.mainContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('ongoingRequestDetails', {
+                  req_id: data.id,
+                });
+              }}>
+              <View style={styles.AvailabilityCon}>
+                <View style={styles.ProfilePicCon}>
+                  <Image
+                    style={styles.ProfilePic}
+                    source={require('../../../assets/Images/profilePic.jpg')}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.headingText}>{data.name}</Text>
+                  <Text style={styles.bodyText}>From:{data.user_name}</Text>
+                  <Text style={styles.bodyText}>
+                    Type: {data.request_type_name}
+                  </Text>
+                  <Text style={styles.bodyText}>
+                    Best Before: {data.need_before.split('T')[0]}
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text style={styles.headingText}>{data[0].name}</Text>
-                <Text style={styles.bodyText}>From:{data[0].user_name}</Text>
-                <Text style={styles.bodyText}>
-                  Quantity: {data[0].available_quantity}
-                </Text>
-                <Text style={styles.bodyText}>
-                  Best Before: {data[0].best_before.split('T')[0]}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        ))
       )}
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   mainContainer: {
     height: Dimensions.get('window').height / 6.5,
@@ -120,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingDonation;
+export default OngoingRequest;

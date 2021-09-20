@@ -34,7 +34,7 @@ const Conversations = () => {
     setData([]);
     try {
       await axios
-        .get('http://10.0.2.2:5000/conversation/' + userId)
+        .get('http://10.0.2.2:8000/conversation/' + userId)
         .then(function (response) {
           // console.log(response.data);
           response.data.map((val) => {
