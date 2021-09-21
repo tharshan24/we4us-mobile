@@ -150,6 +150,7 @@ const EditProfile = (props) => {
         },
       }).then(function (response) {
         if (response.data.status_code === 0) {
+          console.log(response.data, 'ooooooooooooooooooooo');
           setData(response.data.result[0]);
           setLoadingTwo(false);
         }

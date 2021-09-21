@@ -144,7 +144,7 @@ const DashboardPublic = () => {
         },
       })
       .then(function (response) {
-        console.log(response.data, 'pppppppppppppp');
+        // console.log(response.data, 'pppppppppppppp');
         response.data.result.map((val) => {
           // console.log(val);
           setAccNo(val.account_number);
@@ -204,13 +204,13 @@ const DashboardPublic = () => {
   const viewProfile = async () => {
     try {
       await axios
-        .get(constants.BASE_URL + 'public/viewProfile/' + userId, {
+        .get(constants.BASE_URL + 'public/viewProfile/' + context.values.id, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${context.token}`,
           },
         })
         .then(function (response) {
-          // console.log(response.data.result[0], 'qwww');
+          console.log(response.data.result[0], 'qwww');
           setData(response.data.result[0]);
           setLoadingProfile(false);
         });
