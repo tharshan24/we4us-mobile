@@ -37,7 +37,8 @@ function ExploreAvailability({route}) {
           },
         })
         .then(function (response) {
-          // console.log(response.data.result.row);
+          console.log(response.data.result.row[0]);
+          console.log(response.data.result.row, 'lllllllllll');
           setData(response.data.result.row);
           setLoading(false);
         });
@@ -77,7 +78,7 @@ function ExploreAvailability({route}) {
                   <View style={styles.ProfilePicCon}>
                     <Image
                       style={styles.ProfilePic}
-                      source={require('../../../assets/Images/profilePic.jpg')}
+                      source={{uri: values.profile_picture_path.toString()}}
                     />
                   </View>
                   <View>

@@ -79,7 +79,7 @@ function collectionPoints({route}) {
                 <View style={styles.ProfilePicCon}>
                   <Image
                     style={styles.ProfilePic}
-                    source={require('../../../assets/Images/profilePic.jpg')}
+                    source={{uri: values.profile_picture_path.toString()}}
                   />
                 </View>
                 <View>

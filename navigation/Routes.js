@@ -55,7 +55,7 @@ import ChatComponent from '../screens/Common/chatComponent';
 import Conversations from '../screens/Public/Conversations';
 import CommonCheck from '../screens/Public/commonCheck';
 import collectionPointsPublic from '../screens/Public/ViewCollectionPoints/exploreCollectionPointsPublic';
-import sellingPointsPublic from '../screens/Public/sellingPoints';
+import exploreSellingPointsPublic from '../screens/Public/ViewSellingPoints/exploreSellingPointsPublic';
 import ViewOnMapAvailability from '../screens/Public/Availability/viewOnMapAvailability';
 import requestAvailabilityLocationMap from '../screens/Public/Availability/requestAvailabilityLocationMap';
 import RequestedAvailabilities from '../screens/Public/requestedAvailabilities';
@@ -74,7 +74,8 @@ import viewOnMapMyRequest from '../screens/Public/onGoingRequests/viewOnMapMyReq
 import donationForMyRequests from '../screens/Public/onGoingRequests/donationForMyRequests';
 import ViewOnMapCollectionPoints from '../screens/Public/ViewCollectionPoints/viewOnMapCollectionPoints';
 import DeliveryDetailsAvailabilities from '../screens/Public/onGoingDonations/deliveryDetailsAvailabilities';
-
+import browseSellingPointsPublic from '../screens/Public/ViewSellingPoints/browseSellingPointsPublic';
+import ViewOnMapSellingPointsPublic from '../screens/Public/ViewSellingPoints/ViewOnMapSellingPointsPublic';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -935,7 +936,10 @@ const ExploreStack = () => {
         name="collection  points"
         component={collectionPointsPublic}
       />
-      <Top.Screen name="selling  points" component={sellingPointsPublic} />
+      <Top.Screen
+        name="Selling Points"
+        component={exploreSellingPointsPublic}
+      />
       <Top.Screen
         name="Requested Availabilities"
         component={RequestedAvailabilities}
@@ -1716,6 +1720,40 @@ const DashboardPublicStack = () => {
       <Stack.Screen
         name="ViewOnMapCollectionPoints"
         component={ViewOnMapCollectionPoints}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'View on Map',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="browseSellingPointsPublic"
+        component={browseSellingPointsPublic}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Browse Selling Points',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ViewOnMapSellingPointsPublic"
+        component={ViewOnMapSellingPointsPublic}
         options={{
           headerTintColor: '#ffffff',
           title: 'View on Map',

@@ -286,7 +286,7 @@ const DashboardPublic = () => {
               </View>
               <View style={styles.DonationCount}>
                 <Text style={styles.DonationCountTxt}>17</Text>
-                <Text style={styles.DonationSuccess}>SUCCESSFUL DONATIONS</Text>
+                <Text style={styles.DonationSuccess}>TOTAL DONATIONS</Text>
               </View>
               <View style={styles.ButtonsCon}>
                 {/*<Button*/}
@@ -307,7 +307,7 @@ const DashboardPublic = () => {
                   mode="contained"
                   style={{
                     marginTop: 10,
-                    height: 30,
+                    height: 45,
                     width: 150,
                     justifyContent: 'center',
                   }}
@@ -331,7 +331,7 @@ const DashboardPublic = () => {
               </View>
               <View style={styles.RequestCount}>
                 <Text style={styles.RequestCountTxt}>5</Text>
-                <Text style={styles.RequestSuccess}>REQUESTS CREATED</Text>
+                <Text style={styles.RequestSuccess}>TOTAL CREATED</Text>
               </View>
               <View style={styles.ButtonsConRequest}>
                 {/*<Button*/}
@@ -352,7 +352,7 @@ const DashboardPublic = () => {
                   mode="contained"
                   style={{
                     marginTop: 10,
-                    height: 30,
+                    height: 45,
                     width: 150,
                     justifyContent: 'center',
                   }}
@@ -474,8 +474,8 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   ProfilePic: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
     borderRadius: 100,
   },
   UserDetails: {
@@ -584,7 +584,7 @@ const styles = StyleSheet.create({
   },
   DonationSuccess: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 10,
+    fontSize: 17,
     color: colorConstant.primaryColor,
   },
   RequestCount: {
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
   },
   RequestSuccess: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 10,
+    fontSize: 17,
     color: colorConstant.primaryColor,
   },
   ButtonsCon: {

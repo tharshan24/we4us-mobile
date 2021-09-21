@@ -40,7 +40,7 @@ function RequestedAvailabilities(props) {
           },
         )
         .then(function (response) {
-          // console.log(response.data.result.data);
+          console.log(response.data.result.data);
           setData(response.data.result.data);
           setLoading(false);
         });
@@ -79,7 +79,7 @@ function RequestedAvailabilities(props) {
                     <View style={styles.ProfilePicCon}>
                       <Image
                         style={styles.ProfilePic}
-                        source={require('../../assets/Images/profilePic.jpg')}
+                        source={{uri: values.profile_picture_path.toString()}}
                       />
                     </View>
                     <View>

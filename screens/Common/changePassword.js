@@ -1,15 +1,20 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Text, View, StyleSheet, Dimensions, Alert} from 'react-native';
 import colorConstant from '../../constants/colorConstant';
-import {Input} from 'native-base';
+import {Input, Spinner} from 'native-base';
 import {Button} from 'react-native-paper';
+import axios from 'axios';
+import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
 
 function ChangePassword(props) {
   const [oldPwd, setOldPwd] = useState('');
   const [newPwd, setNewPwd] = useState('');
   const [confirmPwd, setConfirmPwd] = useState('');
+  const [loading, setLoading] = useState(false);
+  const context = useContext(SocketContext);
 
-  const submit = () => {
+  const submit = async () => {
     if (oldPwd === '') {
       Alert.alert('Enter Old Password');
     } else if (newPwd === '') {
@@ -19,20 +24,48 @@ function ChangePassword(props) {
     } else if (confirmPwd !== newPwd) {
       Alert.alert('New password and confirm password are not matching ');
     } else {
-      console.log('ok');
+      setLoading(true);
+      const pwd = {
+        old_password: oldPwd,
+        new_password: confirmPwd,
+      };
+      try {
+        await axios({
+          url: constants.BASE_URL + 'user/changeUserPass',
+          method: 'post',
+          data: pwd,
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        }).then(function (response) {
+          if (response.data.status_code === 0) {
+            console.log(response.data, 'rrrrrrrrrrrrr');
+            Alert.alert('Password Changed Successfully');
+            setOldPwd('');
+            setNewPwd('');
+            setConfirmPwd('');
+            setLoading(false);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <View style={styles.mainContainer}>
       <View style={styles.oldPwdCon}>
         <View style={styles.oldPwdTxt}>
-          <Text style={styles.txt}>Old Password :</Text>
+          <Text style={styles.txt}>Current Password :</Text>
         </View>
         <View style={styles.oldPwdInput}>
           <Input
             size="sm"
-            placeholder="Old Password"
+            placeholder="Current Password"
+            type="password"
             value={oldPwd}
             onChangeText={(val) => setOldPwd(val)}
             _light={{
@@ -52,6 +85,7 @@ function ChangePassword(props) {
           <Input
             size="sm"
             placeholder="New Password"
+            type="password"
             value={newPwd}
             onChangeText={(val) => setNewPwd(val)}
             _light={{
@@ -70,6 +104,7 @@ function ChangePassword(props) {
         <View style={styles.oldPwdInput}>
           <Input
             size="sm"
+            type="password"
             placeholder="Confirm Password"
             value={confirmPwd}
             onChangeText={(val) => setConfirmPwd(val)}
