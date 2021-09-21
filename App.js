@@ -22,6 +22,7 @@ export default function App() {
   useEffect(() => {
     const socketConnection = io('http://10.0.2.2:8000');
     const getUser = async () => {
+      console.log('rrrrrrrrrrr');
       try {
         const value = await AsyncStorage.getItem('user');
         const parsedValue = JSON.parse(value);
@@ -32,6 +33,7 @@ export default function App() {
             values: parsedValue.result,
           });
           setLoading(false);
+          console.log(parsedValue);
         } else {
           setLoading(false);
         }

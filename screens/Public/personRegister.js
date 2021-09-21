@@ -26,14 +26,16 @@ import constants from '../../constants/constantsProject.';
 
 const PersonRegister = (props) => {
   const navigation = useNavigation();
-  const [name, setUsername] = React.useState();
-  const [gender, setGender] = React.useState();
-  const [district, setDistrict] = React.useState();
+  const [name, setUsername] = React.useState('');
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [gender, setGender] = React.useState('');
+  const [district, setDistrict] = React.useState('');
   const [city, setCity] = React.useState([]);
-  const [email, setEmail] = React.useState();
-  const [mobile, setMobile] = React.useState();
-  const [password, setPassword] = React.useState();
-  const [checkPassword, setCheckPassword] = React.useState();
+  const [email, setEmail] = React.useState('');
+  const [mobile, setMobile] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [checkPassword, setCheckPassword] = React.useState('');
   const [show, setShow] = React.useState(false);
   const [showEmailError, setShowEmailError] = React.useState(false);
   const [showMobileError, setShowMobileError] = React.useState(false);
@@ -42,20 +44,20 @@ const PersonRegister = (props) => {
     React.useState(false);
   const handleClick = () => setShow(!show);
   const [loading, setLoading] = React.useState(true);
-  const [selectedCity, setSelectedCity] = React.useState(true);
-  const [selectedDistrict, setSelectedDistrict] = React.useState(true);
+  const [selectedCity, setSelectedCity] = React.useState('');
+  const [selectedDistrict, setSelectedDistrict] = React.useState('');
 
   let flag = 0;
 
   const validateEmail = () => {
-    console.log('blur');
-    var re =
+    const re =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     setShowEmailError(!re.test(email));
     if (re.test(email)) {
       flag = 1;
     } else {
       flag = 0;
+      setEmail('');
     }
     return re.test(email);
   };
@@ -67,6 +69,7 @@ const PersonRegister = (props) => {
       flag = 1;
     } else {
       flag = 0;
+      setMobile('');
     }
     return reg.test(mobile);
   };
@@ -78,6 +81,7 @@ const PersonRegister = (props) => {
       flag = 1;
     } else {
       flag = 0;
+      setPassword('');
     }
     return reg.test(password);
   };
@@ -90,6 +94,7 @@ const PersonRegister = (props) => {
     } else {
       setConfirmShowPasswordError(true);
       flag = 0;
+      setCheckPassword('');
       return false;
     }
   };
@@ -127,16 +132,39 @@ const PersonRegister = (props) => {
   };
 
   const validateOnSubmit = () => {
-    if (flag === 1) {
-      RegisterUser();
+    if (name === '') {
+      Alert.alert('Enter username');
+    } else if (firstName === '') {
+      Alert.alert('Enter First name');
+    } else if (lastName === '') {
+      Alert.alert('Enter Last name');
+    } else if (email === '') {
+      Alert.alert('Enter Email');
+    } else if (mobile === '') {
+      Alert.alert('Enter mobile Number');
+    } else if (selectedDistrict === '') {
+      Alert.alert('select District');
+    } else if (selectedCity === '') {
+      Alert.alert('select City');
+    } else if (gender === '') {
+      Alert.alert('select gender');
+    } else if (password === '') {
+      Alert.alert('Enter Password');
+    } else if (checkPassword === '') {
+      Alert.alert('Enter Confirm Password');
     } else {
-      Alert.alert('Enter valid Credentials');
-      navigation.replace('Auth', {
-        screen: 'PersonRegister',
-      });
+      console.log('lll');
+      RegisterUser();
+      Alert.alert('Registration Successful');
     }
   };
 
+  // {
+  //   Alert.alert('Enter valid Credentials');
+  //   navigation.replace('Auth', {
+  //     screen: 'PersonRegister',
+  //   });
+  // }
   const RegisterUser = () => {
     axios
       .post(constants.BASE_URL + 'user/publicRegister', {
@@ -144,6 +172,8 @@ const PersonRegister = (props) => {
         email: email,
         mobile_number: mobile,
         city: selectedCity,
+        first_name: firstName,
+        last_name: lastName,
         gender: gender,
         password: checkPassword,
       })
@@ -154,7 +184,7 @@ const PersonRegister = (props) => {
             screen: 'Login',
           });
         } else {
-          Alert.alert('PublicRegistration Failed');
+          Alert.alert('Public Registration Failed');
           console.log(response.data);
         }
       })
@@ -187,6 +217,22 @@ const PersonRegister = (props) => {
                   placeholder="Username"
                   onChangeText={(val) => setUsername(val)}
                   value={name}
+                />
+              </View>
+              <View style={styles.Inputtext}>
+                <Input
+                  style={styles.textInput}
+                  placeholder="Firstname"
+                  onChangeText={(val) => setFirstName(val)}
+                  value={firstName}
+                />
+              </View>
+              <View style={styles.Inputtext}>
+                <Input
+                  style={styles.textInput}
+                  placeholder="Lastname"
+                  onChangeText={(val) => setLastName(val)}
+                  value={lastName}
                 />
               </View>
               <View style={styles.Inputtext}>
@@ -370,12 +416,11 @@ const PersonRegister = (props) => {
                   left: 130,
                 }}
                 mode="outlined"
-                onPress={validateOnSubmit}>
+                onPress={() => validateOnSubmit()}>
                 <Text style={styles.Btn}> Submit </Text>
               </Button>
               <View>
                 <Text style={styles.bodytext}>Already have an account? </Text>
-
                 <Button
                   color="#3F5185"
                   style={{
