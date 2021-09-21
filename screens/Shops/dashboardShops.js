@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,10 +13,38 @@ import {
   Dimensions,
 } from 'react-native';
 import {Button} from 'react-native-paper';
+import {Switch, HStack, Center, NativeBaseProvider, Spinner} from 'native-base';
+import axios from 'axios';
+import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
 
 const DashboardShops = (props) => {
   const navigation = useNavigation();
-  return (
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  useEffect(() => {
+    viewProfile();
+  }, []);
+
+  const viewProfile = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'org/viewProfile/' + context.values.id, {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          setData(response.data.result);
+          setLoadingProfile(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return loadingProfile ? (
+    <Spinner />
+  ) : (
     <SafeAreaView style={styles.Container}>
       <StatusBar backgroundColor={colorConstant.primaryColor} />
       <View style={styles.HeaderContainer}>
@@ -30,7 +58,7 @@ const DashboardShops = (props) => {
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> Keells </Text>
+          <Text style={styles.UserName}>  {data[0].user_name} </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
@@ -83,18 +111,6 @@ const DashboardShops = (props) => {
               </View>
               <View style={styles.ButtonsCon}>
                 <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 9,
-                    height: 35,
-                    width: 120,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Sellingpoint')}>
-                  <Text style={styles.BtnTxt}>History</Text>
-                </Button>
-                <Button
                   color={colorConstant.proRed}
                   mode="contained"
                   style={{
@@ -104,7 +120,7 @@ const DashboardShops = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingSellingpoint')}>
-                  <Text style={styles.BtnTxt2}>3 in Progress</Text>
+                  <Text style={styles.BtnTxt2}>Progress</Text>
                 </Button>
               </View>
             </View>

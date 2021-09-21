@@ -49,11 +49,12 @@ function OngoingDonationNgo(props) {
       {loading ? (
         <Spinner />
       ) : (
+        data.map((values) => (
         <View style={styles.mainContainer}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('OngoingDeliveryDetailsNgo', {
-                availability_id: data[0].id,
+                availability_id: values.id,
               });
             }}>
             <View style={styles.AvailabilityCon}>
@@ -64,18 +65,18 @@ function OngoingDonationNgo(props) {
                 />
               </View>
               <View>
-                <Text style={styles.headingText}>{data[0].name}</Text>
-                <Text style={styles.bodyText}>From:{data[0].user_name}</Text>
+                <Text style={styles.headingText}>{values.name}</Text>
+                <Text style={styles.bodyText}>From:{values.user_name}</Text>
                 <Text style={styles.bodyText}>
-                  Quantity: {data[0].available_quantity}
+                  Quantity: {values.available_quantity}
                 </Text>
                 <Text style={styles.bodyText}>
-                  Best Before: {data[0].best_before.split('T')[0]}
+                  Best Before: {values.best_before.split('T')[0]}
                 </Text>
               </View>
             </View>
           </TouchableOpacity>
-        </View>
+        </View>))
       )}
     </ScrollView>
   );

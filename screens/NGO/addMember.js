@@ -58,6 +58,7 @@ const [data, setData] = useState(0);
   };
 
   const ItemView = ({item}) => {
+    setUserid(item.id);
     return (
    
       <Text
@@ -89,7 +90,7 @@ const [data, setData] = useState(0);
    // setId();
   //});
   const getItem = (item) => {
-setUserid(item.id);
+
     Alert.alert(   "Add Member",
     (userId+" "+item.first_name+"  "+item.last_name),
     [

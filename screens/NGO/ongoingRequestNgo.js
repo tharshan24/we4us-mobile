@@ -1,16 +1,16 @@
 import React, {useContext, useEffect, useState} from 'react';
-import colorConstant from '../../constants/colorConstant';
-import {useNavigation} from '@react-navigation/native';
 import {
-  View,
+  Dimensions,
+  Image,
+  ScrollView,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
-  ScrollView,
-  Dimensions,
+  View,
   RefreshControl,
 } from 'react-native';
+import colorConstant from '../../constants/colorConstant';
+import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import constants from '../../constants/constantsProject.';
 import SocketContext from '../../Context/SocketContext';
@@ -20,19 +20,27 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function OngoingRequestNgo(props) {
+function OngoingRequest(props) {
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const context = useContext(SocketContext);
-  const navigation = useNavigation();
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getAvailabilityData();
+    wait(3000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
-      getRequests();
+      getAvailabilityData();
     });
   }, []);
 
-  const getRequests = async () => {
+  const getAvailabilityData = async () => {
     try {
       await axios
         .get(constants.BASE_URL + 'request/exploreMyRequest', {
@@ -49,31 +57,23 @@ function OngoingRequestNgo(props) {
     }
   };
 
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    getRequests();
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
-
   return (
     <ScrollView
+      style={{margin: 7}}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      style={{margin: 7}}>
+      }>
       {loading ? (
         <Spinner />
       ) : (
-        data.map((values) => (
-          <View key={values.request_type} style={styles.mainContainer}>
+        data.map((data) => (
+          <View key={data.id} style={styles.mainContainer}>
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('OngoingRequestDetailsNgo', {
-                  request_id: values.request_id,
-                })
-              }>
+              onPress={() => {
+                navigation.navigate('ongoingRequestDetails', {
+                  req_id: data.id,
+                });
+              }}>
               <View style={styles.AvailabilityCon}>
                 <View style={styles.ProfilePicCon}>
                   <Image
@@ -82,13 +82,13 @@ function OngoingRequestNgo(props) {
                   />
                 </View>
                 <View>
-                  <Text style={styles.headingText}>{values.name}</Text>
-                  <Text style={styles.bodyText}>From:{values.user_name}</Text>
+                  <Text style={styles.headingText}>{data.name}</Text>
+                  <Text style={styles.bodyText}>From:{data.user_name}</Text>
                   <Text style={styles.bodyText}>
-                    Type:{values.request_type_name}
+                    Type: {data.request_type_name}
                   </Text>
                   <Text style={styles.bodyText}>
-                    Best Before:{values.need_before.split('T')[0]}
+                    Best Before: {data.need_before.split('T')[0]}
                   </Text>
                 </View>
               </View>
@@ -101,21 +101,6 @@ function OngoingRequestNgo(props) {
 }
 
 const styles = StyleSheet.create({
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingRight: 15,
-    paddingTop: 10,
-  },
-  filterBtnContainer: {
-    flexDirection: 'row',
-  },
-  filterTxt: {
-    fontFamily: 'Barlow-SemiBold',
-    fontSize: 20,
-    marginRight: 10,
-    color: colorConstant.primaryColor,
-  },
   mainContainer: {
     height: Dimensions.get('window').height / 6.5,
     alignItems: 'center',
@@ -135,27 +120,11 @@ const styles = StyleSheet.create({
     borderLeftWidth: 6,
     paddingLeft: 10,
   },
-  Heading: {
-    left: 23,
-  },
-  AvailabilityHeaderCon: {
-    marginRight: 8,
-  },
-  AvailabilityHeaderTxt: {
-    fontFamily: 'Barlow',
-    fontSize: 18,
-    color: colorConstant.proCharcoal,
-  },
   ProfilePicCon: {},
   ProfilePic: {
     height: 80,
     width: 80,
     borderRadius: 100,
-  },
-  TextCon: {
-    height: 105,
-    borderRadius: 16,
-    left: 20,
   },
   headingText: {
     fontFamily: 'Barlow-SemiBold',
@@ -171,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OngoingRequestNgo;
+export default OngoingRequest;

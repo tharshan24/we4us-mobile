@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,6 +17,29 @@ import {flexDirection} from 'styled-system';
 
 const DashboardNgo = (props) => {
   const navigation = useNavigation();
+  const [data, setData] = React.useState([]);
+  const [userId, setUserId] = useState();
+  useEffect(() => {
+    // console.log(context.values.id, 'pppppppppppppp');
+    getUser();
+   
+  }, [userId]);
+
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      const parsedValue = JSON.parse(jsonValue);
+      console.log(parsedValue.result.id);
+      if (parsedValue !== null) {
+        setToken(parsedValue.token);
+        setUserId(parsedValue.result.id);
+        setData(parsedValue.result);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Done.');
+  };
   return (
     <SafeAreaView style={styles.Container}>
       <StatusBar backgroundColor={colorConstant.primaryColor} />
@@ -84,18 +107,6 @@ const DashboardNgo = (props) => {
               </View>
               <View style={styles.ButtonsCon}>
                 <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 9,
-                    height: 25,
-                    width: 100,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Donation')}>
-                  <Text style={styles.BtnTxt}>History</Text>
-                </Button>
-                <Button
                   color={colorConstant.proRed}
                   mode="contained"
                   style={{
@@ -105,7 +116,7 @@ const DashboardNgo = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingDonation')}>
-                  <Text style={styles.BtnTxt2}>3 in Progress</Text>
+                  <Text style={styles.BtnTxt2}>Progress</Text>
                 </Button>
               </View>
             </View>
@@ -128,18 +139,6 @@ const DashboardNgo = (props) => {
               </View>
               <View style={styles.ButtonsConRequest}>
                 <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 9,
-                    height: 25,
-                    width: 100,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Request')}>
-                  <Text style={styles.BtnTxtRequest}>History</Text>
-                </Button>
-                <Button
                   color={colorConstant.proRed}
                   mode="contained"
                   style={{
@@ -149,7 +148,7 @@ const DashboardNgo = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingRequest')}>
-                  <Text style={styles.BtnTxt2Request}>5 on request</Text>
+                  <Text style={styles.BtnTxt2Request}>Progress</Text>
                 </Button>
               </View>
             </View>
@@ -177,18 +176,6 @@ const DashboardNgo = (props) => {
               </View>
               <View style={styles.ButtonsConDonationCamp}>
                 <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Collection-Point')}>
-                  <Text style={styles.BtnTxtDonationCamp}>History</Text>
-                </Button>
-                <Button
                   color={colorConstant.proRed}
                   mode="contained"
                   style={{
@@ -198,7 +185,7 @@ const DashboardNgo = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingCollectionPoint')}>
-                  <Text style={styles.BtnTxt2DonationCamp}>5 on request</Text>
+                  <Text style={styles.BtnTxt2DonationCamp}>Progress</Text>
                 </Button>
               </View>
             </View>

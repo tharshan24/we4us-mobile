@@ -25,8 +25,6 @@ import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import constants from '../../../constants/constantsProject.';
-import { SettingsOutlined } from '@material-ui/icons';
-import moment from 'moment';
 
 
 const availabilityInputSetThreeNgo = () => {
@@ -36,48 +34,52 @@ const availabilityInputSetThreeNgo = () => {
   const [district, setDistrict] = useState('');
   const [city, setCity] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [madeOn, setMadeOn] = useState(null);
-  const [bestBefore, setBestBefore] = useState(null);
+  const [start, setStart] = useState(null);
+  const [end ,setEnd] = useState(null);
   const [description, setDescription] = useState(null);
   const [imageLoc, setImageLoc] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] =useState('');
   const [fromLocation, setFromLocation] = useState();
   const [token, setToken] = React.useState();
-  const [progress, setProgress] = useState(null);
-  const [member, setMember] = React.useState();
-  const [title, setTitle] = React.useState('');
+//  const [progress, setProgress] = useState(null);
+  const [member, setMember] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [userId, setUserId] = useState(null);
   
   const getDataInputOne = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetOneColl');
+      const jsonValue = await AsyncStorage.getItem('@inputSetOne');
       const value = JSON.parse(jsonValue);
       if (value !== null) {
         console.log(value, 'first');
-        
+        setUserId(value.id);
         setTitle(value.title);
         setMember(value.member);
-        console.log(title, 'Member');
         setDescription(value.description);
       }
     } catch (e) {
       console.log(e);
     }
   };
+
   const getDataInputTwo = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@inputSetTwoColl');
+      const jsonValue = await AsyncStorage.getItem('@inputSetTwo');
       const value = JSON.parse(jsonValue);
       console.log(value, 'two');
       if (value !== null) {
-        
-        setMadeOn(value.madeOn);
-        setBestBefore(value.bestBefore);
+        setStart(value.start);
+        setEnd(value.end);
       }
     } catch (e) {}
   };
 
   useEffect(() => {
+    
+    console.log(member,'Nammmmmmmmmmmmmmmmmmmmmmmmmmm');
+    console.log(member,'Nammmmmmmmmmmmmmmmmmmmmmmmmmm');
+    console.log(description,'Nammmmmmmmmmmmmmmmmmmmmmmmmmm');
     Geolocation.getCurrentPosition(
       (position) => {
         setLocation({
@@ -130,14 +132,15 @@ const availabilityInputSetThreeNgo = () => {
     } else {
       setLoading(true);
        const availabilityData = {
-      'name':title,
-      'assigned_to':member,
-      'description':description,
-      'start_time':madeOn,
-      'end_time':bestBefore,
-      'latitude': fromLocation.latitude,
-      'longitude': fromLocation.longitude,
-      'city': selectedCity}
+         'ngo_id':userId,
+         'name':title,
+         'assigned_to':member,
+         'description':description,
+         'start_time':start,
+         'end_time':end,
+         'latitude': fromLocation.latitude,
+         'longitude': fromLocation.longitude,
+         'city': selectedCity}
     
       await axios({
         url: constants.BASE_URL + 'org/createCollectionPoint',
@@ -146,7 +149,7 @@ const availabilityInputSetThreeNgo = () => {
         headers: {
           Authorization: `OrganizationData ${token}`,
           Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
+          
         },
         
       })

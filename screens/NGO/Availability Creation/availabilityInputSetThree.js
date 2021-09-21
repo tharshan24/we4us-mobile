@@ -99,6 +99,7 @@ const availabilityInputSetThreeNgo = () => {
   };
 
   useEffect(() => {
+    console.log(category,'Nammmmmmmmmmmmmmmmmmmmmmmmmmm');
     Geolocation.getCurrentPosition(
       (position) => {
         setLocation({
@@ -216,6 +217,7 @@ const availabilityInputSetThreeNgo = () => {
         console.log(value, 'first');
         setTitle(value.title);
         setCategory(value.category);
+        console.log(category,'Nammmmmmmmmmmmmmmmmmmmmmmmmmm');
         SetFoodType(value.foodType);
         setDescription(value.description);
       }
@@ -435,9 +437,9 @@ const availabilityInputSetThreeNgo = () => {
                       onValueChange={(itemValue) =>
                         setDeliveryOption(itemValue)
                       }>
-                      <Select.Item label="Self Delivery" value="self" />
-                      <Select.Item label="Volunteer Driver" value="volunteer" />
-                      <Select.Item label="Paid Driver" value="paid" />
+                      <Select.Item label="Self Delivery" value={0} />
+                      <Select.Item label="Volunteer Driver" value={1} />
+                      <Select.Item label="Paid Driver" value={2} />
                     </Select>
                   </VStack>
                 </NativeBaseProvider>

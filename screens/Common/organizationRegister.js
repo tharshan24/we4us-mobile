@@ -147,6 +147,7 @@ const OrganizationRegister = (props) => {
     console.log(type,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     axios
       .post(constants.BASE_URL + 'user/orgRegister', {
+        name: type,
         user_name: name,
         email: email,
         mobile_number: mobile,

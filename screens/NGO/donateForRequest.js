@@ -24,7 +24,7 @@ import {Button, TextInput} from 'react-native-paper';
 import {NativeBaseProvider} from 'native-base/src/core/NativeBaseProvider';
 import Geolocation from 'react-native-geolocation-service';
 
-function browseRequest(props) {
+function browseRequestNgo(props) {
   const {request_id} = props.route.params;
   const context = useContext(SocketContext);
   const navigation = useNavigation();
@@ -36,7 +36,7 @@ function browseRequest(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(request_id);
+    console.log(request_id, 'req_id');
     getCurrentUser();
   }, []);
 
@@ -148,12 +148,12 @@ function browseRequest(props) {
 
   const sendData = () => {
     const info = {
-      quantity: data.needed_quantity,
+      items: items,
       request_id: request_id,
       latitude: data.latitude,
       longitude: data.longitude,
     };
-    navigation.navigate('DonateForRequestNgo', {info});
+    navigation.navigate('DonateForRequestNgo', {info: info});
   };
 
   return (
@@ -445,4 +445,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default browseRequest;
+export default browseRequestNgo;

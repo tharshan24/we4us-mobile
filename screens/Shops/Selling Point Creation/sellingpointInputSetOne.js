@@ -25,7 +25,7 @@ const sellingpointInputSetOne = () => {
  // const [member, setMember] = React.useState('');
   const [desc, setDesc] = React.useState('');
   const [token, setToken] = React.useState();
- // const [userId, setUserId] = React.useState();
+ const [userId, setUserId] = React.useState();
   const [data, setData] = useState([]);
  // const [loading, setLoading] = React.useState(true);
   const context = useContext(SocketContext);
@@ -77,6 +77,7 @@ const sellingpointInputSetOne = () => {
         title: title,
         member: selectedMember,
         description: desc,
+        id: userId
       };
       storeData(inputSetOne);
       navigation.navigate('sellingpointInputSetTwo');
@@ -132,6 +133,7 @@ const sellingpointInputSetOne = () => {
         .then(function (response) {
           console.log(response.data);
           setData(response.data.result.data);
+          setUserId(response.data.authData.user.id);
          // setMasterDataSource(response.data.result.row);
          
           console.log(id);

@@ -70,12 +70,12 @@ const collectionpointInputSetTwoNgo = ({route}) => {
     } else if ( beforeTime === 'HH:MM:SS') {
       Alert.alert('Select Expiry Time');
     } else {
-      const inputSetTwo = {
-        madeOn: assignMade,
-        bestBefore: assignBest,
+      const inputSetTwoColl = {
+        start: assignMade,
+        end: assignBest,
         
       };
-      storeData(inputSetTwo);
+      storeData(inputSetTwoColl);
       navigation.navigate('collectionpointInputSetThree');
     }
   };
@@ -83,7 +83,7 @@ const collectionpointInputSetTwoNgo = ({route}) => {
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@inputSetTwoColl', jsonValue);
+      await AsyncStorage.setItem('@inputSetTwo', jsonValue);
     } catch (err) {
       console.log(err);
     }

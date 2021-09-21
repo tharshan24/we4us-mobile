@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -20,7 +20,7 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ExploreCollectionpoint(props) {
+function collectionPoints({route}) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const context = useContext(SocketContext);
@@ -28,11 +28,13 @@ function ExploreCollectionpoint(props) {
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
-      getRequests();
+      getCollectionPoints();
     });
   }, []);
 
-  const getRequests = async () => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const getCollectionPoints = async () => {
     try {
       await axios
         .get(constants.BASE_URL + 'org/getCollectionPoints', {
@@ -41,6 +43,7 @@ function ExploreCollectionpoint(props) {
           },
         })
         .then(function (response) {
+          // console.log(response.data.result.row);
           setData(response.data.result.row);
           setLoading(false);
         });
@@ -49,12 +52,10 @@ function ExploreCollectionpoint(props) {
     }
   };
 
-  const [refreshing, setRefreshing] = React.useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getRequests();
-    wait(2000).then(() => setRefreshing(false));
+    getCollectionPoints();
+    wait(3000).then(() => setRefreshing(false));
   }, []);
 
   return (
@@ -67,11 +68,11 @@ function ExploreCollectionpoint(props) {
         <Spinner />
       ) : (
         data.map((values) => (
-          <View key={values.request_type} style={styles.mainContainer}>
+          <View key={values.id} style={styles.mainContainer}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('BrowseRequestNgo', {
-                  ngo_id: values.ngo_id,
+                navigation.navigate('BrowseCollectionpointNgo', {
+                  collection_id: values.id,
                 })
               }>
               <View style={styles.AvailabilityCon}>
@@ -83,8 +84,12 @@ function ExploreCollectionpoint(props) {
                 </View>
                 <View>
                   <Text style={styles.headingText}>{values.name}</Text>
+                  <Text style={styles.bodyText}>From:{values.user_name}</Text>
                   <Text style={styles.bodyText}>
-                    Start Time:{values.star_time.split('T')[0]}
+                    Start on: {values.start_time}
+                  </Text>
+                  <Text style={styles.bodyText}>
+                    End on: {values.end_time.split('T')[0]}
                   </Text>
                 </View>
               </View>
@@ -167,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreCollectionpoint;
+export default collectionPoints;

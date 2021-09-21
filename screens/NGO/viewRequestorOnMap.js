@@ -6,7 +6,7 @@ import colorConstant from '../../constants/colorConstant';
 import Geolocation from 'react-native-geolocation-service';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 
-const ViewOnMapAvailabilityNgo = (props) => {
+const viewRequesterOnMapNgo = (props) => {
   const {longitude, latitude} = props.route.params;
   const [region, setRegion] = useState();
   const [valueMargin, setValueMargin] = useState(5);
@@ -41,8 +41,6 @@ const ViewOnMapAvailabilityNgo = (props) => {
   );
 
   useEffect(() => {
-    console.log(longitude);
-    console.log(latitude);
     setRegion({
       latitude: latitude,
       longitude: longitude,
@@ -114,4 +112,4 @@ const ViewOnMapAvailabilityNgo = (props) => {
   );
 };
 
-export default ViewOnMapAvailabilityNgo;
+export default viewRequesterOnMapNgo;

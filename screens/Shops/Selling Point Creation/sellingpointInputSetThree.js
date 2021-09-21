@@ -45,6 +45,7 @@ const sellingpointInputSetThreeNgo = () => {
   const [progress, setProgress] = useState(null);
   const [member, setMember] = React.useState('');
   const [title, setTitle] = React.useState('');
+  const [userId, setUserId] = useState(null);
   
   const getDataInputOne = async () => {
     try {
@@ -52,7 +53,7 @@ const sellingpointInputSetThreeNgo = () => {
       const value = JSON.parse(jsonValue);
       if (value !== null) {
         console.log(value, 'first');
-        
+        setUserId(value.id);
         setTitle(value.title);
         setMember(value.member);
         setDescription(value.description);
@@ -127,6 +128,7 @@ const sellingpointInputSetThreeNgo = () => {
     } else {
       setLoading(true);
       const availabilityData = {
+        'ngo_id':userId,
       'name':title,
       'assigned_to':member,
       'description':description,
@@ -142,7 +144,6 @@ const sellingpointInputSetThreeNgo = () => {
         headers: {
           Authorization: `OrganizationData ${token}`,
           Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
         },
         
       })

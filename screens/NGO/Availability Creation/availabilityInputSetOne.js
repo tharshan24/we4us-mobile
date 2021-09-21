@@ -17,7 +17,7 @@ import moment from 'moment';
 import axios from 'axios';
 import constants from '../../../constants/constantsProject.';
 
-const availabilityInputSetOneNgo = () => {
+const availabilityInputSetOne = () => {
   const navigation = useNavigation();
   const [title, setTitle] = React.useState('');
   const [foodType, setFoodType] = React.useState('');
@@ -204,9 +204,9 @@ const availabilityInputSetOneNgo = () => {
                       selectedValue={foodType}
                       placeholder="Select Food Type"
                       onValueChange={(itemValue) => setFoodType(itemValue)}>
-                      <Select.Item label="Vegetarian" value="veg" />
-                      <Select.Item label="Non-Vegetarian" value="nonveg" />
-                      <Select.Item label="Mixed" value="mix" />
+                       <Select.Item label="Vegetarian" value={1} />
+                      <Select.Item label="Non-Vegetarian" value={0} />
+                      <Select.Item label="Mixed" value={0} />
                     </Select>
                   </VStack>
                 </NativeBaseProvider>
@@ -411,4 +411,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default availabilityInputSetOneNgo;
+export default availabilityInputSetOne;

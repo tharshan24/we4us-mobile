@@ -293,7 +293,7 @@ function RequestForDonation({route}) {
                             alignItems: 'center',
                           }}
                           onPress={() =>
-                            navigation.navigate('viewRequesterOnMap', {
+                            navigation.navigate('viewRequesterOnMapNgo', {
                               longitude: value.longitude,
                               latitude: value.latitude,
                             })

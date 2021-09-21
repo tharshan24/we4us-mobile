@@ -11,14 +11,14 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colorConstant from '../../../constants/colorConstant';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import GOOGLE_API_KEY from '../../../constants/constantsProject.';
+import constants from '../../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-const findLocationMapAvailability = ({route}) => {
+const findLocationMap = ({route}) => {
   const {location} = route.params;
   const ref = useRef();
 
@@ -35,6 +35,7 @@ const findLocationMapAvailability = ({route}) => {
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
     console.log('Permission Already Granted');
+    console.log(constants.GOOGLE_API_KEY, 'llllllll');
   };
 
   const checkPermissions = () => {
@@ -146,7 +147,10 @@ const findLocationMapAvailability = ({route}) => {
         <GooglePlacesAutocomplete
           ref={ref}
           placeholder="Search"
-          query={{key: GOOGLE_API_KEY, language: 'en'}}
+          query={{
+            key: 'AIzaSyBeTMqfMRsOIEDZs8nTaBBv1lI1W9KTADE',
+            language: 'en',
+          }}
           debounce={400}
           styles={{
             container: {
@@ -216,7 +220,7 @@ const findLocationMapAvailability = ({route}) => {
   );
 };
 
-export default findLocationMapAvailability;
+export default findLocationMap;
 
 const styles = StyleSheet.create({
   mainContainerFindLocation: {

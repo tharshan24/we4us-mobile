@@ -93,6 +93,17 @@ function BrowseAvailabilityNgo(props) {
     }
   };
 
+  const sendData = () => {
+    const info = {
+      quantity: data.available_quantity,
+      availability_id: availabilityId,
+      latitude: data.latitude,
+      longitude: data.longitude,
+    };
+    navigation.navigate('RequestAvailabilityNgo', {info});
+  };
+
+
   const getCurrentUser = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('user');
@@ -281,7 +292,7 @@ function BrowseAvailabilityNgo(props) {
                 <Button
                   mode="contained"
                   onPress={() =>
-                    navigation.navigate('ViewOnMapAvailability', {
+                    navigation.navigate('ViewOnMapAvailabilityNgo', {
                       longitude: data.longitude,
                       latitude: data.latitude,
                     })
@@ -380,11 +391,16 @@ function BrowseAvailabilityNgo(props) {
             </Swiper>
           </View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-              <Text style={styles.btnTxt}>Request</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btn}
+                activeOpacity={0.8}
+                onPress={() => {
+                  sendData();
+                }}>
+                <Text style={styles.btnTxt}>Request</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
       )}
     </ScrollView>
   );

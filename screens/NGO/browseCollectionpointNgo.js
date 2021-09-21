@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   ScrollView,
@@ -11,183 +12,173 @@ import {
 import colorConstant from '../../constants/colorConstant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swiper from 'react-native-swiper';
-import {Button} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import SocketContext from '../../Context/SocketContext';
+import constants from '../../constants/constantsProject.';
+import moment from 'moment';
+import {Center, Input, Modal, Select, Spinner, VStack} from 'native-base';
+import {Button, TextInput} from 'react-native-paper';
+import {NativeBaseProvider} from 'native-base/src/core/NativeBaseProvider';
+import Geolocation from 'react-native-geolocation-service';
 
-function BrowseCollectionpointNgo(props) {
+function BrowseCollectionPointsNgo(props) {
+  const {collection_id} = props.route.params;
+  const context = useContext(SocketContext);
   const navigation = useNavigation();
+  const [userId, setUserId] = useState('');
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log(collection_id);
+    getCurrentUser();
+  }, []);
+
+  const getCurrentUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      if (jsonValue !== null) {
+        const value = JSON.parse(jsonValue);
+        setUserId(value.result.id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    // browseAvailability();
+    return navigation.addListener('focus', () => {
+      browseCollectionPoints();
+    });
+  }, []);
+
+  const browseCollectionPoints = async () => {
+    try {
+      await axios
+        .get(
+          constants.BASE_URL + 'org/getCollectionPointsById/' + collection_id,
+          {
+            headers: {
+              Authorization: `Bearer ${context.token}`,
+            },
+          },
+        )
+        .then(function (response) {
+          console.log(response.data.result.data[0], 'llllllll');
+          setData(response.data.result.data[0]);
+          setLoading(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.headingContainer}>
-          <View style={styles.txtCon}>
-            <Text style={styles.headingTxt}>{'Corona Disaster \nCollection Point'}</Text>
-          </View>
-          <View style={styles.iconCon}>
-            <TouchableOpacity style={{marginRight: 20}} activeOpacity={0.7}>
-              <MaterialCommunityIcons
-                name="phone"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.primaryColor,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
-              <MaterialCommunityIcons
-                name="message-reply-text"
-                color="#ffffff"
-                size={30}
-                style={{
-                  backgroundColor: colorConstant.primaryColor,
-                  borderRadius: 100,
-                  padding: 7,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            borderBottomColor: colorConstant.proGreen,
-            borderBottomWidth: 3,
-            marginLeft: 15,
-            marginRight: 15,
-            marginTop: 15,
-          }}
-        />
-        <View style={styles.contentContainer}>
-          {/*txt2*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Created by :</Text>
+    <NativeBaseProvider>
+      <ScrollView>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <View style={styles.mainContainer}>
+            <View style={styles.headingContainer}>
+              <View style={styles.txtCon}>
+                <Text style={styles.headingTxt}>{data.name}</Text>
+              </View>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Rotaract Club</Text>
-            </View>
-          </View>
-          {/*txt*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Assigned to :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Mithula Tharmarasa</Text>
-            </View>
-          </View>
-          {/*txt3*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Start Time :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}> 29/05/2021 | 09:00 AM</Text>
-            </View>
-          </View>
-          {/*txt4*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>End Time :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>29/05/2021 | 06:00 PM</Text>
-            </View>
-          </View>
-          {/*txt5*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Count :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>45</Text>
-            </View>
-          </View>
-          {/*txt6*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Location :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>Valvettithurai, Jaffna</Text>
-            </View>
-          </View>
-          {/*txt7*/}
-          {/*txt5*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}></Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>
-              <Button
-                mode="contained"
-                onPress={() => navigation.navigate('CollectionpointTrackingMapNgo')}
-                style={{
-                  backgroundColor: colorConstant.proRed,
-                }}>
-                View on Map
-              </Button>
-              </Text>
+            <View
+              style={{
+                borderBottomColor: colorConstant.proGreen,
+                borderBottomWidth: 3,
+                marginLeft: 15,
+                marginRight: 15,
+                marginTop: 15,
+              }}
+            />
+            <View style={styles.contentContainer}>
+              <View style={styles.txtContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.subHeadingTxt}>Title :</Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text style={styles.resultsTxt}>{data.name}</Text>
+                </View>
+              </View>
+              <View style={styles.txtContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.subHeadingTxt}>Created by :</Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text style={styles.resultsTxt}>{data.user_name}</Text>
+                </View>
+              </View>
+              {/*txt3*/}
+              <View style={styles.txtContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.subHeadingTxt}>Start on :</Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text style={styles.resultsTxt}>
+                    {moment(data.start_time).format('DD-MM-YYYY   HH:mm A')}
+                  </Text>
+                </View>
+              </View>
+              {/*txt4*/}
+              <View style={styles.txtContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.subHeadingTxt}>End on :</Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text style={styles.resultsTxt}>
+                    {moment(data.end_time).format('DD-MM-YYYY   HH:mm A')}
+                  </Text>
+                </View>
+              </View>
+              {/*txt6*/}
+              <View style={styles.txtContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.subHeadingTxt}>Location :</Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Button
+                    mode="contained"
+                    onPress={() =>
+                      navigation.navigate('ViewOnMapCollectionPoints', {
+                        longitude: data.longitude,
+                        latitude: data.latitude,
+                      })
+                    }
+                    style={{
+                      backgroundColor: colorConstant.proRed,
+                      width: 140,
+                      height: 30,
+                      padding: 0,
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={styles.resultsTxtBtn}>View on Map</Text>
+                  </Button>
+                </View>
+              </View>
+              {/*txt7*/}
+              <View style={styles.txtContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.subHeadingTxt}>Description :</Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text style={styles.resultsTxt}>
+                    {data.description}
+                    {/*Rice meal with Dhal , Brinjal , Beans , Potato and Panneer*/}
+                    {/*Curries. Catering taken from MAHENDRANS.*/}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
-          {/*txt8*/}
-          <View style={styles.txtContainer}>
-            <View style={{flex: 1}}>
-              <Text style={styles.subHeadingTxt}>Description :</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={styles.resultsTxt}>
-                Rice meal with Dhal , Brinjal , Beans , Potato and Panneer
-                Curries. Catering taken from MAHENDRANS.
-              </Text>
-            </View>
-          </View>
-          {/*txt9*/}
-        </View>
-        <View style={styles.imageContainer}>
-          <Swiper
-            showsPagination={false}
-            showsButtons={false}
-            style={{
-              height: Dimensions.get('window').height / 3,
-              borderRadius: 10,
-            }}>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food1.jpg')}
-              />
-            </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food2.jpg')}
-              />
-            </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food3.jpg')}
-              />
-            </View>
-            <View style={styles.contentImageCon}>
-              <Image
-                style={styles.contentImage}
-                source={require('../../assets/Images/food4.jpg')}
-              />
-            </View>
-          </Swiper>
-        </View>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-            <Text style={styles.btnTxt}>Accept</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ScrollView>
+        )}
+      </ScrollView>
+    </NativeBaseProvider>
   );
 }
 
@@ -249,6 +240,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#727E8E',
   },
+  resultsTxtBtn: {
+    fontFamily: 'Barlow-SemiBold',
+    fontSize: 13,
+    color: '#ffffff',
+  },
   contentImageCon: {
     height: Dimensions.get('window').height / 3,
     width: Dimensions.get('window').width,
@@ -267,7 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorConstant.proGreen,
     padding: 10,
     width: Dimensions.get('window').width / 3,
-    borderRadius: 10,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -278,4 +274,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrowseCollectionpointNgo;
+export default BrowseCollectionPointsNgo;

@@ -25,11 +25,11 @@ const collectionpointInputSetOne = () => {
  // const [member, setMember] = React.useState('');
   const [desc, setDesc] = React.useState('');
   const [token, setToken] = React.useState();
- // const [userId, setUserId] = React.useState();
-  const [data, setData] = useState([]);
+ const [userId, setUserId] = React.useState();
+  const [data, setData] = React.useState([]);
  // const [loading, setLoading] = React.useState(true);
   const context = useContext(SocketContext);
-  const [selectedMember, setSelectedMember] = useState();
+  const [selectedMember, setSelectedMember] =React.useState(0);
 
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {});
@@ -77,6 +77,7 @@ const collectionpointInputSetOne = () => {
         title: title,
         member: selectedMember,
         description: desc,
+        id: userId
       };
       storeData(inputSetOne);
       navigation.navigate('collectionpointInputSetTwo');
@@ -104,7 +105,7 @@ const collectionpointInputSetOne = () => {
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@inputSetOneColl', jsonValue);
+      await AsyncStorage.setItem('@inputSetOne', jsonValue);
     } catch (e) {
       console.log(e);
     }
@@ -132,6 +133,7 @@ const collectionpointInputSetOne = () => {
         .then(function (response) {
           console.log(response.data);
           setData(response.data.result.data);
+          setUserId(response.data.authData.user.id);
          // setMasterDataSource(response.data.result.row);
          
          // console.log(id);

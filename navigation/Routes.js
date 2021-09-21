@@ -112,6 +112,10 @@ import AddMember from '../screens/NGO/addMember';
 import BrowseRequestNgo from '../screens/NGO/browseRequestsNgo';
 import ViewOnMapAvailabilityNgo from '../screens/NGO/viewOnMapAvailability';
 import ExploreCollectionpoint from '../screens/NGO/exploreCollectionpoint';
+import viewRequesterOnMapNgo from '../screens/NGO/viewRequestorOnMap';
+import RequestAvailabilityNgo from '../screens/NGO/requestAvailability';
+import requestAvailabilityLocationMapNgo from '../screens/NGO/requestAvailabilityLocationMap';
+import DonateForRequestNgo from '../screens/NGO/donateForRequest';
 //home
 import DashboardHome from '../screens/CareHome/dashboardHome';
 import HistoryDonationHome from '../screens/CareHome/historyDonationHome';
@@ -518,6 +522,40 @@ const DashboardNgoStack = () => {
         }}
       />
       <Stack.Screen
+        name="viewRequesterOnMapNgo"
+        component={viewRequesterOnMapNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'View Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="requestAvailabilityLocationMapNgo"
+        component={requestAvailabilityLocationMapNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Choose Location',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
         name="CollectionpointTrackingMapNgo"
         component={CollectionpointTrackingMapNgo}
         options={{
@@ -654,12 +692,46 @@ const DashboardNgoStack = () => {
           },
         }}
       />
+       <Stack.Screen
+        name="RequestAvailabilityNgo"
+        component={RequestAvailabilityNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Request Availability',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="cameraScreen"
         component={cameraScreen}
         options={{
           headerTintColor: '#ffffff',
           title: 'Capture',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+        <Stack.Screen
+        name="DonateForRequestNgo"
+        component={DonateForRequestNgo}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Request Availability',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
