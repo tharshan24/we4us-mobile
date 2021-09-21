@@ -182,11 +182,13 @@ const availabilityInputSetThree = () => {
         },
       })
         .then(function (response) {
-          console.log(response.data);
-          Alert.alert('Availability Created Successfully');
-          navigation.popToTop();
-          removeAllInputs();
-          setLoading(false);
+          if (response.data.status_code === 0) {
+            console.log(response.data);
+            Alert.alert('Availability Created Successfully');
+            navigation.popToTop();
+            removeAllInputs();
+            setLoading(false);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -435,9 +437,9 @@ const availabilityInputSetThree = () => {
                       onValueChange={(itemValue) =>
                         setDeliveryOption(itemValue)
                       }>
-                      <Select.Item label="Self Delivery" value="self" />
-                      <Select.Item label="Volunteer Driver" value="volunteer" />
-                      <Select.Item label="Paid Driver" value="paid" />
+                      <Select.Item label="Self Delivery" value={0} />
+                      <Select.Item label="Volunteer Driver" value={1} />
+                      <Select.Item label="Paid Driver" value={2} />
                     </Select>
                   </VStack>
                 </NativeBaseProvider>

@@ -10,11 +10,16 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import axios from 'axios';
 import constants from '../../../constants/constantsProject.';
 import SocketContext from '../../../Context/SocketContext';
 import {Spinner} from 'native-base';
+
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 function ExploreAvailability({route}) {
   const [loading, setLoading] = useState(true);
@@ -26,6 +31,14 @@ function ExploreAvailability({route}) {
     return navigation.addListener('focus', () => {
       getAvailabilityData();
     });
+  }, []);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getAvailabilityData();
+    wait(2000).then(() => setRefreshing(false));
   }, []);
 
   const getAvailabilityData = async () => {
@@ -62,7 +75,11 @@ function ExploreAvailability({route}) {
       {/*    />*/}
       {/*  </TouchableOpacity>*/}
       {/*</View>*/}
-      <ScrollView style={{margin: 7}}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        style={{margin: 7}}>
         {loading ? (
           <Spinner />
         ) : (

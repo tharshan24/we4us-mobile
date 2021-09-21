@@ -50,7 +50,7 @@ function OngoingDonation(props) {
         <Spinner />
       ) : (
         data.map((values) => (
-          <View style={styles.mainContainer}>
+          <View key={values.id} style={styles.mainContainer}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('OngoingDeliveryDetails', {

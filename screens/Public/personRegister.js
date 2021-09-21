@@ -153,9 +153,7 @@ const PersonRegister = (props) => {
     } else if (checkPassword === '') {
       Alert.alert('Enter Confirm Password');
     } else {
-      console.log('lll');
       RegisterUser();
-      Alert.alert('Registration Successful');
     }
   };
 
@@ -166,6 +164,7 @@ const PersonRegister = (props) => {
   //   });
   // }
   const RegisterUser = () => {
+    setLoading(true);
     axios
       .post(constants.BASE_URL + 'user/publicRegister', {
         user_name: name,
@@ -180,6 +179,7 @@ const PersonRegister = (props) => {
       .then(function (response) {
         console.log(response.data);
         if (response.data.status_code === 0) {
+          Alert.alert('Check your email and activate your account to Login');
           navigation.replace('Auth', {
             screen: 'Login',
           });

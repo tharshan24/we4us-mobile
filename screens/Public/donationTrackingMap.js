@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Dimensions,
@@ -14,30 +14,85 @@ import MapViewDirections from 'react-native-maps-directions';
 import GOOGLE_API_KEY from '../../constants/constantsProject.';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {Button} from 'react-native-paper';
+import axios from 'axios';
+import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
+import {Spinner} from 'native-base';
 
 function DonationTrackingMap(props) {
+  const {
+    creatorLatitude,
+    createdLongitude,
+    requesterLatitude,
+    requesterLongitude,
+    driver_id,
+  } = props.route.params;
   const [fromLocation, setFromLocation] = useState();
   const [toLocation, setToLocation] = useState(null);
   const [duration, setDuration] = useState();
   const [region, setRegion] = useState();
   const [isReady, setIsReady] = useState(false);
   const [angle, setAngle] = useState();
+  const context = useContext(SocketContext);
+  const [driverLatitude, setDriverLatitude] = useState(9.661338529942757);
+  const [driverLongitude, setDriverLongitude] = useState(80.01411437988283);
+  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState(1);
+
+  useEffect(() => {
+    console.log(
+      creatorLatitude,
+      createdLongitude,
+      requesterLatitude,
+      requesterLongitude,
+      driver_id,
+    );
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getData();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [state]);
+
+  const getData = async () => {
+    await axios({
+      url: constants.BASE_URL + 'user/getRealUser/' + driver_id,
+      method: 'get',
+      headers: {
+        Authorization: `Driver ${context.token}`,
+      },
+    })
+      .then(function (response) {
+        if (response.data.status_code === 0) {
+          setDriverLongitude(response.data.result.location.coordinates[0]);
+          setDriverLatitude(response.data.result.location.coordinates[1]);
+          console.log(response.data.result.location.coordinates[1]);
+          setState(state + 1);
+          console.log('wwwwwww');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const mapView = React.useRef();
 
   const mainFromLocation = {
     streetName: 'Vanniyasingam',
     gps: {
-      longitude: 80.01702189445497,
-      latitude: 9.711674411735867,
+      longitude: driverLongitude,
+      latitude: driverLatitude,
     },
   };
 
   const mainToLocation = {
     streetName: 'Hospital Road',
     gps: {
-      longitude: 80.00869631767274,
-      latitude: 9.712377653975071,
+      longitude: createdLongitude,
+      latitude: creatorLatitude,
     },
   };
 
@@ -151,14 +206,14 @@ function DonationTrackingMap(props) {
           style={{
             backgroundColor: '#ffffff',
             borderRadius: 100,
-            height: 50,
-            width: 50,
+            height: 45,
+            width: 45,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <MaterialCommunityIcons
-            name="navigation"
-            size={40}
+            name="brightness-1"
+            size={30}
             color={colorConstant.proRed}
           />
         </View>
@@ -178,7 +233,9 @@ function DonationTrackingMap(props) {
     return (Math.atan2(dy, dx) * 180) / Math.PI;
   }
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <View style={{flex: 1}}>
       <MapView
         ref={mapView}
@@ -228,75 +285,6 @@ function DonationTrackingMap(props) {
         {destinationMarker()}
         {fromLocationMarker()}
       </MapView>
-      <View style={styles.deliveryDetailsContainer}>
-        <View style={styles.deliveryDetailsContent}>
-          <View style={styles.driverDetailContainer}>
-            <View style={styles.imageContainer}>
-              <TouchableOpacity activeOpacity={0.7}>
-                <Image
-                  source={require('../../assets/Images/assets.jpg')}
-                  style={styles.profilePicture}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.detailContainer}>
-              <TouchableOpacity activeOpacity={0.7}>
-                <Text style={styles.nameTxt}> Priyatharshan </Text>
-                <Text style={styles.detailsTxt}> Volunteer Driver </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <MaterialCommunityIcons
-                    name="star"
-                    color={colorConstant.proYellow}
-                    size={20}
-                  />
-                  <Text style={styles.ratingTxt}> 4.7 </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.BtnContainer}>
-            <Button
-              mode="contained"
-              icon="phone"
-              labelStyle={{
-                fontSize: 18,
-                fontFamily: 'Barlow-Bold',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              style={{
-                backgroundColor: colorConstant.proGreen,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 40,
-                width: 150,
-                marginRight: 30,
-              }}>
-              Call
-            </Button>
-            <Button
-              mode="outlined"
-              icon="message"
-              labelStyle={{
-                color: colorConstant.proGreen,
-                fontSize: 18,
-                fontFamily: 'Barlow-Bold',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 2,
-                borderColor: colorConstant.proGreen,
-                height: 40,
-                width: 150,
-              }}>
-              Chat
-            </Button>
-          </View>
-        </View>
-      </View>
     </View>
   );
 }

@@ -114,7 +114,7 @@ const SettingsPublic = (props) => {
         <View style={styles.SettingContents}>
           <TouchableOpacity
             style={styles.SettingProfileCon}
-            onPress={() => navigation.navigate('AboutUs')}>
+            onPress={() => console.log('jjjjjj')}>
             <Text style={styles.SettingProfileTxt}>About Us</Text>
             <MaterialCommunityIcons
               name="chevron-right"
@@ -127,7 +127,7 @@ const SettingsPublic = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.SettingProfileCon}
-            onPress={() => navigation.navigate('PrivacyPolicy')}>
+            onPress={() => console.log('jjjjjj')}>
             <Text style={styles.SettingProfileTxt}>Privacy Policy</Text>
             <MaterialCommunityIcons
               name="chevron-right"
@@ -140,7 +140,7 @@ const SettingsPublic = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.SettingProfileCon}
-            onPress={() => navigation.navigate('TermsCondition')}>
+            onPress={() => console.log('jjjjjj')}>
             <Text style={styles.SettingProfileTxt}>Terms and Conditions</Text>
             <MaterialCommunityIcons
               name="chevron-right"

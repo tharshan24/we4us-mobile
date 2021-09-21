@@ -204,9 +204,9 @@ const availabilityInputSetOne = () => {
                       selectedValue={foodType}
                       placeholder="Select Food Type"
                       onValueChange={(itemValue) => setFoodType(itemValue)}>
-                      <Select.Item label="Vegetarian" value="veg" />
-                      <Select.Item label="Non-Vegetarian" value="nonveg" />
-                      <Select.Item label="Mixed" value="mix" />
+                      <Select.Item label="Vegetarian" value={0} />
+                      <Select.Item label="Non-Vegetarian" value={1} />
+                      <Select.Item label="Mixed" value={2} />
                     </Select>
                   </VStack>
                 </NativeBaseProvider>
@@ -266,13 +266,13 @@ const availabilityInputSetOne = () => {
                 />
               </View>
             </View>
-            {now >= 23 && selectedFoodCater === 1 ? (
+            {now < 8 && selectedFoodCater === 1 ? (
               <View style={styles.contentContainerBtn}>
                 <Button
                   mode="contained"
                   onPress={() => {
                     Alert.alert(
-                      'You can not Donate Cooked food after 11PM Local Time',
+                      'You can not Donate Cooked food from 10PM to 8AM Local Time',
                     );
                     console.log(now);
                     console.log(selectedFoodCater);

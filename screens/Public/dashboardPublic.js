@@ -33,8 +33,11 @@ const DashboardPublic = () => {
   const [permission, setPermission] = useState(null);
   const [accNo, setAccNo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingCount, setLoadingCount] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [data, setData] = useState([]);
+  const [donateCount, setDonateCount] = useState('');
+  const [reqCount, setReqCount] = useState('');
 
   useEffect(() => {
     getUser();
@@ -43,6 +46,7 @@ const DashboardPublic = () => {
   useEffect(() => {
     return navigation.addListener('focus', () => {
       viewProfile();
+      getCount();
     });
   }, [userId]);
 
@@ -157,6 +161,23 @@ const DashboardPublic = () => {
       });
   };
 
+  const getCount = async () => {
+    await axios
+      .get(constants.BASE_URL + 'user/getCounts', {
+        headers: {
+          Authorization: `Bearer ${context.token}`,
+        },
+      })
+      .then(function (response) {
+        setDonateCount(response.data.result.avail.data[0].cc);
+        setReqCount(response.data.result.req.data[0].cc);
+        setLoadingCount(false);
+      })
+      .catch(function (e) {
+        console.log(e);
+      });
+  };
+
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     sendData();
@@ -190,7 +211,7 @@ const DashboardPublic = () => {
       },
     })
       .then(function (response) {
-        console.log(response.data);
+        console.log('Sending from Dashboard');
       })
       .catch(function (error) {
         console.log(error);
@@ -210,7 +231,6 @@ const DashboardPublic = () => {
           },
         })
         .then(function (response) {
-          console.log(response.data.result[0], 'qwww');
           setData(response.data.result[0]);
           setLoadingProfile(false);
         });
@@ -270,98 +290,76 @@ const DashboardPublic = () => {
           </View>
         </View>
         <View style={styles.ContentCon}>
-          <View style={styles.MainActions}>
-            <View style={styles.Donations}>
-              <View style={styles.DonationHeader}>
-                <View style={styles.DonationHeaderTxtCon}>
-                  <Text style={styles.DonationHeaderTxt}>DONATIONS</Text>
+          {loadingCount ? (
+            <Spinner />
+          ) : (
+            <View style={styles.MainActions}>
+              <View style={styles.Donations}>
+                <View style={styles.DonationHeader}>
+                  <View style={styles.DonationHeaderTxtCon}>
+                    <Text style={styles.DonationHeaderTxt}>DONATIONS</Text>
+                  </View>
+                  <View style={styles.DonationHeaderIcon}>
+                    <MaterialCommunityIcons
+                      name="handshake"
+                      color={colorConstant.proGreen}
+                      size={25}
+                    />
+                  </View>
                 </View>
-                <View style={styles.DonationHeaderIcon}>
-                  <MaterialCommunityIcons
-                    name="handshake"
-                    color={colorConstant.proGreen}
-                    size={25}
-                  />
+                <View style={styles.DonationCount}>
+                  <Text style={styles.DonationCountTxt}>{donateCount}</Text>
+                  <Text style={styles.DonationSuccess}>TOTAL DONATIONS</Text>
                 </View>
-              </View>
-              <View style={styles.DonationCount}>
-                <Text style={styles.DonationCountTxt}>17</Text>
-                <Text style={styles.DonationSuccess}>TOTAL DONATIONS</Text>
-              </View>
-              <View style={styles.ButtonsCon}>
-                {/*<Button*/}
-                {/*  color={colorConstant.primaryColor}*/}
-                {/*  mode="contained"*/}
-                {/*  style={{*/}
-                {/*    marginTop: 9,*/}
-                {/*    height: 25,*/}
-                {/*    width: 100,*/}
-                {/*    justifyContent: 'center',*/}
-                {/*  }}*/}
-                {/*  onPress={() => navigation.navigate('History-Donation')}>*/}
-                {/*  /!*onPress={() => navigation.navigate('DonationTrackingMap')}>*!/*/}
-                {/*  <Text style={styles.BtnTxt}>History</Text>*/}
-                {/*</Button>*/}
-                <Button
-                  color={colorConstant.proRed}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 45,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('OngoingDonation')}>
-                  <Text style={styles.BtnTxt2}>Progress</Text>
-                </Button>
-              </View>
-            </View>
-            <View style={styles.Requests}>
-              <View style={styles.RequestHeader}>
-                <View style={styles.RequestHeaderTxtCon}>
-                  <Text style={styles.RequestHeaderTxt}>REQUESTS</Text>
-                </View>
-                <View style={styles.RequestHeaderIcon}>
-                  <MaterialCommunityIcons
-                    name="bullhorn-outline"
+                <View style={styles.ButtonsCon}>
+                  <Button
                     color={colorConstant.proRed}
-                    size={25}
-                  />
+                    mode="contained"
+                    style={{
+                      marginTop: 10,
+                      height: 45,
+                      width: 150,
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => navigation.navigate('OngoingDonation')}>
+                    <Text style={styles.BtnTxt2}>Progress</Text>
+                  </Button>
                 </View>
               </View>
-              <View style={styles.RequestCount}>
-                <Text style={styles.RequestCountTxt}>5</Text>
-                <Text style={styles.RequestSuccess}>TOTAL CREATED</Text>
-              </View>
-              <View style={styles.ButtonsConRequest}>
-                {/*<Button*/}
-                {/*  color={colorConstant.primaryColor}*/}
-                {/*  mode="contained"*/}
-                {/*  style={{*/}
-                {/*    marginTop: 9,*/}
-                {/*    height: 25,*/}
-                {/*    width: 100,*/}
-                {/*    justifyContent: 'center',*/}
-                {/*  }}*/}
-                {/*  onPress={() => navigation.navigate('History-Request')}>*/}
-                {/*  /!*onPress={() => navigation.navigate('chatComponent')}>*!/*/}
-                {/*  <Text style={styles.BtnTxtRequest}>History</Text>*/}
-                {/*</Button>*/}
-                <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 10,
-                    height: 45,
-                    width: 150,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('OngoingRequest')}>
-                  <Text style={styles.BtnTxt2Request}>Progress</Text>
-                </Button>
+              <View style={styles.Requests}>
+                <View style={styles.RequestHeader}>
+                  <View style={styles.RequestHeaderTxtCon}>
+                    <Text style={styles.RequestHeaderTxt}>REQUESTS</Text>
+                  </View>
+                  <View style={styles.RequestHeaderIcon}>
+                    <MaterialCommunityIcons
+                      name="bullhorn-outline"
+                      color={colorConstant.proRed}
+                      size={25}
+                    />
+                  </View>
+                </View>
+                <View style={styles.RequestCount}>
+                  <Text style={styles.RequestCountTxt}>{reqCount}</Text>
+                  <Text style={styles.RequestSuccess}>TOTAL CREATED</Text>
+                </View>
+                <View style={styles.ButtonsConRequest}>
+                  <Button
+                    color={colorConstant.primaryColor}
+                    mode="contained"
+                    style={{
+                      marginTop: 10,
+                      height: 45,
+                      width: 150,
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => navigation.navigate('OngoingRequest')}>
+                    <Text style={styles.BtnTxt2Request}>Progress</Text>
+                  </Button>
+                </View>
               </View>
             </View>
-          </View>
+          )}
           <View style={styles.RegisterDriverCon}>
             <View style={styles.Heading}>
               <View style={styles.DriverHeaderCon}>

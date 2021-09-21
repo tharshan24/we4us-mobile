@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   View,
+  Alert,
 } from 'react-native';
 import colorConstant from '../../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
@@ -125,6 +126,8 @@ function RequestForDonation({route}) {
           if (response.data.status_code === 0) {
             setDonateVisible(false);
             requestsForAvailabilities();
+          } else if (response.data.status_code === 1) {
+            Alert.alert(response.data.message);
           }
         });
     } catch (e) {
@@ -227,9 +230,11 @@ function RequestForDonation({route}) {
                 ) : value.status === 1 ? (
                   <Button
                     mode="contained"
-                    onPress={() =>
-                      navigation.navigate('DeliveryDetailsAvailabilities')
-                    }
+                    onPress={() => {
+                      navigation.navigate('DeliveryDetailsAvailabilities', {
+                        session_id: value.id,
+                      });
+                    }}
                     style={{
                       marginRight: 15,
                       color: '#000000',
@@ -376,21 +381,23 @@ function RequestForDonation({route}) {
                           width: 320,
                           alignItems: 'center',
                         }}>
-                        <Button
-                          mode="contained"
-                          style={{
-                            backgroundColor: colorConstant.proRed,
-                            marginBottom: 20,
-                          }}
-                          onPress={() => {
-                            rejectAvailabilities(sessionData.id);
-                            // console.log(sessionData.id);
-                          }}
-                          colorScheme="muted">
-                          <Text style={{fontSize: 17, color: '#ffffff'}}>
-                            REJECT
-                          </Text>
-                        </Button>
+                        {value.status === 0 ? (
+                          <Button
+                            mode="contained"
+                            style={{
+                              backgroundColor: colorConstant.proRed,
+                              marginBottom: 20,
+                            }}
+                            onPress={() => {
+                              rejectAvailabilities(sessionData.id);
+                              // console.log(sessionData.id);
+                            }}
+                            colorScheme="muted">
+                            <Text style={{fontSize: 17, color: '#ffffff'}}>
+                              REJECT
+                            </Text>
+                          </Button>
+                        ) : null}
                         <Button
                           mode="contained"
                           style={{

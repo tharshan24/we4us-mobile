@@ -25,42 +25,12 @@ const EditProfile = (props) => {
   const [txtVal, setTxtVal] = React.useState('Edit');
   const [submitTxt, setSubmitTxt] = React.useState();
   const [token, setToken] = React.useState();
-  const [district, setDistrict] = React.useState([]);
-  const [cities, setCities] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [loadingTwo, setLoadingTwo] = React.useState(true);
-  const [selectedCity, setSelectedCity] = React.useState(true);
-  const [selectedDistrict, setSelectedDistrict] = React.useState(true);
   const [data, setData] = React.useState([]);
   const [state, setState] = React.useState(1);
-
-  const loadDistrict = () => {
-    axios
-      .get(constants.BASE_URL + 'system/districts')
-      .then(function (response) {
-        setDistrict(response.data.result.rows);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  const loadCities = (districtId) => {
-    axios
-      .get(constants.BASE_URL + `system/citiesByDistrict/${districtId}`)
-      .then(function (response) {
-        setCities(response.data.result.rows);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  const changeDistrict = (districtId) => {
-    setSelectedDistrict(districtId);
-    loadCities(districtId);
-  };
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [mobile, setMobile] = React.useState('');
 
   const txtChange = () => {
     if (txtVal === 'Edit') {
@@ -80,11 +50,10 @@ const EditProfile = (props) => {
         setToken(value);
       }
     } catch (e) {
-      // error reading value
+      console.log(e);
     }
   };
 
-  // functions
   const FilePic = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -133,12 +102,11 @@ const EditProfile = (props) => {
 
   useEffect(() => {
     getData();
-    loadDistrict();
   }, []);
 
   useEffect(() => {
     userDetails();
-  }, [state]);
+  }, [state, token]);
 
   const userDetails = async () => {
     try {
@@ -150,9 +118,9 @@ const EditProfile = (props) => {
         },
       }).then(function (response) {
         if (response.data.status_code === 0) {
-          console.log(response.data, 'ooooooooooooooooooooo');
+          console.log(response.data.result[0]);
           setData(response.data.result[0]);
-          setLoadingTwo(false);
+          setLoading(false);
         }
       });
     } catch (e) {
@@ -164,7 +132,7 @@ const EditProfile = (props) => {
     <NativeBaseProvider>
       <Provider>
         <ScrollView style={styles.MainContainer}>
-          {loading || loadingTwo ? (
+          {loading ? (
             <Spinner color="blue.500" />
           ) : (
             <>
@@ -180,7 +148,8 @@ const EditProfile = (props) => {
                   <TouchableOpacity
                     style={{marginRight: 50}}
                     onPress={() => {
-                      setActionVal(false), txtChange();
+                      setActionVal(false);
+                      txtChange();
                     }}>
                     <Text style={styles.ChangeTxt}>{txtVal}</Text>
                   </TouchableOpacity>
@@ -194,10 +163,12 @@ const EditProfile = (props) => {
                   <Text style={styles.ContentTxt}>First Name</Text>
                   <View style={styles.EditContent}>
                     <TextInput
-                      placeholder="Athavan"
+                      placeholder={data.first_name}
                       disabled={actionVal}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
+                      value={firstName}
+                      onChangeText={(val) => setFirstName(val)}
                       style={{
                         height: 40,
                         width: '90%',
@@ -211,8 +182,10 @@ const EditProfile = (props) => {
                   <Text style={styles.ContentTxt}>Last Name</Text>
                   <View style={styles.EditContent}>
                     <TextInput
-                      placeholder="Theivendram"
+                      placeholder={data.last_name}
                       disabled={actionVal}
+                      value={lastName}
+                      onChangeText={(val) => setLastName(val)}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -225,11 +198,36 @@ const EditProfile = (props) => {
                   </View>
                 </View>
                 <View style={styles.Content}>
-                  <Text style={styles.ContentTxt}>Address</Text>
+                  <Text style={styles.ContentTxt}>Mobile Number</Text>
                   <View style={styles.EditContent}>
                     <TextInput
-                      placeholder="Jaffna, SriLanka"
+                      placeholder={data.mobile_number.toString()}
                       disabled={actionVal}
+                      value={mobile}
+                      onChangeText={(val) => setMobile(val)}
+                      selectionColor={colorConstant.primaryColor}
+                      underlineColor={colorConstant.proGreyLight}
+                      style={{
+                        height: 40,
+                        width: Dimensions.get('window').width / 1.7,
+                        backgroundColor: '#ffffff',
+                        borderColor: 'red',
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={styles.Content}>
+                  <Text style={styles.ContentTxt}>Gender</Text>
+                  <View style={styles.EditContent}>
+                    <TextInput
+                      placeholder={
+                        data.gender === 1
+                          ? 'Male'
+                          : data.gender === 2
+                          ? 'Female'
+                          : 'other'
+                      }
+                      disabled={true}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
@@ -240,73 +238,18 @@ const EditProfile = (props) => {
                       }}
                     />
                   </View>
-                </View>
-                <View style={styles.Content}>
-                  <Text style={styles.ContentTxt}>District</Text>
-                  <VStack alignItems="center" space={4}>
-                    <Select
-                      minWidth={330}
-                      selectedValue={selectedDistrict}
-                      style={styles.textInput}
-                      placeholder="District"
-                      onValueChange={(itemValue) => changeDistrict(itemValue)}>
-                      {district.map((distVal) => (
-                        <Select.Item
-                          label={distVal.name_en}
-                          value={distVal.id}
-                          key={distVal.id}
-                        />
-                      ))}
-                    </Select>
-                  </VStack>
                 </View>
                 <View style={styles.Content}>
                   <Text style={styles.ContentTxt}>City</Text>
-                  <VStack alignItems="center" space={4}>
-                    <Select
-                      minWidth={330}
-                      selectedValue={selectedCity}
-                      style={styles.textInput}
-                      placeholder="District"
-                      onValueChange={(itemValue) => setSelectedCity(itemValue)}>
-                      {cities.map((cityVal) => (
-                        <Select.Item
-                          label={cityVal.name_en}
-                          value={cityVal.id}
-                          key={cityVal.id}
-                        />
-                      ))}
-                    </Select>
-                  </VStack>
-                </View>
-                <View style={styles.Content}>
-                  <Text style={styles.ContentTxt}>ZipCode</Text>
                   <View style={styles.EditContent}>
                     <TextInput
-                      placeholder="40000"
-                      disabled={actionVal}
+                      placeholder={data.name_en}
+                      disabled={true}
                       selectionColor={colorConstant.primaryColor}
                       underlineColor={colorConstant.proGreyLight}
                       style={{
                         height: 40,
-                        width: Dimensions.get('window').width / 1.7,
-                        backgroundColor: '#ffffff',
-                        borderColor: 'red',
-                      }}
-                    />
-                  </View>
-                </View>
-                <View style={styles.Content}>
-                  <Text style={styles.ContentTxt}>Landline Number</Text>
-                  <View style={styles.EditContent}>
-                    <TextInput
-                      placeholder="021 224 1234"
-                      disabled={actionVal}
-                      selectionColor={colorConstant.primaryColor}
-                      underlineColor={colorConstant.proGreyLight}
-                      style={{
-                        height: 40,
-                        width: Dimensions.get('window').width / 1.7,
+                        width: '90%',
                         backgroundColor: '#ffffff',
                         borderColor: 'red',
                       }}

@@ -7,6 +7,8 @@ import {
   StyleSheet,
   StatusBar,
   Alert,
+  DevSettings,
+  Linking,
 } from 'react-native';
 import {Input, NativeBaseProvider} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
@@ -36,7 +38,9 @@ const Login = (props) => {
             result: response.data.result,
             token: response.data.token,
           };
+          console.log(response.data.token);
           storeData(user);
+
           // storeData(response.data.user);
           // storeData(response.data.result.userType);
           if (response.data.result.userType === 1) {
@@ -120,7 +124,9 @@ const Login = (props) => {
             <Button
               mode="text"
               uppercase={false}
-              onPress={() => navigation.navigate('forgotPassword')}>
+              onPress={() =>
+                Linking.openURL(constants.BASE_URL + 'user/forgotPassword')
+              }>
               <Text style={styles.ForgotPwdText}>ForgotPassword</Text>
             </Button>
             <View style={styles.SigninBtnContainer}>
