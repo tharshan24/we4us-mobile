@@ -21,7 +21,7 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import SocketContext from '../../Context/SocketContext';
 
-const DashboardPublic = (props) => {
+const DashboardPublic = () => {
   const navigation = useNavigation();
   const context = useContext(SocketContext);
   const [token, setToken] = useState();
@@ -37,9 +37,16 @@ const DashboardPublic = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // console.log(context.values.id, 'pppppppppppppp');
     getUser();
-    getDriverStatus();
+  }, []);
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      viewProfile();
+    });
+  }, [userId]);
+
+  useEffect(() => {
     return navigation.addListener('focus', () => {
       getDriverStatus();
     });
@@ -48,8 +55,7 @@ const DashboardPublic = (props) => {
   useEffect(() => {
     requestPermission();
     checkPermissions();
-    viewProfile();
-  }, [permission]);
+  }, []);
 
   const requestPermission = () => {
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
@@ -132,12 +138,13 @@ const DashboardPublic = (props) => {
 
   const getDriverStatus = async () => {
     await axios
-      .get(constants.BASE_URL + 'public/viewProfile/' + userId, {
+      .get(constants.BASE_URL + 'public/viewProfile/' + context.values.id, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${context.token}`,
         },
       })
       .then(function (response) {
+        // console.log(response.data, 'pppppppppppppp');
         response.data.result.map((val) => {
           // console.log(val);
           setAccNo(val.account_number);
@@ -203,7 +210,8 @@ const DashboardPublic = (props) => {
           },
         })
         .then(function (response) {
-          setData(response.data.result);
+          console.log(response.data.result[0], 'qwww');
+          setData(response.data.result[0]);
           setLoadingProfile(false);
         });
     } catch (e) {
@@ -223,17 +231,19 @@ const DashboardPublic = (props) => {
         <View style={styles.ProfilePicCon}>
           <Image
             style={styles.ProfilePic}
-            source={require('../../assets/Images/profilePic.jpg')}
+            source={{uri: data.profile_picture_path.toString()}}
           />
         </View>
         <View style={styles.UserDetails}>
-          <Text style={styles.UserName}> {data[0].user_name} </Text>
+          <Text style={styles.UserName}>
+            {data.first_name} {data.last_name}
+          </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={({marginRight: 15}, {marginTop: 3})}>
               <MaterialCommunityIcons name="email" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 8}}>
-              <Text style={styles.Email}>{data[0].email} </Text>
+              <Text style={styles.Email}>{data.email} </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -241,7 +251,7 @@ const DashboardPublic = (props) => {
               <MaterialCommunityIcons name="phone" color="#ffffff" size={13} />
             </View>
             <View style={{marginLeft: 3}}>
-              <Text style={styles.Mobile}> +94 {data[0].mobile_number} </Text>
+              <Text style={styles.Mobile}> +94 {data.mobile_number} </Text>
             </View>
           </View>
         </View>
@@ -276,33 +286,33 @@ const DashboardPublic = (props) => {
               </View>
               <View style={styles.DonationCount}>
                 <Text style={styles.DonationCountTxt}>17</Text>
-                <Text style={styles.DonationSuccess}>SUCCESSFUL DONATIONS</Text>
+                <Text style={styles.DonationSuccess}>TOTAL DONATIONS</Text>
               </View>
               <View style={styles.ButtonsCon}>
-                <Button
-                  color={colorConstant.primaryColor}
-                  mode="contained"
-                  style={{
-                    marginTop: 9,
-                    height: 25,
-                    width: 100,
-                    justifyContent: 'center',
-                  }}
-                  // onPress={() => navigation.navigate('History-Donation')}>
-                  onPress={() => navigation.navigate('DonationTrackingMap')}>
-                  <Text style={styles.BtnTxt}>History</Text>
-                </Button>
+                {/*<Button*/}
+                {/*  color={colorConstant.primaryColor}*/}
+                {/*  mode="contained"*/}
+                {/*  style={{*/}
+                {/*    marginTop: 9,*/}
+                {/*    height: 25,*/}
+                {/*    width: 100,*/}
+                {/*    justifyContent: 'center',*/}
+                {/*  }}*/}
+                {/*  onPress={() => navigation.navigate('History-Donation')}>*/}
+                {/*  /!*onPress={() => navigation.navigate('DonationTrackingMap')}>*!/*/}
+                {/*  <Text style={styles.BtnTxt}>History</Text>*/}
+                {/*</Button>*/}
                 <Button
                   color={colorConstant.proRed}
                   mode="contained"
                   style={{
                     marginTop: 10,
-                    height: 30,
+                    height: 45,
                     width: 150,
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingDonation')}>
-                  <Text style={styles.BtnTxt2}>2 in Progress</Text>
+                  <Text style={styles.BtnTxt2}>Progress</Text>
                 </Button>
               </View>
             </View>
@@ -321,116 +331,114 @@ const DashboardPublic = (props) => {
               </View>
               <View style={styles.RequestCount}>
                 <Text style={styles.RequestCountTxt}>5</Text>
-                <Text style={styles.RequestSuccess}>REQUESTS CREATED</Text>
+                <Text style={styles.RequestSuccess}>TOTAL CREATED</Text>
               </View>
               <View style={styles.ButtonsConRequest}>
+                {/*<Button*/}
+                {/*  color={colorConstant.primaryColor}*/}
+                {/*  mode="contained"*/}
+                {/*  style={{*/}
+                {/*    marginTop: 9,*/}
+                {/*    height: 25,*/}
+                {/*    width: 100,*/}
+                {/*    justifyContent: 'center',*/}
+                {/*  }}*/}
+                {/*  onPress={() => navigation.navigate('History-Request')}>*/}
+                {/*  /!*onPress={() => navigation.navigate('chatComponent')}>*!/*/}
+                {/*  <Text style={styles.BtnTxtRequest}>History</Text>*/}
+                {/*</Button>*/}
                 <Button
                   color={colorConstant.primaryColor}
                   mode="contained"
                   style={{
-                    marginTop: 9,
-                    height: 25,
-                    width: 100,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => navigation.navigate('History-Request')}>
-                  {/*onPress={() => navigation.navigate('chatComponent')}>*/}
-                  <Text style={styles.BtnTxtRequest}>History</Text>
-                </Button>
-                <Button
-                  color={colorConstant.proRed}
-                  mode="contained"
-                  style={{
                     marginTop: 10,
-                    height: 30,
+                    height: 45,
                     width: 150,
                     justifyContent: 'center',
                   }}
                   onPress={() => navigation.navigate('OngoingRequest')}>
-                  <Text style={styles.BtnTxt2Request}>3 on request</Text>
+                  <Text style={styles.BtnTxt2Request}>Progress</Text>
                 </Button>
               </View>
             </View>
           </View>
-          {loading ? (
-            <Spinner size="sm" />
-          ) : (
-            <View style={styles.RegisterDriverCon}>
-              <View style={styles.Heading}>
-                <View style={styles.DriverHeaderCon}>
-                  <Text style={styles.DriverHeaderTxt}>DELIVERIES</Text>
-                </View>
-                <View>
-                  <MaterialCommunityIcons
-                    name="truck-fast-outline"
-                    color={colorConstant.proCharcoal}
-                    size={25}
-                  />
-                </View>
+          <View style={styles.RegisterDriverCon}>
+            <View style={styles.Heading}>
+              <View style={styles.DriverHeaderCon}>
+                <Text style={styles.DriverHeaderTxt}>DELIVERIES</Text>
               </View>
-              <View style={styles.ImageCon}>
-                <Image
-                  style={styles.DeliveryImage}
-                  source={require('../../assets/Images/registerDriver.png')}
+              <View>
+                <MaterialCommunityIcons
+                  name="truck-fast-outline"
+                  color={colorConstant.proCharcoal}
+                  size={25}
                 />
-                {driverStatus === 0 ? (
-                  <Button
-                    color={colorConstant.primaryColor}
-                    mode="contained"
-                    style={{
-                      marginTop: 5,
-                      width: 205,
-                      height: 30,
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => navigation.navigate('registerDriverOne')}>
-                    <Text>REGISTER AS A DRIVER</Text>
-                  </Button>
-                ) : driverStatus === 1 ? (
-                  <View>
-                    <NativeBaseProvider>
-                      <HStack alignItems="center" space={8}>
-                        {isEnabled ? (
-                          <Text
-                            style={{
-                              fontSize: 20,
-                              fontFamily: 'Barlow-SemiBold',
-                              color: '#157918',
-                            }}>
-                            Driver Mode is ON
-                          </Text>
-                        ) : (
-                          <Text
-                            style={{
-                              fontSize: 20,
-                              fontFamily: 'Barlow-SemiBold',
-                              color: '#5f5f5f',
-                            }}>
-                            Enable Driving Mode
-                          </Text>
-                        )}
-                        <Switch
-                          colorScheme="emerald"
-                          size="lg"
-                          onToggle={toggleSwitch}
-                          isChecked={isEnabled}
-                        />
-                      </HStack>
-                    </NativeBaseProvider>
-                  </View>
-                ) : driverStatus === 2 ? (
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontFamily: 'Barlow-SemiBold',
-                      color: '#b8b6b6',
-                    }}>
-                    Your Driver Application is Pending
-                  </Text>
-                ) : null}
               </View>
             </View>
-          )}
+            <View style={styles.ImageCon}>
+              <Image
+                style={styles.DeliveryImage}
+                source={require('../../assets/Images/registerDriver.png')}
+              />
+              {loading ? (
+                <Spinner />
+              ) : driverStatus === 0 ? (
+                <Button
+                  color={colorConstant.primaryColor}
+                  mode="contained"
+                  style={{
+                    marginTop: 5,
+                    width: 205,
+                    height: 30,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => navigation.navigate('registerDriverOne')}>
+                  <Text>REGISTER AS A DRIVER</Text>
+                </Button>
+              ) : driverStatus === 1 ? (
+                <View>
+                  <NativeBaseProvider>
+                    <HStack alignItems="center" space={8}>
+                      {isEnabled ? (
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            fontFamily: 'Barlow-SemiBold',
+                            color: '#157918',
+                          }}>
+                          Driver Mode is ON
+                        </Text>
+                      ) : (
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            fontFamily: 'Barlow-SemiBold',
+                            color: '#5f5f5f',
+                          }}>
+                          Enable Driving Mode
+                        </Text>
+                      )}
+                      <Switch
+                        colorScheme="emerald"
+                        size="lg"
+                        onToggle={toggleSwitch}
+                        isChecked={isEnabled}
+                      />
+                    </HStack>
+                  </NativeBaseProvider>
+                </View>
+              ) : driverStatus === 2 ? (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: 'Barlow-SemiBold',
+                    color: '#b8b6b6',
+                  }}>
+                  Your Driver Application is Pending
+                </Text>
+              ) : null}
+            </View>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -576,7 +584,7 @@ const styles = StyleSheet.create({
   },
   DonationSuccess: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 10,
+    fontSize: 17,
     color: colorConstant.primaryColor,
   },
   RequestCount: {
@@ -589,7 +597,7 @@ const styles = StyleSheet.create({
   },
   RequestSuccess: {
     fontFamily: 'Barlow-Bold',
-    fontSize: 10,
+    fontSize: 17,
     color: colorConstant.primaryColor,
   },
   ButtonsCon: {

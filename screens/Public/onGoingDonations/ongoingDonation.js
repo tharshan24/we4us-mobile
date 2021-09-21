@@ -49,33 +49,35 @@ function OngoingDonation(props) {
       {loading ? (
         <Spinner />
       ) : (
-        <View style={styles.mainContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('OngoingDeliveryDetails', {
-                availability_id: data[0].id,
-              });
-            }}>
-            <View style={styles.AvailabilityCon}>
-              <View style={styles.ProfilePicCon}>
-                <Image
-                  style={styles.ProfilePic}
-                  source={require('../../../assets/Images/profilePic.jpg')}
-                />
+        data.map((values) => (
+          <View style={styles.mainContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('OngoingDeliveryDetails', {
+                  availability_id: values.id,
+                });
+              }}>
+              <View style={styles.AvailabilityCon}>
+                <View style={styles.ProfilePicCon}>
+                  <Image
+                    style={styles.ProfilePic}
+                    source={{uri: values.profile_picture_path.toString()}}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.headingText}>{values.name}</Text>
+                  <Text style={styles.bodyText}>From:{values.user_name}</Text>
+                  <Text style={styles.bodyText}>
+                    Quantity: {values.available_quantity}
+                  </Text>
+                  <Text style={styles.bodyText}>
+                    Best Before: {values.best_before.split('T')[0]}
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text style={styles.headingText}>{data[0].name}</Text>
-                <Text style={styles.bodyText}>From:{data[0].user_name}</Text>
-                <Text style={styles.bodyText}>
-                  Quantity: {data[0].available_quantity}
-                </Text>
-                <Text style={styles.bodyText}>
-                  Best Before: {data[0].best_before.split('T')[0]}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        ))
       )}
     </ScrollView>
   );

@@ -1,67 +1,51 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import colorConstant from '../../../constants/colorConstant';
-import {useNavigation} from '@react-navigation/native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
+  Dimensions,
   Image,
   ScrollView,
-  Dimensions,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
 } from 'react-native';
+import {Spinner} from 'native-base';
+import colorConstant from '../../../constants/colorConstant';
+import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import constants from '../../../constants/constantsProject.';
 import SocketContext from '../../../Context/SocketContext';
-import {Spinner} from 'native-base';
 
-function ExploreAvailability({route}) {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const context = useContext(SocketContext);
+function HistoryDonation(props) {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const context = useContext(SocketContext);
 
-  useEffect(() => {
-    return navigation.addListener('focus', () => {
-      getAvailabilityData();
-    });
-  }, []);
-
-  const getAvailabilityData = async () => {
-    try {
-      await axios
-        .get(constants.BASE_URL + 'availability/exploreAvailability', {
-          headers: {
-            Authorization: `Bearer ${context.token}`,
-          },
-        })
-        .then(function (response) {
-          console.log(response.data.result.row[0]);
-          console.log(response.data.result.row, 'lllllllllll');
-          setData(response.data.result.row);
-          setLoading(false);
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+  //
+  // const getData = async () => {
+  //   await axios
+  //     .get(constants.BASE_URL + 'public/viewProfile/' + userId, {
+  //       headers: {
+  //         Authorization: `Bearer ${context.token}`,
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       response.data.result.map((val) => {
+  //         // console.log(val);
+  //         setAccNo(val.account_number);
+  //         setDriverStatus(val.driver_status);
+  //       });
+  //       setLoading(false);
+  //     })
+  //     .catch(function (e) {
+  //       console.log(e);
+  //     });
+  // };
 
   return (
-    <>
-      {/*<View style={styles.filterContainer}>*/}
-      {/*  <TouchableOpacity*/}
-      {/*    style={styles.filterBtnContainer}*/}
-      {/*    activeOpacity={0.7}*/}
-      {/*    onPress={() => navigation.navigate('FilterResults')}>*/}
-      {/*    <Text style={styles.filterTxt}>Filter</Text>*/}
-      {/*    <MaterialCommunityIcons*/}
-      {/*      name="filter-variant"*/}
-      {/*      color="#3F51B5"*/}
-      {/*      size={30}*/}
-      {/*    />*/}
-      {/*  </TouchableOpacity>*/}
-      {/*</View>*/}
+    <View style={{flex: 1}}>
       <ScrollView style={{margin: 7}}>
         {loading ? (
           <Spinner />
@@ -78,7 +62,7 @@ function ExploreAvailability({route}) {
                   <View style={styles.ProfilePicCon}>
                     <Image
                       style={styles.ProfilePic}
-                      source={{uri: values.profile_picture_path.toString()}}
+                      source={require('../../../assets/Images/thishan.jpg')}
                     />
                   </View>
                   <View>
@@ -99,9 +83,11 @@ function ExploreAvailability({route}) {
           ))
         )}
       </ScrollView>
-    </>
+    </View>
   );
 }
+
+export default HistoryDonation;
 
 const styles = StyleSheet.create({
   filterContainer: {
@@ -173,5 +159,3 @@ const styles = StyleSheet.create({
     left: 23,
   },
 });
-
-export default ExploreAvailability;

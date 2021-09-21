@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   Text,
   View,
@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from 'react-native';
 import colorConstant from '../../constants/colorConstant';
 import DocumentPicker from 'react-native-document-picker';
@@ -16,53 +17,49 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Select, VStack, Spinner, NativeBaseProvider} from 'native-base';
 import constants from '../../constants/constantsProject.';
+import SocketContext from '../../Context/SocketContext';
 
 const EditProfile = (props) => {
-  // functions
-  const FilePic = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
-      });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size,
-      );
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
-    }
-    return <Text>Success</Text>;
-  };
-
   const [actionVal, setActionVal] = React.useState(true);
+  const context = useContext(SocketContext);
   const [txtVal, setTxtVal] = React.useState('Edit');
   const [submitTxt, setSubmitTxt] = React.useState();
   const [token, setToken] = React.useState();
+  const [district, setDistrict] = React.useState([]);
   const [cities, setCities] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingTwo, setLoadingTwo] = React.useState(true);
   const [selectedCity, setSelectedCity] = React.useState(true);
+  const [selectedDistrict, setSelectedDistrict] = React.useState(true);
+  const [data, setData] = React.useState([]);
+  const [state, setState] = React.useState(1);
 
-  const loadCities = () => {
+  const loadDistrict = () => {
     axios
-      .get(constants.BASE_URL + '/system/districts', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(constants.BASE_URL + 'system/districts')
       .then(function (response) {
-        // console.log(response.data);
-        setCities(response.data.result.rows);
+        setDistrict(response.data.result.rows);
         setLoading(false);
       })
       .catch(function (error) {
         console.log(error);
       });
+  };
+
+  const loadCities = (districtId) => {
+    axios
+      .get(constants.BASE_URL + `system/citiesByDistrict/${districtId}`)
+      .then(function (response) {
+        setCities(response.data.result.rows);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const changeDistrict = (districtId) => {
+    setSelectedDistrict(districtId);
+    loadCities(districtId);
   };
 
   const txtChange = () => {
@@ -87,23 +84,94 @@ const EditProfile = (props) => {
     }
   };
 
+  // functions
+  const FilePic = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      uploadProfilePic(res[0].uri);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        Alert.alert('Error in choosing Image');
+      } else {
+        throw err;
+      }
+    }
+    return <Text>Success</Text>;
+  };
+
+  const uploadProfilePic = async (value) => {
+    setLoading(true);
+    const proPic = new FormData();
+    proPic.append('files', {
+      name: new Date() + 'profilePic',
+      uri: value,
+      type: 'image/jpeg',
+    });
+    try {
+      await axios({
+        url: constants.BASE_URL + 'user/updateProfPic',
+        method: 'post',
+        data: proPic,
+        headers: {
+          Authorization: `proPic ${context.token}`,
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(function (response) {
+        if (response.data.status_code === 0) {
+          Alert.alert('Profile Picture Upload Success');
+          setLoading(false);
+          setState(state + 1);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     getData();
-    loadCities();
+    loadDistrict();
   }, []);
+
+  useEffect(() => {
+    userDetails();
+  }, [state]);
+
+  const userDetails = async () => {
+    try {
+      await axios({
+        url: constants.BASE_URL + 'public/viewProfile',
+        method: 'get',
+        headers: {
+          Authorization: `proPic ${context.token}`,
+        },
+      }).then(function (response) {
+        if (response.data.status_code === 0) {
+          console.log(response.data, 'ooooooooooooooooooooo');
+          setData(response.data.result[0]);
+          setLoadingTwo(false);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <NativeBaseProvider>
       <Provider>
         <ScrollView style={styles.MainContainer}>
-          {loading ? (
+          {loading || loadingTwo ? (
             <Spinner color="blue.500" />
           ) : (
             <>
               <View style={styles.ProfilePicCon}>
                 <Image
                   style={styles.ProfilePic}
-                  source={require('../../assets/Images/profilePic.jpg')}
+                  source={{uri: data.profile_picture_path.toString()}}
                 />
                 <TouchableOpacity onPress={() => FilePic()}>
                   <Text style={styles.ChangeTxt}>Change</Text>
@@ -178,32 +246,38 @@ const EditProfile = (props) => {
                   <VStack alignItems="center" space={4}>
                     <Select
                       minWidth={330}
-                      selectedValue={selectedCity}
+                      selectedValue={selectedDistrict}
                       style={styles.textInput}
                       placeholder="District"
-                      onValueChange={(val) => setSelectedCity(val)}>
-                      {cities.map((city) => (
-                        <Select.Item label={city.name_en} value={city.id} />
+                      onValueChange={(itemValue) => changeDistrict(itemValue)}>
+                      {district.map((distVal) => (
+                        <Select.Item
+                          label={distVal.name_en}
+                          value={distVal.id}
+                          key={distVal.id}
+                        />
                       ))}
                     </Select>
                   </VStack>
                 </View>
                 <View style={styles.Content}>
                   <Text style={styles.ContentTxt}>City</Text>
-                  <View style={styles.EditContent}>
-                    <TextInput
-                      placeholder="Jaffna"
-                      disabled={actionVal}
-                      selectionColor={colorConstant.primaryColor}
-                      underlineColor={colorConstant.proGreyLight}
-                      style={{
-                        height: 40,
-                        width: Dimensions.get('window').width / 1.7,
-                        backgroundColor: '#ffffff',
-                        borderColor: 'red',
-                      }}
-                    />
-                  </View>
+                  <VStack alignItems="center" space={4}>
+                    <Select
+                      minWidth={330}
+                      selectedValue={selectedCity}
+                      style={styles.textInput}
+                      placeholder="District"
+                      onValueChange={(itemValue) => setSelectedCity(itemValue)}>
+                      {cities.map((cityVal) => (
+                        <Select.Item
+                          label={cityVal.name_en}
+                          value={cityVal.id}
+                          key={cityVal.id}
+                        />
+                      ))}
+                    </Select>
+                  </VStack>
                 </View>
                 <View style={styles.Content}>
                   <Text style={styles.ContentTxt}>ZipCode</Text>

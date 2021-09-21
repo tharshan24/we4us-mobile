@@ -14,7 +14,7 @@ import ExploreRequest from '../screens/Public/Request/exploreRequest';
 import AddAvailabilityRequest from '../screens/Public/addAvailabilityRequest';
 import DashboardPublic from '../screens/Public/dashboardPublic';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HistoryDonation from '../screens/Public/historyDonation';
+import HistoryDonation from '../screens/Public/Availability/historyDonation';
 import HistoryRequest from '../screens/Public/Request/historyRequest';
 import SettingsPublic from '../screens/Public/settingsPublic';
 import OngoingDonation from '../screens/Public/onGoingDonations/ongoingDonation';
@@ -55,7 +55,7 @@ import ChatComponent from '../screens/Common/chatComponent';
 import Conversations from '../screens/Public/Conversations';
 import CommonCheck from '../screens/Public/commonCheck';
 import collectionPointsPublic from '../screens/Public/ViewCollectionPoints/exploreCollectionPointsPublic';
-import sellingPointsPublic from '../screens/Public/sellingPoints';
+import exploreSellingPointsPublic from '../screens/Public/ViewSellingPoints/exploreSellingPointsPublic';
 import ViewOnMapAvailability from '../screens/Public/Availability/viewOnMapAvailability';
 import requestAvailabilityLocationMap from '../screens/Public/Availability/requestAvailabilityLocationMap';
 import RequestedAvailabilities from '../screens/Public/requestedAvailabilities';
@@ -74,7 +74,8 @@ import viewOnMapMyRequest from '../screens/Public/onGoingRequests/viewOnMapMyReq
 import donationForMyRequests from '../screens/Public/onGoingRequests/donationForMyRequests';
 import ViewOnMapCollectionPoints from '../screens/Public/ViewCollectionPoints/viewOnMapCollectionPoints';
 import DeliveryDetailsAvailabilities from '../screens/Public/onGoingDonations/deliveryDetailsAvailabilities';
-
+import browseSellingPointsPublic from '../screens/Public/ViewSellingPoints/browseSellingPointsPublic';
+import ViewOnMapSellingPointsPublic from '../screens/Public/ViewSellingPoints/ViewOnMapSellingPointsPublic';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -173,8 +174,6 @@ import browseRequestRest from '../screens/Restaruant/Request/browseRequests';
 import ExploreRequestRest from '../screens/Restaruant/Request/exploreRequest';
 import viewRequesterOnMapRest from '../screens/Restaruant/Request/viewRequestorOnMap';
 
-
-
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 const Top = createMaterialTopTabNavigator();
@@ -220,7 +219,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="ViewOnMapAvailabilityNgo"
         component={ViewOnMapAvailabilityNgo}
         options={{
@@ -331,7 +330,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="BrowseRequestNgo"
         component={BrowseRequestNgo}
         options={{
@@ -1009,7 +1008,10 @@ const ExploreStack = () => {
         name="collection  points"
         component={collectionPointsPublic}
       />
-      <Top.Screen name="selling  points" component={sellingPointsPublic} />
+      <Top.Screen
+        name="Selling Points"
+        component={exploreSellingPointsPublic}
+      />
       <Top.Screen
         name="Requested Availabilities"
         component={RequestedAvailabilities}
@@ -1027,14 +1029,46 @@ const DashboardPublicStack = () => {
         component={DashboardTap}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="History-Donation" component={HistoryDonation} />
-      <Stack.Screen name="History-Request" component={HistoryRequest} />
       <Stack.Screen
         name="OngoingDonation"
         component={OngoingDonation}
         options={{
           headerTintColor: '#ffffff',
           title: 'Donations',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="History-Donation"
+        component={HistoryDonation}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'History - Donations',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="History-Request"
+        component={HistoryRequest}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'History - Requests',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
@@ -1134,7 +1168,23 @@ const DashboardPublicStack = () => {
           },
         }}
       />
-      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Change Password',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
       <Stack.Screen
         name="DriverSettings"
         component={DriverSettings}
@@ -1756,6 +1806,40 @@ const DashboardPublicStack = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="browseSellingPointsPublic"
+        component={browseSellingPointsPublic}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Browse Selling Points',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ViewOnMapSellingPointsPublic"
+        component={ViewOnMapSellingPointsPublic}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'View on Map',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -1935,7 +2019,7 @@ const DashboardHomeStack = () => {
           },
         }}
       />
-      
+
       <Stack.Screen
         name="AddItemsRequestHome"
         component={AddItemsRequestHome}
@@ -2181,7 +2265,7 @@ const DashboardShopStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="BrowseRequestsShop"
         component={BrowseRequestsShop}
         options={{
@@ -2271,7 +2355,7 @@ const DashboardShopStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="sellingpointInputSetThree"
         component={sellingpointInputSetThree}
         options={{
@@ -2496,7 +2580,7 @@ const DashboardRestaurantStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="browseRequestRest"
         component={browseRequestRest}
         options={{
@@ -2513,7 +2597,7 @@ const DashboardRestaurantStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="viewRequesterOnMapRest"
         component={viewRequesterOnMapRest}
         options={{
@@ -2686,7 +2770,7 @@ const DashboardRestaruantTap = () => {
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="Notification"
         component={Notifications}
         options={{
@@ -2732,7 +2816,6 @@ const ExploreRestaruantStack = () => {
         labelStyle: {fontSize: 16, fontFamily: 'Barlow-Bold', color: '#ffffff'},
         style: {backgroundColor: colorConstant.primaryColor},
       }}>
-      
       <Top.Screen name="Request" component={ExploreRequestRest} />
     </Top.Navigator>
   );
