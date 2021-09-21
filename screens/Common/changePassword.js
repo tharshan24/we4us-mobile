@@ -86,7 +86,12 @@ function ChangePassword(props) {
         <Button
           mode="contained"
           onPress={() => submit()}
-          style={{height: 45, alignItems: 'center', justifyContent: 'center'}}>
+          style={{
+            height: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colorConstant.primaryColor,
+          }}>
           <Text>Submit</Text>
         </Button>
       </View>
