@@ -83,16 +83,16 @@ function DonationTrackingMap(props) {
   const mainFromLocation = {
     streetName: 'Vanniyasingam',
     gps: {
-      longitude: driverLongitude,
-      latitude: driverLatitude,
+      longitude: 80.01411437988283,
+      latitude: 9.661338529942757,
     },
   };
 
   const mainToLocation = {
     streetName: 'Hospital Road',
     gps: {
-      longitude: createdLongitude,
-      latitude: creatorLatitude,
+      longitude: 80.01411437988283,
+      latitude: 9.661338529942757,
     },
   };
 

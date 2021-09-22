@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import colorConstant from '../../constants/colorConstant';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,10 +14,14 @@ import {
 import axios from 'axios';
 import constants from '../../constants/constantsProject.';
 import SocketContext from '../../Context/SocketContext';
+import {Spinner} from 'native-base';
+import moment from 'moment';
 
 function Notifications(props) {
   const navigation = useNavigation();
   const context = useContext(SocketContext);
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
@@ -34,60 +38,44 @@ function Notifications(props) {
           },
         })
         .then(function (response) {
-          console.log(response.data, 'llllllllllllll');
-          // setData(response.data.result.data[0]);
-          // setLoading(false);
+          if (response.data.status_code === 0) {
+            setData(response.data.result.rows[0]);
+            setLoading(false);
+          }
         });
     } catch (e) {
       console.log(e);
     }
   };
-
-  const driverRequest = async () => {
-    try {
-      await axios
-        .get(constants.BASE_URL + 'availability/driverCheckForRide', {
-          headers: {
-            Authorization: `Bearer ${context.token}`,
-          },
-        })
-        .then(function (response) {
-          console.log(response.data, 'llllllhhhhhhhhhhhhhhhllllllll');
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      driverRequest();
-      console.log('mmmmmmmmmmmmm');
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <ScrollView style={{margin: 7}}>
-      <View style={styles.mainContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('BrowseAvailability')}>
-          <View style={styles.AvailabilityCon}>
-            <View style={styles.ProfilePicCon}>
-              <Image
-                style={styles.ProfilePic}
-                source={require('../../assets/Images/profilePic.jpg')}
-              />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <View style={styles.mainContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('DonationTrackingMap')}>
+            <View style={styles.AvailabilityCon}>
+              <View style={styles.ProfilePicCon}>
+                <Image
+                  style={styles.ProfilePic}
+                  source={{uri: data.profile_picture_path}}
+                />
+              </View>
+              <View>
+                <Text style={styles.headingText}>{data.message}</Text>
+                <Text style={styles.bodyText}>{data.text}</Text>
+                <Text style={styles.bodyText}>From: {data.from_name}</Text>
+                <Text style={styles.bodyText}>
+                  Created At:{' '}
+                  {moment(data.created_at).format('YYYY-MM-DD  HH:mm A')}
+                </Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.headingText}>Wedding Lunch</Text>
-              <Text style={styles.bodyText}>From:Theivendram Athavan</Text>
-              <Text style={styles.bodyText}>Quantity: 20</Text>
-              <Text style={styles.bodyText}>Best Before: 30/05/2021</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 }

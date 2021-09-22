@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
+  Platform,
 } from 'react-native';
 import {Switch, HStack, Center, NativeBaseProvider, Spinner} from 'native-base';
 import {Modal, Input} from 'native-base';
@@ -20,6 +21,7 @@ import axios from 'axios';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import SocketContext from '../../Context/SocketContext';
+import PushNotification from 'react-native-push-notification';
 
 const DashboardPublic = () => {
   const navigation = useNavigation();
@@ -38,6 +40,24 @@ const DashboardPublic = () => {
   const [data, setData] = useState([]);
   const [donateCount, setDonateCount] = useState('');
   const [reqCount, setReqCount] = useState('');
+
+  PushNotification.configure({
+    onNotification: function () {
+      navigation.navigate('Notification');
+    },
+    requestPermissions: Platform.OS === 'ios',
+  });
+
+  useEffect(() => {
+    createNotification();
+  }, []);
+
+  const createNotification = () => {
+    PushNotification.createChannel({
+      channelId: 'test-channel',
+      channelName: 'Test Channel',
+    });
+  };
 
   useEffect(() => {
     getUser();
@@ -178,12 +198,12 @@ const DashboardPublic = () => {
       });
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     sendData();
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, [isEnabled, driverStatus, currentLongitude, accNo, currentLatitude]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      sendData();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isEnabled, driverStatus, currentLongitude, accNo, currentLatitude]);
 
   const sendData = async () => {
     console.log(isEnabled);
@@ -201,7 +221,6 @@ const DashboardPublic = () => {
     {
       accNo === null ? (data.paymentType = 0) : (data.paymentType = 1);
     }
-    // console.log(data, 'wwwwwwwwwwwwwwwwwwwwwwwwwwwww');
     await axios({
       url: constants.BASE_URL + 'user/updateRealUser',
       method: 'post',
@@ -233,6 +252,42 @@ const DashboardPublic = () => {
         .then(function (response) {
           setData(response.data.result[0]);
           setLoadingProfile(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleNotification = () => {
+    PushNotification.localNotification({
+      channelId: 'test-channel',
+      title: 'Driver Request',
+      message: 'You have been requested for a Delivery',
+      color: colorConstant.primaryColor,
+    });
+  };
+
+  useEffect(() => {
+    if (isEnabled) {
+      const interval = setInterval(() => {
+        getData();
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [isEnabled]);
+
+  const getData = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'availability/driverCheckForRide/', {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          if (response.data.status_code === 1) {
+            handleNotification();
+          }
         });
     } catch (e) {
       console.log(e);

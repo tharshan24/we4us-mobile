@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {Dimensions, Text, View, StyleSheet, ScrollView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  Dimensions,
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {
   NativeBaseProvider,
   Select,
@@ -16,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import constants from '../../../constants/constantsProject.';
 import {useNavigation} from '@react-navigation/native';
+import SocketContext from '../../../Context/SocketContext';
 
 function DriverSettings(props) {
   const [bank, setBank] = useState(null);
@@ -24,7 +32,9 @@ function DriverSettings(props) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   const [token, setToken] = useState();
+  const context = useContext(SocketContext);
   const [paymentMethod, setPaymentMethod] = useState();
   const navigation = useNavigation();
 
@@ -59,9 +69,14 @@ function DriverSettings(props) {
 
   useEffect(() => {
     getCurrentUser();
+  }, []);
+
+  useEffect(() => {
     getPaymentType();
+    viewProfile();
     return navigation.addListener('focus', () => {
       getPaymentType();
+      viewProfile();
     });
   }, [token]);
 
@@ -71,7 +86,53 @@ function DriverSettings(props) {
 
   const handleClick = () => setShow(!show);
 
-  return (
+  const updatePayment = async () => {
+    setLoading(true);
+    const payData = {
+      bank: bank,
+      account_number: accNo,
+    };
+    try {
+      await axios({
+        url: constants.BASE_URL + 'user/updateAccount',
+        method: 'post',
+        data: payData,
+        headers: {
+          Authorization: `PayData ${token}`,
+          Accept: 'application/json',
+        },
+      }).then(function (response) {
+        if (response.data.status_code === 0) {
+          Alert.alert('Updated Successfully');
+          getPaymentType();
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const viewProfile = async () => {
+    try {
+      await axios
+        .get(constants.BASE_URL + 'public/viewProfile', {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        })
+        .then(function (response) {
+          setData(response.data.result[0]);
+          console.log(response.data.result[0]);
+          // setLoadingProfile(false);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return loading ? (
+    <Spinner />
+  ) : (
     <NativeBaseProvider>
       <View style={styles.container}>
         <View style={styles.paymentType}>
@@ -117,11 +178,12 @@ function DriverSettings(props) {
                   }}
                   width={Dimensions.get('screen').width / 1.1}
                   selectedValue={bank}
-                  placeholder="Select Bank"
+                  placeholder={data.bank.toString()}
                   onValueChange={(itemValue) => setBank(itemValue)}>
                   <Select.Item label="BOC" value="boc" />
                   <Select.Item label="HNB" value="hnb" />
-                  <Select.Item label="Commerical" value="com" />
+                  <Select.Item label="Commerical Bank" value="com" />
+                  <Select.Item label="People's Bank" value="ppl" />
                 </Select>
               </VStack>
             </View>
@@ -135,7 +197,7 @@ function DriverSettings(props) {
                 <Input
                   text="password"
                   mode="outlined"
-                  placeholder="Account Number"
+                  placeholder={data.account_number.toString()}
                   keyboardType="numeric"
                   type={show ? 'text' : 'password'}
                   value={accNo}
@@ -189,6 +251,7 @@ function DriverSettings(props) {
           <View style={styles.btnContainer}>
             <Button
               mode="contained"
+              onPress={() => updatePayment()}
               style={{
                 width: 120,
                 height: 45,

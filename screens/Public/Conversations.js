@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  Dimensions,
   FlatList,
   SafeAreaView,
   StatusBar,
@@ -76,8 +77,8 @@ const Conversations = () => {
   );
 
   const renderItem = ({item}) => {
-    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
-    const color = item.id === selectedId ? 'white' : 'black';
+    const backgroundColor = item.id === selectedId ? '#7086e3' : '#e1e5ee';
+    const color = item.id === selectedId ? 'white' : '#555454';
 
     const sendProps = (id) => {
       const value = data.find((val) => val.id === id);
@@ -133,15 +134,17 @@ const Conversations = () => {
 
 const styles = StyleSheet.create({
   container: {
+    margin: 20,
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    marginTop: 10,
+    // width: Dimensions.get('screen').width,
   },
   item: {
     padding: 20,
     marginBottom: 7,
   },
   title: {
-    fontSize: 32,
+    fontSize: 25,
   },
 });
 
