@@ -181,7 +181,7 @@ function RequestForDonation({route}) {
                 <View style={styles.ProfilePicCon}>
                   <Image
                     style={styles.ProfilePic}
-                    source={require('../../../assets/Images/thishan.jpg')}
+                    source={{uri: value.profile_picture_path.toString()}}
                   />
                 </View>
                 <View style={{flex: 5}}>

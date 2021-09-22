@@ -14,14 +14,18 @@ import {
 import axios from 'axios';
 import constants from '../../constants/constantsProject.';
 import SocketContext from '../../Context/SocketContext';
-import {Spinner} from 'native-base';
+import {Center, Modal, Select, Spinner, VStack} from 'native-base';
 import moment from 'moment';
+import {Button} from 'react-native-paper';
 
 function Notifications(props) {
   const navigation = useNavigation();
   const context = useContext(SocketContext);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [donateVisible, setDonateVisible] = useState(false);
+  const [parameter, setParameter] = useState();
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
@@ -48,14 +52,37 @@ function Notifications(props) {
     }
   };
 
-  return (
-    <ScrollView style={{margin: 7}}>
-      {loading ? (
-        <Spinner />
-      ) : (
+  const navigateToMap = async (value) => {
+    navigation.navigate('DonationTrackingMap');
+  };
+
+  const closeModal = () => {
+    setDonateVisible(false);
+  };
+
+  return loading ? (
+    <Spinner />
+  ) : (
+    <>
+      <View
+        style={{
+          alignItems: 'center',
+          width: Dimensions.get('screen').width,
+          height: 45,
+          backgroundColor: colorConstant.primaryColor,
+        }}>
+        <Text
+          style={{
+            fontFamily: 'Barlow-SemiBold',
+            color: '#ffffff',
+            fontSize: 20,
+          }}>
+          Notifications
+        </Text>
+      </View>
+      <ScrollView style={{margin: 7}}>
         <View style={styles.mainContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DonationTrackingMap')}>
+          <TouchableOpacity onPress={() => setDonateVisible(!donateVisible)}>
             <View style={styles.AvailabilityCon}>
               <View style={styles.ProfilePicCon}>
                 <Image
@@ -75,8 +102,60 @@ function Notifications(props) {
             </View>
           </TouchableOpacity>
         </View>
-      )}
-    </ScrollView>
+      </ScrollView>
+      <View style={{flex: 1}}>
+        <Modal isOpen={donateVisible} onClose={() => closeModal()} size="lg">
+          <Modal.Content>
+            <Modal.CloseButton />
+            <Modal.Header>DELIVERY REQUEST</Modal.Header>
+            <Modal.Body>
+              <View style={{flexDirection: 'column'}}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: '#616161',
+                    fontFamily: 'Barlow-SemiBold',
+                  }}>
+                  Are you accepting the Delivery Request or Not
+                </Text>
+              </View>
+            </Modal.Body>
+            <Modal.Footer>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: 320,
+                  alignItems: 'center',
+                }}>
+                <Button
+                  mode="contained"
+                  style={{
+                    backgroundColor: colorConstant.proGreen,
+                    marginBottom: 20,
+                  }}
+                  onPress={() => navigateToMap()}
+                  colorScheme="muted">
+                  <Text style={{fontSize: 17, color: '#ffffff'}}>ACCEPT</Text>
+                </Button>
+                <Button
+                  mode="contained"
+                  style={{
+                    backgroundColor: colorConstant.primaryColor,
+                    marginBottom: 20,
+                  }}
+                  onPress={() => {
+                    setDonateVisible(!donateVisible);
+                  }}
+                  colorScheme="muted">
+                  <Text style={{fontSize: 17, color: '#ffffff'}}>CANCEL</Text>
+                </Button>
+              </View>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
+      </View>
+    </>
   );
 }
 

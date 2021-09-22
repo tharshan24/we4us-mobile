@@ -20,13 +20,6 @@ import SocketContext from '../../Context/SocketContext';
 import {Spinner} from 'native-base';
 
 function DonationTrackingMap(props) {
-  const {
-    creatorLatitude,
-    createdLongitude,
-    requesterLatitude,
-    requesterLongitude,
-    driver_id,
-  } = props.route.params;
   const [fromLocation, setFromLocation] = useState();
   const [toLocation, setToLocation] = useState(null);
   const [duration, setDuration] = useState();
@@ -40,59 +33,49 @@ function DonationTrackingMap(props) {
   const [state, setState] = useState(1);
 
   useEffect(() => {
-    console.log(
-      creatorLatitude,
-      createdLongitude,
-      requesterLatitude,
-      requesterLongitude,
-      driver_id,
-    );
-  }, []);
-
-  useEffect(() => {
     const interval = setInterval(() => {
-      getData();
+      // getData();
     }, 5000);
     return () => clearInterval(interval);
   }, [state]);
 
-  const getData = async () => {
-    await axios({
-      url: constants.BASE_URL + 'user/getRealUser/' + driver_id,
-      method: 'get',
-      headers: {
-        Authorization: `Driver ${context.token}`,
-      },
-    })
-      .then(function (response) {
-        if (response.data.status_code === 0) {
-          setDriverLongitude(response.data.result.location.coordinates[0]);
-          setDriverLatitude(response.data.result.location.coordinates[1]);
-          console.log(response.data.result.location.coordinates[1]);
-          setState(state + 1);
-          console.log('wwwwwww');
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // const getData = async () => {
+  //   await axios({
+  //     url: constants.BASE_URL + 'user/getRealUser/' + driver_id,
+  //     method: 'get',
+  //     headers: {
+  //       Authorization: `Driver ${context.token}`,
+  //     },
+  //   })
+  //     .then(function (response) {
+  //       if (response.data.status_code === 0) {
+  //         setDriverLongitude(response.data.result.location.coordinates[0]);
+  //         setDriverLatitude(response.data.result.location.coordinates[1]);
+  //         console.log(response.data.result.location.coordinates[1]);
+  //         setState(state + 1);
+  //         console.log('wwwwwww');
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
   const mapView = React.useRef();
 
   const mainFromLocation = {
-    streetName: 'Vanniyasingam',
+    streetName: 'Vanniyasingam Road',
     gps: {
-      longitude: 80.01411437988283,
-      latitude: 9.661338529942757,
+      longitude: 80.01702189445497,
+      latitude: 9.711674411735867,
     },
   };
 
   const mainToLocation = {
     streetName: 'Hospital Road',
     gps: {
-      longitude: 80.01411437988283,
-      latitude: 9.661338529942757,
+      longitude: 80.00869631767274,
+      latitude: 9.712377653975071,
     },
   };
 
@@ -352,4 +335,5 @@ const styles = StyleSheet.create({
     color: colorConstant.proYellow,
   },
 });
+
 export default DonationTrackingMap;

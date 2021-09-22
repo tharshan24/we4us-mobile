@@ -271,7 +271,7 @@ const DashboardPublic = () => {
     if (isEnabled) {
       const interval = setInterval(() => {
         getData();
-      }, 5000);
+      }, 15000);
       return () => clearInterval(interval);
     }
   }, [isEnabled]);
@@ -285,7 +285,8 @@ const DashboardPublic = () => {
           },
         })
         .then(function (response) {
-          if (response.data.status_code === 1) {
+          console.log(response.data, 'iiiiiiiiiiiiiiiiiiiii');
+          if (response.data.status_code === 0) {
             handleNotification();
           }
         });

@@ -76,6 +76,7 @@ import ViewOnMapCollectionPoints from '../screens/Public/ViewCollectionPoints/vi
 import DeliveryDetailsAvailabilities from '../screens/Public/onGoingDonations/deliveryDetailsAvailabilities';
 import browseSellingPointsPublic from '../screens/Public/ViewSellingPoints/browseSellingPointsPublic';
 import ViewOnMapSellingPointsPublic from '../screens/Public/ViewSellingPoints/ViewOnMapSellingPointsPublic';
+import spinnerLoading from '../screens/spinner';
 //Ngo
 import HistoryDonationNgo from '../screens/NGO/historyDonationNgo';
 import HistoryRequestNgo from '../screens/NGO/historyRequestNgo';
@@ -537,7 +538,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="requestAvailabilityLocationMapNgo"
         component={requestAvailabilityLocationMapNgo}
         options={{
@@ -691,7 +692,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="RequestAvailabilityNgo"
         component={RequestAvailabilityNgo}
         options={{
@@ -725,7 +726,7 @@ const DashboardNgoStack = () => {
           },
         }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="DonateForRequestNgo"
         component={DonateForRequestNgo}
         options={{
@@ -1212,6 +1213,24 @@ const DashboardPublicStack = () => {
         options={{
           headerTintColor: '#ffffff',
           title: 'Availabilities',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: colorConstant.primaryColor,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRightContainerStyle: {padding: 15},
+          headerTitleStyle: {
+            fontFamily: 'Barlow-SemiBold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="spinnerLoading"
+        component={spinnerLoading}
+        options={{
+          headerTintColor: '#ffffff',
+          title: 'Loading',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: colorConstant.primaryColor,
